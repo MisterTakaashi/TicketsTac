@@ -8,6 +8,8 @@ namespace TicketsTac
         {
             Console.WriteLine("coucou");
             Console.ReadLine();
+            DB.Migrate();
+            //DB.Select("*", "users");
         }
     }
 }
