@@ -46,7 +46,7 @@ namespace TicketsTac
 
         public User GetClient()
         {
-            return Client;
+            return null;
         }
 
         public List<User> GetManagers()
@@ -56,20 +56,20 @@ namespace TicketsTac
 
         public List<User> GetOperationnels()
         {
-            return Operationnels;
+            return null;
         }
 
         public void AddManager(User manager)
         {
             //TODO attaque de la BDD
-            DB.Insert("","", "managers");
+            //DB.Insert("","", "managers");
             Managers.Add(manager);
         }
 
         public void AddOperationnel(User operationnel)
         {
             //TODO attaque de la BDD
-            DB.Insert("", "", "operationels");
+            //DB.Insert("", "", "operationels");
             Operationnels.Add(operationnel);
         }
 
