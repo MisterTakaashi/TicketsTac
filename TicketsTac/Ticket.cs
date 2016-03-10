@@ -30,15 +30,15 @@ namespace TicketsTac
 
         public Ticket(string problemDescription, Projet projet)
         {
-            CreateTicket();
+            //CreateTicket();
 
         }
         List<int> UserId = new List<int>();
         List<Projet> ProjectList = new List<Projet>();
 
-        public void AddUserList()
+        /*public void AddUserList()
         {
-            List<int> fieldList = new List<int>(id);
+            List<int> fieldList = new List<int>();
 
             foreach (var User in Users)
             {
@@ -165,6 +165,6 @@ namespace TicketsTac
                     stopChoice = false;
                 }
             }
-        }
+        }*/
     }
 }
