@@ -10,8 +10,8 @@ namespace TicketsTac
 {
     class DBConfig
     {
-        enum Environment { Prod = 0, Dev = 1 }
-        private Environment _env = Environment.Dev;
+        enum Environment { Prod = 0, Dev = 1, Local = 2 }
+        private Environment _env = Environment.Local;
         public String Host { get; set; }
         public String Username { get; set; }
         public String Pass { get; set; }
@@ -25,12 +25,18 @@ namespace TicketsTac
                     Host = "192.168.50.4";
                     Pass = "#SAPassword!";
                     Username = "sa";
+                    Port = 1433;
                     break;
 
                 case Environment.Prod:
                     Host = "164.132.110.73";
                     Pass = "Bastille89";
                     Username = "remote";
+                    Port = 1433;
+                    break;
+
+                case Environment.Local:
+                    Host = ".\\SQLEXPRESS";
                     break;
             }
         }
@@ -43,7 +49,8 @@ namespace TicketsTac
         static private void _connectToDb()
         {
             DBConfig config = new DBConfig();
-            _connection = new SqlConnection(@"Data Source=" + config.Host + ";Initial Catalog=TicketsTac;User Id=" + config.Username + ";Password=" + config.Pass + ";");
+            // _connection = new SqlConnection(@"Data Source=" + config.Host + "," + config.Port.ToString() + ";Uid=" + config.Username + ";Pwd=" + config.Pass + ";");
+            _connection = new SqlConnection("Data Source=" + config.Host + ";Integrated Security=True;Initial Catalog=TicketsTac;");
             try
             {
                 _connection.Open();
@@ -52,10 +59,13 @@ namespace TicketsTac
             catch ( Exception e )
             {
                 Console.WriteLine("/!\\ La connexion à la base de données à échoué. Informations sur la connexion:");
-                Console.WriteLine("\tHost:" + config.Host);
-                Console.WriteLine("\tUser:" + config.Username);
-                Console.WriteLine("\tPass:" + config.Pass);
-                Console.WriteLine("\tError: " + e.Data);
+                Console.WriteLine("\tHost: " + config.Host);
+                Console.WriteLine("\tUser: " + config.Username);
+                Console.WriteLine("\tPass: " + config.Pass);
+                Console.WriteLine("\tConnection String: " + _connection.ConnectionString);
+                Console.WriteLine("\tError: " + e.Message);
+                Console.ReadLine();
+                System.Environment.Exit(-1);
             }
         }
 
