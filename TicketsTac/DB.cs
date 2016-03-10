@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace TicketsTac
 {
-    class DBConf
+    class DBConfig
     {
         enum Environment { Prod = 0, Dev = 1 }
         private Environment _env = Environment.Dev;
@@ -16,7 +17,7 @@ namespace TicketsTac
         public String Pass { get; set; }
         public int Port { get; set; }
         
-        public DBConf()
+        public DBConfig()
         {
             switch ( this._env )
             {
@@ -35,17 +36,46 @@ namespace TicketsTac
         }
     }
 
-    class DB
+    static class DB
     {
-        private SqlConnection _connection;
-        public DB(DBConf conf)
+        static private SqlConnection _connection;
+
+        static private void _connectToDb()
         {
-            _connection = new SqlConnection(@"DataSource=" + conf.Host + ";Initial Catalog=TicketsTac;User Id=" + conf.Username + ";Password:" + conf.Pass + ";");
+            DBConfig config = new DBConfig();
+            _connection = new SqlConnection(@"DataSource=" + config.Host + ";Initial Catalog=TicketsTac;User Id=" + config.Username + ";Password:" + config.Pass + ";");
+            try
+            {
+                _connection.Open();
+            }
+            catch ( Exception e )
+            {
+                Console.WriteLine("/!\\ La connexion à la base de données à échoué. Informations sur la connexion:");
+                Console.WriteLine("\tHost:" + config.Host);
+                Console.WriteLine("\tUser:" + config.Username);
+                Console.WriteLine("\tPass:" + config.Pass);
+                Console.WriteLine("\tError: " + e.Data);
+            }
         }
 
-        public List<T> Get<T>(int id)
+        static public SqlDataReader Select(List<string> fields, string table)
         {
-            return new List<T>();
+            if (_connection == null ) _connectToDb();
+            
+            Console.WriteLine("Requête: SELECT " + string.Join(",", fields.ToArray()) + " FROM " + table);
+
+            SqlCommand cmd = new SqlCommand("SELECT @fields FROM @table", _connection);
+            cmd.Parameters.Add(new SqlParameter("@fields", string.Join(",", fields.ToArray())));
+            cmd.Parameters.Add(new SqlParameter("@table", table));
+
+            SqlDataReader r = cmd.ExecuteReader();
+
+            return r;
+        }
+
+        static public SqlDataReader Select(string fields, string table)
+        {
+            return Select(new List<string> { fields }, table);
         }
     }
 }
