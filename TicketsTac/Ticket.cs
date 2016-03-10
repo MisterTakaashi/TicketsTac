@@ -73,7 +73,7 @@ namespace TicketsTac
             while (isChoiceProjectCorrect != true)
             {
 
-               v
+               
 
             }
 
