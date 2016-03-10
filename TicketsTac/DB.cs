@@ -102,6 +102,13 @@ namespace TicketsTac
             return cmd.ExecuteNonQuery();
         }
 
+        static public void Migrate()
+        {
+            //if (_connection == null) _connectToDb();
+
+            string text = System.IO.File.ReadAllText(@"..\..\..\ticketstac.sql");
+        }
+
         static public SqlDataReader SelectWhere(string fields, string whereClause, string table)
         {
             if (_connection == null) _connectToDb();
