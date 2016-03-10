@@ -121,10 +121,20 @@ namespace TicketsTac
         static public void Migrate()
         {
             if (_connection == null) _connectToDb();
+            List<string> files = new List<string>();
+            files.Add(@"../../../SQL/dbo.Projet_managers.sql");
+            files.Add(@"../../../SQL/dbo.Projet_operators.sql");
+            files.Add(@"../../../SQL/dbo.Projets.sql");
+            files.Add(@"../../../SQL/dbo.Ticket_comms.sql");
+            files.Add(@"../../../SQL/dbo.Tickets.sql");
+            files.Add(@"../../../SQL/dbo.Users.sql");
 
-            string text = System.IO.File.ReadAllText(@"..\..\..\ticketstac.sql");
-            SqlCommand cmd = new SqlCommand(text, _connection);
-            cmd.ExecuteNonQuery();
+            SqlCommand cmd = null;
+            for ( int i = 0 ; i < files.Count ; i++ )
+            {
+                cmd = new SqlCommand(System.IO.File.ReadAllText(files[i]), _connection);
+                cmd.ExecuteNonQuery();
+            }
         }
 
         static public List<Dictionary<string, string>> SelectWhere(string fields, string whereClause, string table)
@@ -140,11 +150,11 @@ namespace TicketsTac
             return cmd.ExecuteReader().ToList();
         }
 
-        static public List<Dictionary<string, string>> Get(int id, string table)
+        static public Dictionary<string, string> Get(int id, string table)
         {
             if (_connection == null) _connectToDb();
 
-            return SelectWhere("*", "id =" + id.ToString(), table);
+            return SelectWhere("*", "id =" + id.ToString(), table)[0];
         }
 
         public static List<Dictionary<string, string>> ToList(this SqlDataReader r)

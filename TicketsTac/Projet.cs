@@ -29,13 +29,13 @@ namespace TicketsTac
             Client = client;
         }
 
-        public Projet(SqlDataReader r)
+        public Projet(Dictionary<string, string> projet)
         {
-            Id=(int)r["id"];
-            Nom=(String)r["nom"];
-            Description=(String)r["description"];
+            Id= int.Parse(projet["id"]);
+            Nom=(String)projet["nom"];
+            Description=(String)projet["description"];
 
-            int IdClient = (int)r["client_id"];
+            int IdClient = int.Parse(projet["client_id"]);
             // TODO recup client
         }
 
@@ -114,10 +114,9 @@ namespace TicketsTac
         public List<Projet> GetAllProjetsFromBDD()
         {
             List<Projet> projets = new List<Projet>();
-            SqlDataReader r =DB.Select("*", "projets");
-            while (r.Read())
+            foreach ( Dictionary<string, string> projet in DB.Select("*", "projets") )
             {
-                projets.Add(new Projet(r));
+                projets.Add(new Projet(projet));
             }
             return projets;
         }
@@ -126,9 +125,8 @@ namespace TicketsTac
 
         public Projet GetProjetFromBDD(int id)
         {
-            SqlDataReader r = DB.SelectWhere("*", "id = " + id, "projets");
-            r.Read();
-            return new Projet(r);
+            Dictionary<string, string> projet = DB.Get(id, "projets");
+            return new Projet(projet);
         }
     }
 }
