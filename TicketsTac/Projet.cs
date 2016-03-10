@@ -22,17 +22,17 @@ namespace TicketsTac
 
         public User getManagers()
         {
-            return Managers;
+            return null;
         }
 
         public User getClient()
         {
-            return Client;
+            return null;
         }
 
         public User getOperationnels()
         {
-            return Operationnels;
+            return null;
         }
 
         public int getID()
@@ -49,7 +49,7 @@ namespace TicketsTac
         {
             foreach(User opperationnel in Operationnels)
             {
-                if (opperationnel.getId() == id)
+                if (opperationnel.Id == id)
                 {
                     Operationnels.Remove(opperationnel);
                 }

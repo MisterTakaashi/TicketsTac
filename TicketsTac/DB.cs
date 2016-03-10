@@ -89,5 +89,24 @@ namespace TicketsTac
 
             return cmd.ExecuteNonQuery();
         }
+
+        static public SqlDataReader SelectWhere(string fields, string whereClause, string table)
+        {
+            if (_connection == null) _connectToDb();
+
+            SqlCommand cmd = new SqlCommand("SELECT @fields FROM @table WHERE @where");
+            cmd.Parameters.Add(new SqlParameter("@fields", fields));
+            cmd.Parameters.Add(new SqlParameter("@table", table));
+            cmd.Parameters.Add(new SqlParameter("@where", whereClause));
+
+            return cmd.ExecuteReader();
+        }
+
+        static public SqlDataReader Get(int id, string table)
+        {
+            if (_connection == null) _connectToDb();
+
+            return SelectWhere("*", "id =" + id.ToString(), table);
+        }
     }
 }
