@@ -36,7 +36,7 @@ namespace TicketsTac
                     break;
 
                 case Environment.Local:
-                    Host = ".\\SQLEXPRESS";
+                    Host = "(localdb)\\MSSQLLocalDb";
                     break;
             }
         }
@@ -76,6 +76,7 @@ namespace TicketsTac
             Console.WriteLine("Requête: SELECT " + string.Join(",", fields.ToArray()) + " FROM " + table);
 
             SqlCommand cmd = new SqlCommand("SELECT @fields FROM @table", _connection);
+            cmd.Prepare();
             cmd.Parameters.Add(new SqlParameter("@fields", string.Join(",", fields.ToArray())));
             cmd.Parameters.Add(new SqlParameter("@table", table));
 
@@ -89,6 +90,7 @@ namespace TicketsTac
                 Console.WriteLine("/!\\ Erreur: La requuête n'a pas abouti.");
                 Console.WriteLine("\tTexte: " + cmd.CommandText);
                 Console.WriteLine("\tErreur: " + e.Data);
+                Console.ReadLine();
 
                 return null;
             }
@@ -105,6 +107,7 @@ namespace TicketsTac
             if (_connection == null) _connectToDb();
 
             SqlCommand cmd = new SqlCommand("INSERT INTO @table (@fields) VALUES (@values)", _connection);
+            cmd.Prepare();
             cmd.Parameters.Add(new SqlParameter("@table", table));
             cmd.Parameters.Add(new SqlParameter("@fields", string.Join(",", fields.ToArray())));
             cmd.Parameters.Add(new SqlParameter("@values", string.Join(",", values.ToArray())));
@@ -124,6 +127,7 @@ namespace TicketsTac
             if (_connection == null) _connectToDb();
 
             SqlCommand cmd = new SqlCommand("SELECT @fields FROM @table WHERE @where", _connection);
+            cmd.Prepare();
             cmd.Parameters.Add(new SqlParameter("@fields", fields));
             cmd.Parameters.Add(new SqlParameter("@table", table));
             cmd.Parameters.Add(new SqlParameter("@where", whereClause));
