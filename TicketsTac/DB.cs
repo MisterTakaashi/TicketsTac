@@ -38,15 +38,16 @@ namespace TicketsTac
 
     static class DB
     {
-        static private SqlConnection _connection;
+        static private SqlConnection _connection = null;
 
         static private void _connectToDb()
         {
             DBConfig config = new DBConfig();
-            _connection = new SqlConnection(@"DataSource=" + config.Host + ";Initial Catalog=TicketsTac;User Id=" + config.Username + ";Password:" + config.Pass + ";");
+            _connection = new SqlConnection(@"Data Source=" + config.Host + ";Initial Catalog=TicketsTac;User Id=" + config.Username + ";Password=" + config.Pass + ";");
             try
             {
                 _connection.Open();
+                Console.WriteLine("Connexion à la base de données: ok");
             }
             catch ( Exception e )
             {
@@ -68,21 +69,32 @@ namespace TicketsTac
             cmd.Parameters.Add(new SqlParameter("@fields", string.Join(",", fields.ToArray())));
             cmd.Parameters.Add(new SqlParameter("@table", table));
 
-            SqlDataReader r = cmd.ExecuteReader();
+            try
+            {
+                SqlDataReader r = cmd.ExecuteReader();
+                return r;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("/!\\ Erreur: La requuête n'a pas abouti.");
+                Console.WriteLine("\tTexte: " + cmd.CommandText);
+                Console.WriteLine("\tErreur: " + e.Data);
 
-            return r;
+                return null;
+            }
+
         }
 
         static public SqlDataReader Select(string fields, string table)
         {
-            return Select(new List<string> { fields }, table);
+            return Select(new List<String>(fields.Split(',')), table);
         }
 
         static public int Insert(List<string> fields, List<string> values, string table)
         {
             if (_connection == null) _connectToDb();
 
-            SqlCommand cmd = new SqlCommand("INSERT INTO @table (@fields) VALUES (@values)");
+            SqlCommand cmd = new SqlCommand("INSERT INTO @table (@fields) VALUES (@values)", _connection);
             cmd.Parameters.Add(new SqlParameter("@table", table));
             cmd.Parameters.Add(new SqlParameter("@fields", string.Join(",", fields.ToArray())));
             cmd.Parameters.Add(new SqlParameter("@values", string.Join(",", values.ToArray())));
@@ -94,7 +106,7 @@ namespace TicketsTac
         {
             if (_connection == null) _connectToDb();
 
-            SqlCommand cmd = new SqlCommand("SELECT @fields FROM @table WHERE @where");
+            SqlCommand cmd = new SqlCommand("SELECT @fields FROM @table WHERE @where", _connection);
             cmd.Parameters.Add(new SqlParameter("@fields", fields));
             cmd.Parameters.Add(new SqlParameter("@table", table));
             cmd.Parameters.Add(new SqlParameter("@where", whereClause));
