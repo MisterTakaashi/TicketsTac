@@ -83,28 +83,16 @@ namespace TicketsTac
             try
             {
                 SqlDataReader r = cmd.ExecuteReader();
-                //Notre reader est prêt, on récupère les noms des colonnes
-                List<string> columns = new List<string>();
-                for (int i = 0; i < r.FieldCount ; i++)
-                {
-                    columns.Add(r.GetName(i));
-                }
-
-                //On a les noms des colonnes, maintenant on prépare le dico
-                List<Dictionary<int, String>> ret = new List<Dictionary<int, string>>();
-                while ( r.Read() )
-                {
-
-                }
 
                 r.Close();
+
                 return r.ToList();
             }
             catch (Exception e)
             {
                 Console.WriteLine("/!\\ Erreur: La requuête n'a pas abouti.");
                 Console.WriteLine("\tTexte: " + cmd.CommandText);
-                Console.WriteLine("\tErreur: " + e.Data);
+                Console.WriteLine("\tErreur: " + e.Message);
                 Console.ReadLine();
 
                 return null;
@@ -132,9 +120,11 @@ namespace TicketsTac
 
         static public void Migrate()
         {
-            //if (_connection == null) _connectToDb();
+            if (_connection == null) _connectToDb();
 
             string text = System.IO.File.ReadAllText(@"..\..\..\ticketstac.sql");
+            SqlCommand cmd = new SqlCommand(text, _connection);
+            cmd.ExecuteNonQuery();
         }
 
         static public List<Dictionary<string, string>> SelectWhere(string fields, string whereClause, string table)
