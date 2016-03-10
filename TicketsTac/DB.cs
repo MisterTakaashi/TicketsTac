@@ -19,7 +19,7 @@ namespace TicketsTac
         
         public DBConfig()
         {
-            switch ( this._env )
+            switch ( _env )
             {
                 case Environment.Dev:
                     Host = "192.168.50.4";
