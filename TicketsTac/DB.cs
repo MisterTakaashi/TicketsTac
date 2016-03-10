@@ -77,5 +77,17 @@ namespace TicketsTac
         {
             return Select(new List<string> { fields }, table);
         }
+
+        static public int Insert(List<string> fields, List<string> values, string table)
+        {
+            if (_connection == null) _connectToDb();
+
+            SqlCommand cmd = new SqlCommand("INSERT INTO @table (@fields) VALUES (@values)");
+            cmd.Parameters.Add(new SqlParameter("@table", table));
+            cmd.Parameters.Add(new SqlParameter("@fields", string.Join(",", fields.ToArray())));
+            cmd.Parameters.Add(new SqlParameter("@values", string.Join(",", values.ToArray())));
+
+            return cmd.ExecuteNonQuery();
+        }
     }
 }
