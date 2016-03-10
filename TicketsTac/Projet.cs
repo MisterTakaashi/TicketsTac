@@ -35,7 +35,7 @@ namespace TicketsTac
             Nom=(String)r["nom"];
             Description=(String)r["description"];
 
-            int IdClient = (int)r["idClient"];
+            int IdClient = (int)r["client_id"];
             // TODO recup client
         }
 
@@ -46,7 +46,7 @@ namespace TicketsTac
 
         public User GetClient()
         {
-            return null;
+            return Client;
         }
 
         public List<User> GetManagers()
@@ -56,7 +56,7 @@ namespace TicketsTac
 
         public List<User> GetOperationnels()
         {
-            return null;
+            return Operationnels;
         }
 
         public void AddManager(User manager)
@@ -114,8 +114,11 @@ namespace TicketsTac
         public List<Projet> GetAllProjetsFromBDD()
         {
             List<Projet> projets = new List<Projet>();
-            // TODO attaque de la BDD
-            String sql = "SELECT * FROM projets";
+            SqlDataReader r =DB.Select("*", "projets");
+            while (r.Read())
+            {
+                projets.Add(new Projet(r));
+            }
             return projets;
         }
 
@@ -123,9 +126,9 @@ namespace TicketsTac
 
         public Projet GetProjetFromBDD(int id)
         {
-            //TODO attaque de la BDD
-            String sql = "SELECT * FROM projets WHERE id =" + id;
-            return new Projet();
+            SqlDataReader r = DB.SelectWhere("*", "id = " + id, "projets");
+            r.Read();
+            return new Projet(r);
         }
     }
 }
