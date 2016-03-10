@@ -10,8 +10,8 @@ namespace TicketsTac
 {
     class DBConfig
     {
-        enum Environment { Prod = 0, Dev = 1 }
-        private Environment _env = Environment.Dev;
+        enum Environment { Prod = 0, Dev = 1, Local = 2 }
+        private Environment _env = Environment.Local;
         public String Host { get; set; }
         public String Username { get; set; }
         public String Pass { get; set; }
@@ -34,6 +34,10 @@ namespace TicketsTac
                     Username = "remote";
                     Port = 1433;
                     break;
+
+                case Environment.Local:
+                    Host = ".\\SQLEXPRESS";
+                    break;
             }
         }
     }
@@ -45,7 +49,8 @@ namespace TicketsTac
         static private void _connectToDb()
         {
             DBConfig config = new DBConfig();
-            _connection = new SqlConnection(@"Data Source=" + config.Host + "," + config.Port.ToString() + ";Uid=" + config.Username + ";Pwd=" + config.Pass + ";");
+            // _connection = new SqlConnection(@"Data Source=" + config.Host + "," + config.Port.ToString() + ";Uid=" + config.Username + ";Pwd=" + config.Pass + ";");
+            _connection = new SqlConnection("Data Source=" + config.Host + ";Integrated Security=True;Initial Catalog=TicketsTac;");
             try
             {
                 _connection.Open();
