@@ -69,7 +69,7 @@ namespace TicketsTac
             }
         }
 
-        static public SqlDataReader Select(List<string> fields, string table)
+        static public List<Dictionary<string, string>> Select(List<string> fields, string table)
         {
             if (_connection == null ) _connectToDb();
             
@@ -83,7 +83,22 @@ namespace TicketsTac
             try
             {
                 SqlDataReader r = cmd.ExecuteReader();
-                return r;
+                //Notre reader est prêt, on récupère les noms des colonnes
+                List<string> columns = new List<string>();
+                for (int i = 0; i < r.FieldCount ; i++)
+                {
+                    columns.Add(r.GetName(i));
+                }
+
+                //On a les noms des colonnes, maintenant on prépare le dico
+                List<Dictionary<int, String>> ret = new List<Dictionary<int, string>>();
+                while ( r.Read() )
+                {
+
+                }
+
+                r.Close();
+                return r.ToList();
             }
             catch (Exception e)
             {
@@ -97,7 +112,7 @@ namespace TicketsTac
 
         }
 
-        static public SqlDataReader Select(string fields, string table)
+        static public List<Dictionary<string, string>> Select(string fields, string table)
         {
             return Select(new List<String>(fields.Split(',')), table);
         }
@@ -122,7 +137,7 @@ namespace TicketsTac
             string text = System.IO.File.ReadAllText(@"..\..\..\ticketstac.sql");
         }
 
-        static public SqlDataReader SelectWhere(string fields, string whereClause, string table)
+        static public List<Dictionary<string, string>> SelectWhere(string fields, string whereClause, string table)
         {
             if (_connection == null) _connectToDb();
 
@@ -132,14 +147,43 @@ namespace TicketsTac
             cmd.Parameters.Add(new SqlParameter("@table", table));
             cmd.Parameters.Add(new SqlParameter("@where", whereClause));
 
-            return cmd.ExecuteReader();
+            return cmd.ExecuteReader().ToList();
         }
 
-        static public SqlDataReader Get(int id, string table)
+        static public List<Dictionary<string, string>> Get(int id, string table)
         {
             if (_connection == null) _connectToDb();
 
             return SelectWhere("*", "id =" + id.ToString(), table);
+        }
+
+        public static List<Dictionary<string, string>> ToList(this SqlDataReader r)
+        {
+            //On prépare la liste des noms des colonnes
+            List<string> cols = new List<string>();
+            for ( int i = 0; i < r.FieldCount; i++ )
+            {
+                cols.Add(r.GetName(i));
+            }
+
+            //La liste que l'on va retourner
+            List<Dictionary<string, string>> ret = new List<Dictionary<string, string>>();
+            while ( r.Read() )
+            {
+                //Le dictionnaire à ajouter à la liste
+                Dictionary<string, string> tmp = new Dictionary<string, string>();
+                for ( int i = 0; i < cols.Count; i++ )
+                {
+                    string col = cols[i];
+                    tmp.Add(col, r[col].ToString());
+                }
+
+                //On ajoute le dico à la liste
+                ret.Add(tmp);
+            }
+
+            //Et maintenant que la liste est prête on la renvoie
+            return ret;
         }
     }
 }
