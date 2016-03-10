@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -44,6 +45,23 @@ namespace TicketsTac
 
     static class DB
     {
+        //Done:
+        //  Select(List, string)
+        //  Select(string, string)
+        //  SelectWhere(string, string, string)
+        //  Insert(List, List, string)
+        //  Get(int, string)
+
+        //TODO:
+        //  SelectWhere(List, List, string)
+        //  SelectWhere(string, List, string)
+        //  SelectWhere(List, string, string)
+        //  Insert<T>(T instance, string)
+        //  Delete(int id, string table)
+        //  DeleteWhere(string whereClause, string table)
+        //  DeleteWhere(List whereClauses, string table)
+        //  Update<T>(T instance, string table)
+        
         static private SqlConnection _connection = null;
 
         static private void _connectToDb()
@@ -73,31 +91,9 @@ namespace TicketsTac
         {
             if (_connection == null ) _connectToDb();
             
-            Console.WriteLine("Requête: SELECT " + string.Join(",", fields.ToArray()) + " FROM " + table);
+            SqlCommand cmd = new SqlCommand("SELECT " + string.Join(",", fields) + " FROM " + table, _connection);
 
-            SqlCommand cmd = new SqlCommand("SELECT @fields FROM @table", _connection);
-            cmd.Prepare();
-            cmd.Parameters.Add(new SqlParameter("@fields", string.Join(",", fields.ToArray())));
-            cmd.Parameters.Add(new SqlParameter("@table", table));
-
-            try
-            {
-                SqlDataReader r = cmd.ExecuteReader();
-
-                r.Close();
-
-                return r.ToList();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("/!\\ Erreur: La requuête n'a pas abouti.");
-                Console.WriteLine("\tTexte: " + cmd.CommandText);
-                Console.WriteLine("\tErreur: " + e.Message);
-                Console.ReadLine();
-
-                return null;
-            }
-
+            return getRequestResult(cmd);
         }
 
         static public List<Dictionary<string, string>> Select(string fields, string table)
@@ -105,49 +101,51 @@ namespace TicketsTac
             return Select(new List<String>(fields.Split(',')), table);
         }
 
-        static public int Insert(List<string> fields, List<string> values, string table)
-        {
-            if (_connection == null) _connectToDb();
-
-            SqlCommand cmd = new SqlCommand("INSERT INTO @table (@fields) VALUES (@values)", _connection);
-            cmd.Prepare();
-            cmd.Parameters.Add(new SqlParameter("@table", table));
-            cmd.Parameters.Add(new SqlParameter("@fields", string.Join(",", fields.ToArray())));
-            cmd.Parameters.Add(new SqlParameter("@values", string.Join(",", values.ToArray())));
-
-            return cmd.ExecuteNonQuery();
-        }
-
-        static public void Migrate()
-        {
-            if (_connection == null) _connectToDb();
-            List<string> files = new List<string>();
-            files.Add(@"../../../SQL/dbo.Projet_managers.sql");
-            files.Add(@"../../../SQL/dbo.Projet_operators.sql");
-            files.Add(@"../../../SQL/dbo.Projets.sql");
-            files.Add(@"../../../SQL/dbo.Ticket_comms.sql");
-            files.Add(@"../../../SQL/dbo.Tickets.sql");
-            files.Add(@"../../../SQL/dbo.Users.sql");
-
-            SqlCommand cmd = null;
-            for ( int i = 0 ; i < files.Count ; i++ )
-            {
-                cmd = new SqlCommand(System.IO.File.ReadAllText(files[i]), _connection);
-                cmd.ExecuteNonQuery();
-            }
-        }
-
         static public List<Dictionary<string, string>> SelectWhere(string fields, string whereClause, string table)
         {
             if (_connection == null) _connectToDb();
 
-            SqlCommand cmd = new SqlCommand("SELECT @fields FROM @table WHERE @where", _connection);
-            cmd.Prepare();
-            cmd.Parameters.Add(new SqlParameter("@fields", fields));
-            cmd.Parameters.Add(new SqlParameter("@table", table));
-            cmd.Parameters.Add(new SqlParameter("@where", whereClause));
+            SqlCommand cmd = new SqlCommand("SELECT " + fields + " FROM " + table + " WHERE " + whereClause, _connection);
 
-            return cmd.ExecuteReader().ToList();
+            return getRequestResult(cmd);
+        }
+
+        static public int Insert(List<string> fields, List<string> values, string table)
+        {
+            if (_connection == null) _connectToDb();
+            string reqValues = string.Join(",", values.ToArray());
+            string reqFields = string.Join(",", fields.ToArray());
+
+            SqlCommand cmd = new SqlCommand("INSERT INTO " + table + " (" + reqFields + ") VALUES (" + reqValues + ")", _connection);
+
+            return cmd.ExecuteNonQuery();
+        }
+
+        static public int Insert<T>(T instance, string table)
+        {
+            List<string> fields = new List<string>();
+            List<string> values = new List<string>();
+
+            foreach ( PropertyInfo p in typeof(T).GetProperties() )
+            {
+                if (p.Name.ToLower() == "id") continue;
+
+                fields.Add(p.Name);
+
+                Type valueType = p.GetValue(instance).GetType();
+
+                //TODO : Etre sur de prendre toutes les énums en compte
+                if (valueType == typeof(string))
+                    values.Add("'" + p.GetValue(instance).ToString() + "'");
+                else if (valueType == typeof(Rank) || valueType == typeof(StateEnum) )
+                    values.Add(((int)p.GetValue(instance)).ToString());
+                else
+                    values.Add(p.GetValue(instance).ToString());
+            }
+
+            Insert(fields, values, table);
+
+            return 0;
         }
 
         static public Dictionary<string, string> Get(int id, string table)
@@ -155,6 +153,25 @@ namespace TicketsTac
             if (_connection == null) _connectToDb();
 
             return SelectWhere("*", "id =" + id.ToString(), table)[0];
+        }
+
+        static public void Migrate()
+        {
+            if (_connection == null) _connectToDb();
+            List<string> files = new List<string>();
+            files.Add(@"../../../SQL/dbo.Users.sql");
+            files.Add(@"../../../SQL/dbo.Projets.sql");
+            files.Add(@"../../../SQL/dbo.Tickets.sql");
+            files.Add(@"../../../SQL/dbo.Ticket_comms.sql");
+            files.Add(@"../../../SQL/dbo.Projet_managers.sql");
+            files.Add(@"../../../SQL/dbo.Projet_operators.sql");
+
+            SqlCommand cmd = null;
+            for ( int i = 0 ; i < files.Count ; i++ )
+            {
+                cmd = new SqlCommand(System.IO.File.ReadAllText(files[i]), _connection);
+                cmd.ExecuteNonQuery();
+            }
         }
 
         public static List<Dictionary<string, string>> ToList(this SqlDataReader r)
@@ -182,8 +199,32 @@ namespace TicketsTac
                 ret.Add(tmp);
             }
 
+            r.Close();
+
             //Et maintenant que la liste est prête on la renvoie
             return ret;
+        }
+
+        private static List<Dictionary<string, string>> getRequestResult(SqlCommand cmd)
+        {
+            try
+            {
+                SqlDataReader r = cmd.ExecuteReader();
+                List<Dictionary<string, string>> ret = r.ToList();
+
+                r.Close();
+
+                return ret;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("/!\\ Erreur: Une requête n'a pas abouti.");
+                Console.WriteLine("\tTexte: " + cmd.CommandText);
+                Console.WriteLine("\tErreur: " + e.Message);
+                Console.ReadLine();
+
+                return null;
+            }
         }
     }
 }

@@ -6,6 +6,16 @@ using System.Threading.Tasks;
 
 namespace TicketsTac
 {
+    enum StateEnum
+    {
+
+        Open = 4,
+        Commented = 3,
+        Resolve = 2,
+        Validate = 1,
+        Closed = 0
+    };
+
     class Ticket
     {
         public int Id { get; private set; }
@@ -15,16 +25,6 @@ namespace TicketsTac
         public string AdditionnalNote { get; set; }
 
         public Projet Projets { get; set; }
-
-        public enum StateEnum
-        {
-
-            Open = 4,
-            Commented = 3,
-            Resolve = 2,
-            Validate = 1,
-            Closed = 0
-        };
 
         public StateEnum State { get; set; }
 
