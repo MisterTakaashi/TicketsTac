@@ -89,5 +89,12 @@ namespace TicketsTac
 
             return cmd.ExecuteNonQuery();
         }
+
+        static public void Migrate()
+        {
+            if (_connection == null) _connectToDb();
+
+            string text = System.IO.File.ReadAllText(@"..\ticketstac.sql");
+        }
     }
 }
