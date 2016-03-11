@@ -16,7 +16,6 @@ namespace TicketsTac
         public String Host { get; set; }
         public String Username { get; set; }
         public String Pass { get; set; }
-        public int Port { get; set; }
         
         public DBConfig()
         {
@@ -26,14 +25,12 @@ namespace TicketsTac
                     Host = "192.168.50.4";
                     Pass = "#SAPassword!";
                     Username = "sa";
-                    Port = 1433;
                     break;
 
                 case Environment.Prod:
                     Host = "164.132.110.73";
                     Pass = "Bastille89";
                     Username = "remote";
-                    Port = 1433;
                     break;
 
                 case Environment.Local:
@@ -51,12 +48,12 @@ namespace TicketsTac
         //  SelectWhere(string, string, string)
         //  Insert(List, List, string)
         //  Get(int, string)
+        //  Insert<T>(T instance, string)
 
         //TODO:
         //  SelectWhere(List, List, string)
         //  SelectWhere(string, List, string)
         //  SelectWhere(List, string, string)
-        //  Insert<T>(T instance, string)
         //  Delete(int id, string table)
         //  DeleteWhere(string whereClause, string table)
         //  DeleteWhere(List whereClauses, string table)
@@ -117,35 +114,40 @@ namespace TicketsTac
             string reqFields = string.Join(",", fields.ToArray());
 
             SqlCommand cmd = new SqlCommand("INSERT INTO " + table + " (" + reqFields + ") VALUES (" + reqValues + ")", _connection);
-
-            return cmd.ExecuteNonQuery();
+            try
+            {
+                int affectedRows = cmd.ExecuteNonQuery();
+                return affectedRows;
+            }
+            catch ( Exception e )
+            {
+                logRequestError(cmd, e);
+                return 0;
+            }
         }
 
         static public int Insert<T>(T instance, string table)
         {
-            List<string> fields = new List<string>();
-            List<string> values = new List<string>();
+            Dictionary<string, List<string>> properties = getObjectProperties<T>(instance);
 
-            foreach ( PropertyInfo p in typeof(T).GetProperties() )
-            {
-                if (p.Name.ToLower() == "id") continue;
-
-                fields.Add(p.Name);
-
-                Type valueType = p.GetValue(instance).GetType();
-
-                //TODO : Etre sur de prendre toutes les énums en compte
-                if (valueType == typeof(string))
-                    values.Add("'" + p.GetValue(instance).ToString() + "'");
-                else if (valueType == typeof(Rank) || valueType == typeof(StateEnum) )
-                    values.Add(((int)p.GetValue(instance)).ToString());
-                else
-                    values.Add(p.GetValue(instance).ToString());
-            }
-
-            Insert(fields, values, table);
+            Insert(properties["fields"], properties["values"], table);
 
             return 0;
+        }
+
+        static public int Delete(int id, string table)
+        {
+            SqlCommand cmd = new SqlCommand("DELETE FROM " + table + " WHERE id = " + id.ToString(), _connection);
+            try
+            {
+                int affectedRows = cmd.ExecuteNonQuery();
+                return affectedRows;
+            }
+            catch( Exception e )
+            {
+                logRequestError(cmd, e);
+                return 0;
+            }
         }
 
         static public Dictionary<string, string> Get(int id, string table)
@@ -172,6 +174,36 @@ namespace TicketsTac
                 cmd = new SqlCommand(System.IO.File.ReadAllText(files[i]), _connection);
                 cmd.ExecuteNonQuery();
             }
+        }
+
+        private static Dictionary<string, List<string>> getObjectProperties<T>(T instance)
+        {
+            Dictionary<string, List<string>> ret = new Dictionary<string, List<string>>();
+
+            List<string> fields = new List<string>();
+            List<string> values = new List<string>();
+
+            foreach (PropertyInfo p in typeof(T).GetProperties())
+            {
+                if (p.Name.ToLower() == "id") continue;
+
+                fields.Add(p.Name);
+
+                Type valueType = p.GetValue(instance).GetType();
+
+                //TODO : Etre sur de prendre toutes les énums en compte
+                if (valueType == typeof(string))
+                    values.Add("'" + p.GetValue(instance).ToString() + "'");
+                else if (valueType == typeof(Rank) || valueType == typeof(StateEnum))
+                    values.Add(((int)p.GetValue(instance)).ToString());
+                else
+                    values.Add(p.GetValue(instance).ToString());
+            }
+
+            ret.Add("fields", fields);
+            ret.Add("values", values);
+
+            return ret;
         }
 
         public static List<Dictionary<string, string>> ToList(this SqlDataReader r)
@@ -225,6 +257,14 @@ namespace TicketsTac
 
                 return null;
             }
+        }
+
+        private static void logRequestError(SqlCommand cmd, Exception e)
+        {
+            Console.WriteLine("/!\\ Erreur: La requête n'a pas abouti");
+            Console.WriteLine("\tTexte: " + cmd.CommandText);
+            Console.WriteLine("\tErreur: " + e.Data);
+            Console.WriteLine("\tMessage d'erreur: " + e.Message);
         }
     }
 }
