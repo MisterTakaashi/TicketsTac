@@ -6,13 +6,21 @@ namespace TicketsTac
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("coucou");
             // DB.Migrate();                // Décommenter pour que l'exécution prépare la BDD
 
+            /* Tests Pierrick 
+            User u = new User(0, "Zozo", "Zozoleclown1@gmail.com", Rank.Administrateur, 1457682682);
+            u.Password = "toto".ToSHA1();
+            DB.Insert<User>(u, "users");*/
+
+
+            //DB.Migrate();                // Décommenter pour que l'exécution prépare la BDD
+
             /* Tests Pierrick */
-            User u = new User(0, "Zozo", "Zozoleclown1@gmail.com", Rank.Administrateur);
-            DB.Insert<User>(u, "users");
-            //*/
+            InterfaceManager im = new InterfaceManager();
+            im.DisplayWelcomeMessage();
+            im.AskForAuthentication();
+            // Fin tests Pierrick */
 
             Console.ReadLine();
         }
