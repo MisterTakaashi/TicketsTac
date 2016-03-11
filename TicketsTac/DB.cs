@@ -72,7 +72,7 @@ namespace TicketsTac
             try
             {
                 _connection.Open();
-                Console.WriteLine("Connexion à la base de données: ok");
+                Logger.Info("Connexion à la base de données: OK");
             }
             catch ( Exception e )
             {
@@ -115,6 +115,8 @@ namespace TicketsTac
             if (_connection == null) _connectToDb();
             string reqValues = string.Join(",", values.ToArray());
             string reqFields = string.Join(",", fields.ToArray());
+
+            Console.WriteLine("INSERT INTO " + table + " (" + reqFields + ") VALUES (" + reqValues + ")");
 
             SqlCommand cmd = new SqlCommand("INSERT INTO " + table + " (" + reqFields + ") VALUES (" + reqValues + ")", _connection);
 
@@ -225,6 +227,11 @@ namespace TicketsTac
 
                 return null;
             }
+        }
+
+        public static int getTimestamp()
+        {
+            return (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
         }
     }
 }
