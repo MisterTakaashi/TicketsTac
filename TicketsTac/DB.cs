@@ -49,13 +49,14 @@ namespace TicketsTac
         //  Insert(List, List, string)
         //  Get(int, string)
         //  Insert<T>(T instance, string)
+        //  Delete(int id, string table)
+        //  Delete<T>(T instance, string table)
+        //  DeleteWhere(string whereClause, string table)
 
         //TODO:
         //  SelectWhere(List, List, string)
         //  SelectWhere(string, List, string)
         //  SelectWhere(List, string, string)
-        //  Delete(int id, string table)
-        //  DeleteWhere(string whereClause, string table)
         //  DeleteWhere(List whereClauses, string table)
         //  Update<T>(T instance, string table)
         
@@ -144,6 +145,38 @@ namespace TicketsTac
                 return affectedRows;
             }
             catch( Exception e )
+            {
+                logRequestError(cmd, e);
+                return 0;
+            }
+        }
+
+        static public int Delete<T>(T instance, string table)
+        {
+            int id = -1;
+            Dictionary<string, List<string>> properties = getObjectProperties<T>(instance);
+            for ( int i = 0; i < properties["fields"].Count; i++ )
+            {
+                if (properties["fields"][i].ToLower() == "id") id = int.Parse(properties["values"][i]);
+            }
+
+            //Si on a pas trouvé l'id, on envoie une exception pour éviter de Delete la table entière en passant une clause where invalide
+            if (id == -1) throw new Exception("Instance given to Delete method seems to have no public 'id' property.");
+
+            //Donc on arrive ici que si on a un id valide
+            return Delete(id, table);
+        }
+
+        static public int DeleteWhere(string whereClause, string table)
+        {
+            SqlCommand cmd = new SqlCommand("DELETE FROM " + table + " WHERE " + whereClause, _connection);
+
+            try
+            {
+                int affectedRows = cmd.ExecuteNonQuery();
+                return affectedRows;
+            }
+            catch ( Exception e )
             {
                 logRequestError(cmd, e);
                 return 0;
