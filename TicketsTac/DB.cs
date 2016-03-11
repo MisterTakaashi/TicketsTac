@@ -85,7 +85,7 @@ namespace TicketsTac
             }
         }
 
-        static public List<Dictionary<string, string>> Select(List<string> fields, string table)
+        public static List<Dictionary<string, string>> Select(List<string> fields, string table)
         {
             if (_connection == null ) _connectToDb();
             
@@ -94,12 +94,12 @@ namespace TicketsTac
             return getRequestResult(cmd);
         }
 
-        static public List<Dictionary<string, string>> Select(string fields, string table)
+        public static List<Dictionary<string, string>> Select(string fields, string table)
         {
             return Select(new List<String>(fields.Split(',')), table);
         }
 
-        static public List<Dictionary<string, string>> SelectWhere(string fields, string whereClause, string table)
+        public static List<Dictionary<string, string>> SelectWhere(string fields, string whereClause, string table)
         {
             if (_connection == null) _connectToDb();
 
@@ -108,7 +108,7 @@ namespace TicketsTac
             return getRequestResult(cmd);
         }
 
-        static public int Insert(List<string> fields, List<string> values, string table)
+        public static int Insert(List<string> fields, List<string> values, string table)
         {
             if (_connection == null) _connectToDb();
             string reqValues = string.Join(",", values.ToArray());
@@ -127,7 +127,7 @@ namespace TicketsTac
             }
         }
 
-        static public int Insert<T>(T instance, string table)
+        public static int Insert<T>(T instance, string table)
         {
             Dictionary<string, List<string>> properties = getObjectProperties<T>(instance);
 
@@ -136,7 +136,7 @@ namespace TicketsTac
             return 0;
         }
 
-        static public int Delete(int id, string table)
+        public static int Delete(int id, string table)
         {
             SqlCommand cmd = new SqlCommand("DELETE FROM " + table + " WHERE id = " + id.ToString(), _connection);
             try
@@ -151,7 +151,7 @@ namespace TicketsTac
             }
         }
 
-        static public int Delete<T>(T instance, string table)
+        public static int Delete<T>(T instance, string table)
         {
             int id = -1;
             Dictionary<string, List<string>> properties = getObjectProperties<T>(instance);
@@ -167,7 +167,7 @@ namespace TicketsTac
             return Delete(id, table);
         }
 
-        static public int DeleteWhere(string whereClause, string table)
+        public static int DeleteWhere(string whereClause, string table)
         {
             SqlCommand cmd = new SqlCommand("DELETE FROM " + table + " WHERE " + whereClause, _connection);
 
@@ -183,14 +183,14 @@ namespace TicketsTac
             }
         }
 
-        static public Dictionary<string, string> Get(int id, string table)
+        public static Dictionary<string, string> Get(int id, string table)
         {
             if (_connection == null) _connectToDb();
 
             return SelectWhere("*", "id =" + id.ToString(), table)[0];
         }
 
-        static public void Migrate()
+        public static void Migrate()
         {
             if (_connection == null) _connectToDb();
             List<string> files = new List<string>();
