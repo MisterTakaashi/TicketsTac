@@ -47,21 +47,19 @@ namespace TicketsTac
 
         public static User Get(int id)
         {
-            SqlDataReader r = DB.Get(id, "users");
+            Dictionary<string, string> r = DB.Get(id, "users");
             User theUser = new User();
-            while (r.Read())
-            {
-                theUser = new User((int)r["id"], (String)r["username"], (String)r["email"], (Rank)r["rank"]);
-            }
+            theUser = new User(Int32.Parse(r["id"]), (String)r["username"], (String)r["email"], new Rank(["rank"]);
             return theUser;
         }
 
         public static List<User> GetAll()
         {
             List<User> allUsers = new List<User>();
-            SqlDataReader r = DB.Select("*", "users");
-            while (r.Read()){
-                allUsers.Add(new User((int)r["id"], (String)r["username"], (String)r["email"], (Rank)r["rank"]));
+            List<Dictionary<string, string>> r = DB.Select("*", "users");
+            foreach (Dictionary<string, string> aUser in r)
+            {
+                allUsers.Add(new User(Int32.Parse(aUser["id"]), (String)aUser["username"], (String)aUser["email"], (Rank) Int32.Parse(aUser["rank"])));
             }
             return allUsers;
         }
