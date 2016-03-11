@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="InterfaceManager.cs" />
     <Compile Include="DB.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Projet.cs" />
