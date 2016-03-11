@@ -13,22 +13,12 @@ namespace TicketsTac
             u.Password = "toto".ToSHA1();
             DB.Insert<User>(u, "users");*/
 
-            User user = null;
 
-            do
-            {
-                Console.WriteLine("Entrez votre mail ?");
-                string email = Console.ReadLine();
-                Console.WriteLine("Entrez votre mot de passe ?");
-                string pass = Console.ReadLine();
+            //DB.Migrate();                // Décommenter pour que l'exécution prépare la BDD
 
-                user = User.Connect(email, pass.ToSHA1());
-
-                if (user == null)
-                    Logger.Error("Your email or password is wrong");
-            } while (user == null);
-
-            Logger.Info("Connection etablished");
+            /* Tests Pierrick */
+            InterfaceManager im = new InterfaceManager();
+            // Fin tests Pierrick */
 
             Console.ReadLine();
         }
