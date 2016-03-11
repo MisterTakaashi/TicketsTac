@@ -3,15 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Data.SqlClient;
 
 namespace TicketsTac
 {
     class User
     {
-        public int Id { get; set; }
-        public string Username { get; set; }
-        public string Email { get; set; }
-        public Rank Rank { get; set; }
+        public int Id { get; private set; }
+        public string Username { get; private set; }
+        public string Email { get; private set; }
+        public Rank Rank { get; private set; }
 
         private string _password;
 
@@ -23,18 +24,46 @@ namespace TicketsTac
             Rank = rank;
         }
 
-        public static User Get()
+        public User() { }
+
+        public void setId(int id) {
+            //code
+        }
+
+        public void setUsername(String username)
         {
+            //code
+        }
 
+        public void setEmail(String email)
+        {
+            //code
+        }
 
-            return null;
+        public void setRank(Rank rank)
+        {
+            //code
+        }
+
+        public static User Get(int id)
+        {
+            SqlDataReader r = DB.Get(id, "users");
+            User theUser = new User();
+            while (r.Read())
+            {
+                theUser = new User((int)r["id"], (String)r["username"], (String)r["email"], (Rank)r["rank"]);
+            }
+            return theUser;
         }
 
         public static List<User> GetAll()
         {
-
-
-            return null;
+            List<User> allUsers = new List<User>();
+            SqlDataReader r = DB.Select("*", "users");
+            while (r.Read()){
+                allUsers.Add(new User((int)r["id"], (String)r["username"], (String)r["email"], (Rank)r["rank"]));
+            }
+            return allUsers;
         }
 
         public static User Connect(string email, string password)
