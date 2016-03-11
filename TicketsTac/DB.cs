@@ -46,19 +46,15 @@ namespace TicketsTac
         //  Select(List, string)
         //  Select(string, string)
         //  SelectWhere(string, string, string)
+        //  SelectWhere(List, List, string)
         //  Insert(List, List, string)
         //  Get(int, string)
         //  Insert<T>(T instance, string)
         //  Delete(int id, string table)
         //  Delete<T>(T instance, string table)
         //  DeleteWhere(string whereClause, string table)
-
-        //TODO:
-        //  SelectWhere(List, List, string)
-        //  SelectWhere(string, List, string)
-        //  SelectWhere(List, string, string)
-        //  DeleteWhere(List whereClauses, string table)
         //  Update<T>(T instance, string table)
+        //  Update(int id, List<string>fields, List<string> values, string table)
         
         static private SqlConnection _connection = null;
 
@@ -139,6 +135,49 @@ namespace TicketsTac
             Insert(properties["fields"], properties["values"], table);
 
             return 0;
+        }
+
+        public static int Update(int id, List<string> fields, List<string> values, string table)
+        {
+            string request = "UPDATE " + table + " SET ";
+            for ( int i = 0; i < fields.Count; i++ )
+            {
+                int intBuffer;
+                double doubleBuffer;
+
+                if (int.TryParse(values[i], out intBuffer) || double.TryParse(values[i], out doubleBuffer))
+                    request += (fields[i] + " = " + values[i]);
+                else
+                    request += (fields[i] + " = '" + values[i] + "'");
+            }
+            request += " WHERE id = " + id.ToString();
+
+            SqlCommand cmd = new SqlCommand(request);
+            try
+            {
+                int affectedRows = cmd.ExecuteNonQuery();
+                return affectedRows;
+            }
+            catch ( Exception e )
+            {
+                logRequestError(cmd, e);
+                return 0;
+            }
+        }
+
+        public static int Update<T>(T instance, string table)
+        {
+            Dictionary<string, List<string>> ret = getObjectProperties<T>(instance);
+
+            int id = -1;
+            for (int i = 0; i < ret["fields"].Count; i++)
+                if (ret["fields"][i].ToLower() == "id")
+                    id = int.Parse(ret["values"][i]);
+
+            if (id == -1)
+                throw new Exception("id fields does not seem to be set for the instance you want to use in update");
+
+            return Update(id, table);
         }
 
         public static int Delete(int id, string table)
