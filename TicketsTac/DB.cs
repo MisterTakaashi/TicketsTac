@@ -50,6 +50,7 @@ namespace TicketsTac
         //  Insert(List, List, string)
         //  Get(int, string)
         //  Insert<T>(T instance, string)
+        //  Insert(List<string> fields, List<string> values, string table)
         //  Delete(int id, string table)
         //  Delete<T>(T instance, string table)
         //  DeleteWhere(string whereClause, string table)
@@ -116,15 +117,26 @@ namespace TicketsTac
             string reqFields = string.Join(",", fields.ToArray());
 
             SqlCommand cmd = new SqlCommand("INSERT INTO " + table + " (" + reqFields + ") VALUES (" + reqValues + ")", _connection);
+            int affectedRows = 0;
+            Dictionary<string, string> insertedRecord = null;
             try
             {
-                int affectedRows = cmd.ExecuteNonQuery();
-                return affectedRows;
+                affectedRows = cmd.ExecuteNonQuery();
+                insertedRecord = SelectWhere(reqFields, reqValues, table)[0];
             }
             catch ( Exception e )
             {
                 logRequestError(cmd, e);
                 return 0;
+            }
+
+            if ( affectedRows != 0 && insertedRecord.ContainsKey("Id"))
+            {
+                return int.Parse(insertedRecord["Id"]);
+            }
+            else
+            {
+                throw new Exception("Insertion failed for the data you provided.");
             }
         }
 
