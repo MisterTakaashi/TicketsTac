@@ -18,6 +18,8 @@ namespace TicketsTac
 
             /* Tests Pierrick */
             InterfaceManager im = new InterfaceManager();
+            im.DisplayWelcomeMessage();
+            im.AskForAuthentication();
             // Fin tests Pierrick */
 
             Console.ReadLine();
