@@ -108,6 +108,11 @@ namespace TicketsTac
             return getRequestResult(cmd);
         }
 
+        public static List<Dictionary<string, string>> SelectWhere(List<string> fields, List<string> values, string table)
+        {
+            return SelectWhere(string.Join(",", fields), string.Join(",", fields), table);
+        }
+
         public static int Insert(List<string> fields, List<string> values, string table)
         {
             if (_connection == null) _connectToDb();
