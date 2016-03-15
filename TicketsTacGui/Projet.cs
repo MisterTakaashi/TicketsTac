@@ -69,11 +69,11 @@ namespace TicketsTacGui
         {
             // Création de l'objet
             Id = int.Parse(projet["Id"]);
-            Nom = projet["Nom"];
+            Nom = projet["Name"];
             Description = projet["Description"];
             int IdClient = int.Parse(projet["Client_Id"]);
             // ajout du Client
-            Client = new User(DB.Get(IdClient, "Clients"));
+            Client = new User(DB.Get(IdClient, "Users"));
             // Ajout des Managers
             List<Dictionary<String, String>> managers = DB.SelectWhere("Users.Id, Users.Username, Users.Email, Users.Password, Users.Rank, Users.Created", "Projet_managers.Projet_Id = " + Id + ", Users.Id = Projet_manager.Manager_Id", "Projet_managers, Users");
             foreach (Dictionary<String, String> manager in managers)

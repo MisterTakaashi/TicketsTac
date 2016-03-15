@@ -31,7 +31,7 @@ namespace TicketsTacGui
         public User(Dictionary<String, String> user)
         {
             Id = int.Parse(user["Id"]);
-            Username = user["Name"];
+            Username = user["Username"];
             Email = user["Email"];
             Rank = (Rank)int.Parse(user["Rank"]);
             Created = Int64.Parse(user["Created"]);

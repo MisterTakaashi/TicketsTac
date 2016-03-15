@@ -26,6 +26,21 @@ namespace TicketsTacGui
 
             List<Projet> projets = Projet.GetAllProjetsFromBDD();
 
+            int numberProjets = 0;
+            foreach (Projet projet in projets)
+            {
+                Button buttonProjet = new Button();
+                buttonProjet.Height = 50;
+                buttonProjet.Margin = new Thickness(0, 50 * numberProjets, 0, 0);
+                buttonProjet.Content = projet.Nom;
+
+                Console.WriteLine("Nouveau projet: " + projet.Nom);
+
+                stackPanel_projects.Children.Add(buttonProjet);
+
+                numberProjets++;
+            }
+
             Console.WriteLine(projets);
         }
     }
