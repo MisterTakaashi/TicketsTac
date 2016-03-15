@@ -43,7 +43,9 @@ namespace TicketsTacGui
                 User.currentUser = user;
 
                 MainWindow main = (MainWindow)Application.Current.MainWindow;
-                main.frameContent.Navigate(new ProjectsListPage());
+                //main.frameContent.Navigate(new ProjectsListPage());
+                main.frameContent.Navigate(new NewProjectPage());
+
             }
         }
 

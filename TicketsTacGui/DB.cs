@@ -119,6 +119,10 @@ namespace TicketsTacGui
 
         public static List<Dictionary<string, string>> SelectWhere(List<string> fields, List<string> values, string table)
         {
+            for ( int i = 0; i < fields.Count; i++ )
+            {
+
+            }
             return SelectWhere(string.Join(",", fields), string.Join(",", fields), table);
         }
 
@@ -270,6 +274,7 @@ namespace TicketsTacGui
             files.Add(@"../../../SQL/dbo.Ticket_comms.sql");
             files.Add(@"../../../SQL/dbo.Projet_managers.sql");
             files.Add(@"../../../SQL/dbo.Projet_operators.sql");
+            files.Add(@"../../../SQL/dbo.Ticket_assignee.sql");
 
             SqlCommand cmd = null;
             for ( int i = 0 ; i < files.Count ; i++ )

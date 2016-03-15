@@ -29,18 +29,21 @@ namespace TicketsTacGui
         {
             if (User.currentUser.hasPermissionTo(Permission.projectCreate, this))
             {
+                Nom = nom;
+                Client = client;
+
                 List<String> fields = new List<String>();
                 fields.Add("Name");
                 fields.Add("Client_Id");
                 fields.Add("Created");
                 List<String> values = new List<String>();
-                values.Add(nom);
+                values.Add("'" + nom + "'");
                 values.Add(Client.Id.ToString());
                 values.Add(DB.getTimestamp().ToString());
-                int id = DB.Insert(fields, values, "Projets");
-                Nom = nom;
-                Client = client;
-                Id = id;
+
+                DB.Insert(fields, values, "Projets");
+
+                Id = int.Parse(DB.SelectWhere("*", "Name = '" + nom + "'", "Projets")[0]["Id"]);
                 Managers.Add(manager);
             }
             else
