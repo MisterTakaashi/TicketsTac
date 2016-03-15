@@ -85,7 +85,7 @@ namespace TicketsTacGui
             }
 
             ValueList.Add(this.ProblemDescription);
-            ValueList.Add(this.project.GetIDToString());
+            ValueList.Add(this.Project.GetIDToString());
             ValueList.Add(this.State.ToString());
            
             DB.Update(this.Id, fieldList, ValueList, "Tickets");

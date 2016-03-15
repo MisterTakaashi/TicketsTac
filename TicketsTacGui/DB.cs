@@ -119,6 +119,10 @@ namespace TicketsTacGui
 
         public static List<Dictionary<string, string>> SelectWhere(List<string> fields, List<string> values, string table)
         {
+            for ( int i = 0; i < fields.Count; i++ )
+            {
+
+            }
             return SelectWhere(string.Join(",", fields), string.Join(",", fields), table);
         }
 
