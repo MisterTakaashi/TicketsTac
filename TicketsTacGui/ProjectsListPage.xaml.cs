@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace TicketsTacGui
 {
     /// <summary>
-    /// Interaction logic for ProjectsList.xaml
+    /// Logique d'interaction pour ProjectsListPage.xaml
     /// </summary>
-    public partial class ProjectsList : Page
+    public partial class ProjectsListPage : Page
     {
-        public ProjectsList()
+        public ProjectsListPage()
         {
             InitializeComponent();
         }
