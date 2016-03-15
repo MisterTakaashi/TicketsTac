@@ -70,33 +70,27 @@ namespace TicketsTacGui
             DB.Get(this.Id, "Tickets");
         }
 
-        /*private Ticket EditTicket(Ticket editTicket)
+        private void EditTicket()
         {
 
             List<string> fieldList = new List<string>();
-            fieldList.Add("users");
             fieldList.Add("problem_description");
             fieldList.Add("projet");
             fieldList.Add("state");;
 
-            Ticket ticket = new Ticket(DB.Get(this.Id, "Tickets"));
-
             List<string> ValueList = new List<string>();
-            if((ticket.ProblemDescription != editTicket.ProblemDescription) || (ticket.State != editTicket.State) || (ticket.AdditionnalNote != editTicket.AdditionnalNote))
+            if ((this.AdditionnalNote != null))
             {
-                if ((ticket.AdditionnalNote != null) || (editTicket.AdditionnalNote != null))
-                {
-                    ValueList.Add("3");
-                }
-                ValueList.Add(editTicket.ProblemDescription);
-                ValueList.Add("4");
-                ValueList.Add(project.GetIDToString());
-
-                DB.Update(this.Id,fieldList, ValueList, "Tickets");
+                this.State = StateEnum.Commented;
             }
 
-            return editTicket;
-        }*/
+            ValueList.Add(this.ProblemDescription);
+            ValueList.Add(this.project.GetIDToString());
+            ValueList.Add(this.State.ToString());
+           
+            DB.Update(this.Id, fieldList, ValueList, "Tickets");
+        }
+
     }
 }
 
