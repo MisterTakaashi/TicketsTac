@@ -9,6 +9,8 @@ namespace TicketsTacGui
 {
     class User
     {
+        public static User currentUser = new User(0, "Test", "Test", Rank.Administrateur, 0);
+
         public int Id { get; }
         public string Username { get; set; }
         public string Email { get; set; }

@@ -10,8 +10,8 @@
 
     <Grid>
         <Label x:Name="label" Content="Tickets Tac" Margin="0,50" VerticalAlignment="Top" HorizontalAlignment="Center"/>
-        <TextBox x:Name="textBoxUsername" HorizontalAlignment="Center" Height="25" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Margin="0,80"/>
-        <PasswordBox x:Name="passwordBoxPassword" HorizontalAlignment="Center" Margin="0,110" Height="25" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="textBoxUsername" HorizontalAlignment="Center" Height="25" TextWrapping="Wrap" VerticalAlignment="Top" Width="200" Margin="0,80"/>
+        <PasswordBox x:Name="passwordBoxPassword" HorizontalAlignment="Center" Margin="0,110" Height="25" VerticalAlignment="Top" Width="200"/>
         <Button x:Name="buttonConnexion" Content="Connexion" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,150,0,0"/>
     </Grid>
 </Page>

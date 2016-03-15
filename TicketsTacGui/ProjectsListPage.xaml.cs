@@ -23,6 +23,10 @@ namespace TicketsTacGui
         public ProjectsListPage()
         {
             InitializeComponent();
+
+            List<Projet> projets = Projet.GetAllProjetsFromBDD();
+
+            Console.WriteLine(projets);
         }
     }
 }
