@@ -55,6 +55,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Commentaire.cs" />
     <Compile Include="DbConnectPage.xaml.cs">
       <DependentUpon>DbConnectPage.xaml</DependentUpon>
     </Compile>

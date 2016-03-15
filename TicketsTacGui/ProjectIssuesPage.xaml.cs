@@ -31,19 +31,19 @@ namespace TicketsTacGui
 
             Task.Run(() =>
             {
-                Thread.Sleep(3000);
-                Console.WriteLine("Bonjour !");
+                List<Ticket> tickets = this.Project.GetAllTickets();
+
+                foreach (Ticket ticket in tickets)
+                {
+                    stackPanel_issues.Dispatcher.Invoke(() =>
+                    {
+                        Button ticketButton = new Button();
+                        ticketButton.Content = ticket.ProblemDescription;
+
+                        stackPanel_issues.Children.Add(ticketButton);
+                    });
+                }
             });
-
-            List<Ticket> tickets = this.Project.GetAllTickets();
-
-            foreach (Ticket ticket in tickets)
-            {
-                Button ticketButton = new Button();
-                ticketButton.Content = ticket.ProblemDescription;
-
-                stackPanel_issues.Children.Add(ticketButton);
-            }
         }
     }
 }

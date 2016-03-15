@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -10,6 +11,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
@@ -32,21 +34,39 @@ namespace TicketsTacGui
         {
             Debug.WriteLine("Connexion de " + textBoxUsername.Text + " Pass: " + passwordBoxPassword.Password);
 
-            User user = User.Connect(textBoxUsername.Text, passwordBoxPassword.Password.ToSHA1());
+            string email = textBoxUsername.Text;
+            string password = passwordBoxPassword.Password.ToSHA1();
 
-            if (user == null)
+            Task.Run(() =>
             {
-                MessageBox.Show("Email or Password is wrong");
-            }
-            else
-            {
-                User.currentUser = user;
+                this.Dispatcher.Invoke(() =>
+                {
+                    textBoxUsername.Visibility = Visibility.Collapsed;
+                    passwordBoxPassword.Visibility = Visibility.Collapsed;
+                    buttonConnexion.IsEnabled = false;
+                    buttonConnexion.Content = "Connexion en cours...";
+                });
 
-                MainWindow main = (MainWindow)Application.Current.MainWindow;
-                //main.frameContent.Navigate(new ProjectsListPage());
-                main.frameContent.Navigate(new NewProjectPage());
+                User user = User.Connect(email, password);
 
-            }
+                if (user == null)
+                {
+                    MessageBox.Show("Email or Password is wrong");
+                }
+                else
+                {
+                    User.currentUser = user;
+
+                    
+                    //main.frameContent.Navigate(new NewProjectPage());
+
+                    this.Dispatcher.Invoke(() =>
+                    {
+                        MainWindow main = (MainWindow)Application.Current.MainWindow;
+                        main.frameContent.Navigate(new ProjectsListPage());
+                    });
+                }
+            });
         }
 
         private void textBoxUsername_GotFocus(object sender, RoutedEventArgs e)
