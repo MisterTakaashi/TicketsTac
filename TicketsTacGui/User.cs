@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace TicketsTacGui
 {
@@ -46,9 +47,15 @@ namespace TicketsTacGui
 
         public static List<User> GetAll()
         {
+            List<User> ret = new List<User>();
+            List<Dictionary<string, string>> users = DB.Select("*", "Users");
 
+            foreach (Dictionary<string, string> user in users)
+            {
+                ret.Add(new User(user));
+            }
 
-            return null;
+            return ret;
         }
 
         public static User Connect(string email, string password)

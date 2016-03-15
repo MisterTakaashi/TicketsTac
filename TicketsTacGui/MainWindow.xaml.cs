@@ -16,12 +16,7 @@ namespace TicketsTacGui
 
             //frameContent.Source = new Uri("LoginPage.xaml", UriKind.Relative);
             
-            frameContent.Navigate(new DbConnectPage());
-        }
-
-        public void mainLabelClicked(object sender, MouseButtonEventArgs e)
-        {
-            MessageBox.Show("You clicked me at " + e.GetPosition(this).ToString());
+            //frameContent.Navigate(new NewProjectPage());
         }
     }
 }
