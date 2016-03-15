@@ -16,18 +16,13 @@ using System.Windows.Shapes;
 namespace TicketsTacGui
 {
     /// <summary>
-    /// Logique d'interaction pour MainWindow.xaml
+    /// Interaction logic for ProjectsList.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class ProjectsList : Page
     {
-        public MainWindow()
+        public ProjectsList()
         {
             InitializeComponent();
-        }
-
-        public void mainLabelClicked(object sender, MouseButtonEventArgs e)
-        {
-            MessageBox.Show("You clicked me at " + e.GetPosition(this).ToString());
         }
     }
 }

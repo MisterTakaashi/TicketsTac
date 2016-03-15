@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:TicketsTacGui"
         mc:Ignorable="d"
         Title="Tickets Tac" Height="350" Width="525">
-    <Grid Background="Red">
-        
+    <Grid Background="#C5C5C5">
+        <Label x:Name="mainTitle" Content="TicketsTac&#xA;" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="225,10,0,0" MouseUp="mainLabelClicked"/>
+
     </Grid>
 </Window>
