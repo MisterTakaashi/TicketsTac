@@ -20,7 +20,7 @@ namespace TicketsTacGui
     {
         public int Id { get; private set; }
         public string ProblemDescription { get; set; }
-        public string AdditionnalNote { get; set; }
+        public List<Comms> AdditionnalNote { get; set; }
 
         public Projet Project { get; set; }
 
@@ -89,6 +89,16 @@ namespace TicketsTacGui
             ValueList.Add(this.State.ToString());
            
             DB.Update(this.Id, fieldList, ValueList, "Tickets");
+        }
+
+        private Comms AddComment(string noteContent)
+        {
+            Console.WriteLine("edition d'un nouveau commentaire");
+            Comms comms = new Comms(noteContent, User.currentUser, this);
+            comms.InsertIntoBDD();
+            this.AdditionnalNote.Add(comms);
+
+            return comms;
         }
 
     }
