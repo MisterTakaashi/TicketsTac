@@ -11,12 +11,13 @@
     <Page.Resources>
         <Style TargetType="Button" x:Key="ListProjectButtons">
             <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Height" Value="45"/>
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Padding" Value="10,0,0,0"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type Button}">
                         <Border Background="{TemplateBinding Background}">
-                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <ContentPresenter HorizontalAlignment="Left" VerticalAlignment="Center"/>
                         </Border>
                     </ControlTemplate>
                 </Setter.Value>
