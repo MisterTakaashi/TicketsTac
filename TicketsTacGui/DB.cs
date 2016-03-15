@@ -117,13 +117,23 @@ namespace TicketsTacGui
             return getRequestResult(cmd);
         }
 
-        public static List<Dictionary<string, string>> SelectWhere(List<string> fields, List<string> values, string table)
+        public static List<Dictionary<string, string>> SelectWhere(List<string> selectFields, List<string> fields, List<string> values, string table)
         {
-            for ( int i = 0; i < fields.Count; i++ )
+            string whereClause = "";
+            for ( int i = 0; i < selectFields.Count; i++ )
             {
+                if (i == 0)
+                    whereClause += fields[i] + " = ";
+                else
+                    whereClause += " AND " + fields[i] + " = ";
 
+                int bufferInt;
+                double bufferDouble;
+
+                if (double.TryParse(values[i], out bufferDouble) || int.TryParse(values[i], out bufferInt)) whereClause += values[i];
+                else whereClause += "'" + values[i] + "'";
             }
-            return SelectWhere(string.Join(",", fields), string.Join(",", fields), table);
+            return SelectWhere(string.Join(",", selectFields), whereClause, table);
         }
 
         public static int Insert(List<string> fields, List<string> values, string table)
@@ -297,15 +307,18 @@ namespace TicketsTacGui
 
                 fields.Add(p.Name);
 
-                Type valueType = p.GetValue(instance).GetType();
-
-                //TODO : Etre sur de prendre toutes les énums en compte
-                if (valueType == typeof(string))
-                    values.Add("'" + p.GetValue(instance).ToString() + "'");
-                else if (valueType == typeof(Rank) || valueType == typeof(StateEnum))
-                    values.Add(((int)p.GetValue(instance)).ToString());
-                else
-                    values.Add(p.GetValue(instance).ToString());
+                if (p.GetValue(instance) != null)
+                {
+                    Type valueType = p.GetValue(instance).GetType(); //NULLReferenceException
+                    if (valueType == typeof(string))
+                        values.Add("'" + p.GetValue(instance).ToString() + "'");
+                    else if (valueType == typeof(Rank) || valueType == typeof(StateEnum))
+                        values.Add(((int)p.GetValue(instance)).ToString());
+                    else
+                        values.Add(p.GetValue(instance).ToString());
+                    //TODO : Etre sur de prendre toutes les énums en compte
+                }
+                else continue;
             }
 
             ret.Add("fields", fields);

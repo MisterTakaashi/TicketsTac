@@ -38,7 +38,13 @@ namespace TicketsTacGui
         private void buttonCreateProject_Click(object sender, RoutedEventArgs e)
         {
             User u = new User(DB.Get(int.Parse(((ComboBoxItem)comboBox_assignee.SelectedItem).Tag.ToString()), "Users"));
-            DB.Insert(new Projet(textBox_title.Text, u, User.currentUser), "Projets");
+            Projet created = new Projet(textBox_title.Text, u, User.currentUser);
+            NavigationService.Navigate(new ProjectsListPage());
+        }
+
+        private void buttonCancel_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new ProjectsListPage());
         }
     }
 }

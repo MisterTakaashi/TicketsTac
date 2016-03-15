@@ -39,7 +39,7 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <StackPanel x:Name="stackPanel_projects" Grid.Row="1"/>
-        <Button x:Name="button" HorizontalAlignment="Left" VerticalAlignment="Center" Width="32" Height="32" Background="{x:Null}" BorderBrush="{x:Null}" RenderTransformOrigin="1.331,-0.413" Margin="10,0,0,0">
+        <Button x:Name="button" Click="button_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Width="32" Height="32" Background="{x:Null}" BorderBrush="{x:Null}" RenderTransformOrigin="1.331,-0.413" Margin="10,0,0,0">
             <StackPanel>
                 <Image Source="Ressources/Add.png" />
             </StackPanel>
