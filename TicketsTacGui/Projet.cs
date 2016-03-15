@@ -116,6 +116,27 @@ namespace TicketsTacGui
             }*/
         }
 
+        private Ticket CreateTicket(string problemDescription)
+        {
+
+            List<string> fieldList = new List<string>();
+            fieldList.Add("users");
+            fieldList.Add("problem_description");
+            fieldList.Add("projet");
+            fieldList.Add("state");
+
+            Console.WriteLine("Ouverture d'un nouveau ticket");
+
+            Ticket ticket = new Ticket(problemDescription, this);
+            List<string> ValueList = new List<string>();
+            ValueList.Add(problemDescription);
+            ValueList.Add("4");
+            ValueList.Add(this.GetIDToString());
+            DB.Insert(fieldList, ValueList, "tickets");
+
+            return ticket;
+        }
+
         /*
         ** Getters
         */
@@ -163,6 +184,23 @@ namespace TicketsTacGui
         public String getDescription()
         {
             return Description;
+        }
+
+        public List<Ticket> GetAllTickets()
+        {
+            if (User.currentUser.hasPermissionTo(Permission.projectView, this))
+            {
+                List<Ticket> allTickets = new List<Ticket>();
+                List<Dictionary<String, String>> ticketsList = DB.SelectWhere("*", "Projet_Id = " + this.GetIDToString(), "Tickets");
+                foreach (Dictionary<String, String> ticket in ticketsList)
+                {
+                    allTickets.Add(new Ticket(ticket));
+                }
+                return allTickets;
+            }
+            else
+                Console.WriteLine("Insuficient permissions");
+                return null;
         }
 
         /*
@@ -321,6 +359,20 @@ namespace TicketsTacGui
             {
                 DB.DeleteWhere("Operator_Id = " + operationnel.Id.ToString() + " AND Projet_Id " + Id, "Projet_operators");
                 Operationnels.Remove(operationnel);
+            }
+            else
+            {
+                Console.WriteLine("Insuficient permissions");
+            }
+        }
+
+        public void DeleteProjet()
+        {
+            if (User.currentUser.hasPermissionTo(Permission.projectDelete, this))
+            {
+                DB.DeleteWhere("Projet_Id = " + this.GetIDToString(), "Projet_managers");
+                DB.DeleteWhere("Projet_Id = " + this.GetIDToString(), "Projet_operators");
+                DB.DeleteWhere("Id = " + this.GetIDToString(), "Projet");
             }
             else
             {

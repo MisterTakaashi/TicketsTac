@@ -60,7 +60,7 @@ namespace TicketsTacGui
 
         public static User Connect(string email, string password)
         {
-            List<Dictionary<string, string>> result = DB.SelectWhere("*", string.Format("Email = '{0}' AND Password = '{1}'", email, password), "users");
+            List<Dictionary<string, string>> result = DB.SelectWhere("*", string.Format("Email = '{0}' AND Password = '{1}'", email, password), "Users");
 
             foreach (var user in result)
             {

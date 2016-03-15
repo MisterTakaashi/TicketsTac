@@ -17,6 +17,8 @@ namespace TicketsTacGui
             //frameContent.Source = new Uri("LoginPage.xaml", UriKind.Relative);
             
             //frameContent.Navigate(new NewProjectPage());
+
+            //frameContent.Navigate(new DbConnectPage());
         }
     }
 }
