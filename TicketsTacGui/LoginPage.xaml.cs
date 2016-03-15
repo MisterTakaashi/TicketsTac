@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,13 +17,20 @@ using System.Windows.Shapes;
 namespace TicketsTacGui
 {
     /// <summary>
-    /// Interaction logic for ProjectsList.xaml
+    /// Logique d'interaction pour LoginPage.xaml
     /// </summary>
-    public partial class ProjectsList : Page
+    public partial class LoginPage : Page
     {
-        public ProjectsList()
+        public LoginPage()
         {
             InitializeComponent();
+
+            buttonConnexion.Click += buttonConnexion_Click;
+        }
+
+        private void buttonConnexion_Click(object sender, RoutedEventArgs e)
+        {
+            Debug.WriteLine("Connexion de " + textBoxUsername.Text + " Pass: " + passwordBoxPassword.Password);
         }
     }
 }

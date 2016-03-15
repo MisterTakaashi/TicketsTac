@@ -1,18 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
-namespace TicketsTac
+namespace TicketsTacGui
 {
+    enum Environment { Prod = 0, Dev = 1, Local = 2 }
     class DBConfig
     {
-        enum Environment { Prod = 0, Dev = 1, Local = 2 }
         private Environment _env = Environment.Prod;
 
         public String Host { get; set; }
@@ -67,12 +63,11 @@ namespace TicketsTac
         //  Update(int id, List<string>fields, List<string> values, string table)
         
         static private SqlConnection _connection = null;
-
+        static private DBConfig config = new DBConfig();
         static private void _connectToDb()
         {
-            DBConfig config = new DBConfig();
-            // _connection = new SqlConnection(@"Data Source=" + config.Host + "," + config.Port.ToString() + ";Uid=" + config.Username + ";Pwd=" + config.Pass + ";");
-            _connection = new SqlConnection("Data Source=" + config.Host + ";Integrated Security=True;Initial Catalog=TicketsTac;");
+            _connection = new SqlConnection(@"Data Source=" + config.Host + ";Uid=" + config.Username + ";Pwd=" + config.Pass + ";");
+            //_connection = new SqlConnection("Data Source=" + config.Host + ";Integrated Security=True;Initial Catalog=TicketsTac;");
             try
             {
                 _connection.Open();
@@ -80,20 +75,22 @@ namespace TicketsTac
             }
             catch ( Exception e )
             {
-                Console.WriteLine("/!\\ La connexion à la base de données à échoué. Informations sur la connexion:");
-                Console.WriteLine("\tHost: " + config.Host);
-                Console.WriteLine("\tUser: " + config.Username);
-                Console.WriteLine("\tPass: " + config.Pass);
-                Console.WriteLine("\tConnection String: " + _connection.ConnectionString);
-                Console.WriteLine("\tError: " + e.Message);
-                Console.ReadLine();
-                System.Environment.Exit(-1);
+                string str = "/!\\ La connexion à la base de données à échoué. Informations sur la connexion:\n\tHost: " + config.Host +
+                "\n\tUser: " + config.Username +
+                "\n\tPass: " + config.Pass +
+                "\n\tConnection String: " + _connection.ConnectionString +
+                "\n\tError: " + e.Message;
+
+                MessageBox.Show(str);
             }
         }
 
-        public static void testConnection()
+        public static void testConnection(DBConfig conf)
         {
-            if ( _connection == null ) _connectToDb();
+            config = conf;
+            if (_connection != null) _connection.Close();
+
+            _connectToDb();
             _connection.Close();
         }
 
