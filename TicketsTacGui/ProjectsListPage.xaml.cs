@@ -30,9 +30,10 @@ namespace TicketsTacGui
             foreach (Projet projet in projets)
             {
                 Button buttonProjet = new Button();
-                buttonProjet.Height = 50;
-                buttonProjet.Margin = new Thickness(0, 50 * numberProjets, 0, 0);
                 buttonProjet.Content = projet.Nom;
+                buttonProjet.Style = Resources["ListProjectButtons"] as Style;
+                buttonProjet.Click += buttonConnexion_Click;
+                buttonProjet.Tag = projet.Id;
 
                 Console.WriteLine("Nouveau projet: " + projet.Nom);
 
@@ -42,6 +43,16 @@ namespace TicketsTacGui
             }
 
             Console.WriteLine(projets);
+        }
+
+        private void buttonConnexion_Click(object sender, RoutedEventArgs e)
+        {
+            Button senderButton = sender as Button;
+            int id = (int)senderButton.Tag;
+
+            Console.WriteLine("Demande Projet N°" + id);
+
+            frame_project.Navigate(new ProjectIssuesPage(id));
         }
     }
 }
