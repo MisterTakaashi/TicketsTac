@@ -88,17 +88,32 @@ namespace TicketsTacGui
             // ajout du Client
             Client = new User(DB.Get(IdClient, "Users"));
             // Ajout des Managers
-            List<Dictionary<String, String>> managers = DB.SelectWhere("Users.Id, Users.Username, Users.Email, Users.Password, Users.Rank, Users.Created", "Projet_managers.Projet_Id = " + Id + ", Users.Id = Projet_manager.Manager_Id", "Projet_managers, Users");
+
+            List<Dictionary<String, String>> managersIds = DB.SelectWhere("*", "Projet_Id = " + this.Id, "Projet_managers");
+            foreach (Dictionary<String, String> managerId in managersIds)
+            {
+                Dictionary<String, String> managersReal = DB.SelectWhere("*", "Id = " + managerId["Manager_Id"], "Users")[0];
+                Managers.Add(new User(managersReal));
+            }
+
+            /*List<Dictionary<String, String>> managers = DB.SelectWhere("Users.Id, Users.Username, Users.Email, Users.Password, Users.Rank, Users.Created", "Projet_managers.Projet_Id = " + Id + ", Users.Id = Projet_manager.Manager_Id", "Projet_managers, Users");
             foreach (Dictionary<String, String> manager in managers)
             {
                 Managers.Add(new User(manager));
-            }
+            }*/
             // Ajout des opérateurs
-            List<Dictionary<String, String>> operateurs = DB.SelectWhere("Users.Id, Users.Username, Users.Email, Users.Password, Users.Rank, Users.Created", "Projet_operators.Projet_Id = " + Id + ", Users.Id = Projet_operators.Operator_Id", "Projet_operators, Users");
+            List<Dictionary<String, String>> operatersIds = DB.SelectWhere("*", "Projet_Id = " + this.Id, "Projet_operators");
+            foreach (Dictionary<String, String> operaterId in operatersIds)
+            {
+                Dictionary<String, String> managersReal = DB.SelectWhere("*", "Id = " + operaterId["Operator_Id"], "Users")[0];
+                Operationnels.Add(new User(managersReal));
+            }
+
+            /*List<Dictionary<String, String>> operateurs = DB.SelectWhere("Users.Id, Users.Username, Users.Email, Users.Password, Users.Rank, Users.Created", "Projet_operators.Projet_Id = " + Id + ", Users.Id = Projet_operators.Operator_Id", "Projet_operators, Users");
             foreach (Dictionary<String, String> operateur in operateurs)
             {
                 Managers.Add(new User(operateur));
-            }
+            }*/
         }
 
         /*
