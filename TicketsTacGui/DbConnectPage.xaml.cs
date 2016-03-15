@@ -17,20 +17,18 @@ using TicketsTac;
 namespace TicketsTacGui
 {
     /// <summary>
-    /// Logique d'interaction pour MainWindow.xaml
+    /// Interaction logic for DbConnectPage.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class DbConnectPage : Page
     {
-        public MainWindow()
+        public DbConnectPage()
         {
             InitializeComponent();
-            DB.Migrate();
-            DB.testConnection();
         }
 
-        public void mainLabelClicked(object sender, MouseButtonEventArgs e)
+        private void button_connect_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("You clicked me at " + e.GetPosition(this).ToString());
+            DBConfig conf = new DBConfig(textbox_host.Text, textBox_username.Text, textbox_password.Text);
         }
     }
 }

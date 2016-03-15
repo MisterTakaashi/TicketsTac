@@ -6,13 +6,15 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace TicketsTac
 {
     class DBConfig
     {
         enum Environment { Prod = 0, Dev = 1, Local = 2 }
-        private Environment _env = Environment.Local;
+        private Environment _env = Environment.Prod;
+
         public String Host { get; set; }
         public String Username { get; set; }
         public String Pass { get; set; }
@@ -28,15 +30,22 @@ namespace TicketsTac
                     break;
 
                 case Environment.Prod:
-                    Host = "164.132.110.73";
-                    Pass = "Bastille89";
-                    Username = "remote";
+                    Host = "10.0.10.10";
+                    Pass = "Passw0rd";
+                    Username = "Administrator";
                     break;
 
                 case Environment.Local:
                     Host = "(localdb)\\MSSQLLocalDb";
                     break;
             }
+        }
+
+        public DBConfig(string host, string username, string password)
+        {
+            Host = host;
+            Username = username;
+            Pass = password;
         }
     }
 
@@ -67,7 +76,7 @@ namespace TicketsTac
             try
             {
                 _connection.Open();
-                Logger.Info("Connexion à la base de données: OK");
+                MessageBox.Show("Connexion à la base de données: OK");
             }
             catch ( Exception e )
             {
@@ -80,6 +89,12 @@ namespace TicketsTac
                 Console.ReadLine();
                 System.Environment.Exit(-1);
             }
+        }
+
+        public static void testConnection()
+        {
+            if ( _connection == null ) _connectToDb();
+            _connection.Close();
         }
 
         public static List<Dictionary<string, string>> Select(List<string> fields, string table)
