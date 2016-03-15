@@ -44,7 +44,7 @@ namespace TicketsTacGui
                     textBoxUsername.Visibility = Visibility.Collapsed;
                     passwordBoxPassword.Visibility = Visibility.Collapsed;
                     buttonConnexion.IsEnabled = false;
-                    buttonConnexion.Content = "Connexion en cours...";
+                    buttonConnexion.Content = "Login in progress...";
                 });
 
                 User user = User.Connect(email, password);
@@ -52,6 +52,16 @@ namespace TicketsTacGui
                 if (user == null)
                 {
                     MessageBox.Show("Email or Password is wrong");
+
+                    this.Dispatcher.Invoke(() =>
+                    {
+                        textBoxUsername.Visibility = Visibility.Visible;
+                        passwordBoxPassword.Visibility = Visibility.Visible;
+                        passwordBoxPassword.Password = "";
+                        textBoxUsername.Focus();
+                        buttonConnexion.IsEnabled = true;
+                        buttonConnexion.Content = "Login";
+                    });
                 }
                 else
                 {
