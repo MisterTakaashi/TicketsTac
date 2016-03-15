@@ -5,7 +5,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TicketsTac
+namespace TicketsTacGui
 {
     public static class StringExtension
     {
