@@ -5,8 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TicketsTacGui"
         mc:Ignorable="d"
-        Title="Tickets Tac" Height="350" Width="525">
+        Title="Tickets Tac" Height="600" Width="1000">
     <Grid>
-        <Frame x:Name="frameContent" />
+        <Frame x:Name="frameContent" NavigationUIVisibility="Hidden" />
     </Grid>
 </Window>

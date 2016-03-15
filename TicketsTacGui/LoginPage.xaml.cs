@@ -31,6 +31,20 @@ namespace TicketsTacGui
         private void buttonConnexion_Click(object sender, RoutedEventArgs e)
         {
             Debug.WriteLine("Connexion de " + textBoxUsername.Text + " Pass: " + passwordBoxPassword.Password);
+
+            User user = User.Connect(textBoxUsername.Text, passwordBoxPassword.Password.ToSHA1());
+
+            if (user == null)
+            {
+                MessageBox.Show("Email or Password is wrong");
+            }
+            else
+            {
+                User.currentUser = user;
+
+                MainWindow main = (MainWindow)Application.Current.MainWindow;
+                main.frameContent.Navigate(new ProjectsListPage());
+            }
         }
     }
 }
