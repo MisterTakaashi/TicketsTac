@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,8 +27,18 @@ namespace TicketsTacGui
             List<User> users = User.GetAll();
             foreach (User user in users)
             {
-                listBox_assignee.Items.Add(user.Username);
+                ComboBoxItem item = new ComboBoxItem();
+                item.Tag = user.Id;
+                item.Content = user.Username;
+
+                comboBox_assignee.Items.Add(item);
             }
+        }
+
+        private void buttonCreateProject_Click(object sender, RoutedEventArgs e)
+        {
+            User u = new User(DB.Get(int.Parse(((ComboBoxItem)comboBox_assignee.SelectedItem).Tag.ToString()), "Users"));
+            DB.Insert(new Projet(textBox_title.Text, u, User.currentUser), "Projets");
         }
     }
 }
