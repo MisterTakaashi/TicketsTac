@@ -40,7 +40,8 @@ namespace TicketsTacGui
             Project = Projet.GetProjetFromBDD(int.Parse(ticket["Projet_Id"]));
             State = (StateEnum)int.Parse(ticket["State"]);
             List<User> userList = new List<User>();
-            List<Dictionary<String, String>> retourSelect = DB.SelectWhere("Users.Id, Users.Username, Users.Email, Users.Password, Users.Rank, Users.Created", "ticket_assignee.Ticket_Id = " + Id + ", Users.Id = ticket_assignee.User_Id", "ticket_assignee, Users");
+            //List<Dictionary<String, String>> retourSelect = DB.SelectWhere("Users.Id, Users.Username, Users.Email, Users.Password, Users.Rank, Users.Created", "ticket_assignee.Ticket_Id = " + Id + ", Users.Id = ticket_assignee.User_Id", "ticket_assignee, Users");
+            List<Dictionary<String, String>> retourSelect = DB.SelectWhere("*", "Ticket_Id = " + Id, "Ticket_assignee");
             foreach (Dictionary<String, String> user in retourSelect)
             {
                 User selectedUser = new User(user);

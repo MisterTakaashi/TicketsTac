@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -20,13 +21,29 @@ namespace TicketsTacGui
     /// </summary>
     public partial class ProjectIssuesPage : Page
     {
-        public int ProjectId { get; set; }
+        private Projet Project { get; set; }
 
         public ProjectIssuesPage(int id)
         {
-            this.ProjectId = id;
+            this.Project = Projet.GetProjetFromBDD(id);
 
             InitializeComponent();
+
+            Task.Run(() =>
+            {
+                Thread.Sleep(3000);
+                Console.WriteLine("Bonjour !");
+            });
+
+            List<Ticket> tickets = this.Project.GetAllTickets();
+
+            foreach (Ticket ticket in tickets)
+            {
+                Button ticketButton = new Button();
+                ticketButton.Content = ticket.ProblemDescription;
+
+                stackPanel_issues.Children.Add(ticketButton);
+            }
         }
     }
 }

@@ -9,9 +9,11 @@
       Title="LoginPage">
 
     <Grid>
-        <Label x:Name="label" Content="Tickets Tac" Margin="0,50" VerticalAlignment="Top" HorizontalAlignment="Center"/>
-        <TextBox x:Name="textBoxUsername" HorizontalAlignment="Center" Height="25" TextWrapping="Wrap" VerticalAlignment="Top" Width="200" Margin="0,80"/>
-        <PasswordBox x:Name="passwordBoxPassword" HorizontalAlignment="Center" Margin="0,110" Height="25" VerticalAlignment="Top" Width="200"/>
-        <Button x:Name="buttonConnexion" Content="Connexion" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,150,0,0"/>
+        <Label x:Name="label" Content="Welcome" Margin="0,130,0,0" VerticalAlignment="Top" HorizontalAlignment="Center" FontSize="20"/>
+        <TextBox x:Name="textBoxUsername" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Top" Width="200" Margin="0,180,0,0" FontSize="13.333" GotFocus="textBoxUsername_GotFocus" LostFocus="textBoxUsername_LostFocus" Text="Email adress" Panel.ZIndex="1" Foreground="LightSlateGray"/>
+        <TextBox x:Name="textBoxPassword" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Top" Width="200" Margin="0,210,0,0" FontSize="13.333" Text="Password" GotFocus="textBoxPassword_GotFocus" Panel.ZIndex="1" Foreground="LightSlateGray"/>
+        <PasswordBox x:Name="passwordBoxPassword" HorizontalAlignment="Center" Margin="0,210,0,0" VerticalAlignment="Top" Width="200" FontSize="13.333" LostFocus="passwordBoxPassword_LostFocus"/>
+        <Button x:Name="buttonConnexion" Content="Connexion" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,250,0,0"/>
+        <Image x:Name="image" HorizontalAlignment="Center" Height="100" Margin="0,30,0,0" VerticalAlignment="Top" Width="100" Source="Ressources/Bug.png"/>
     </Grid>
 </Page>

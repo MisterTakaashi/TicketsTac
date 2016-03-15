@@ -31,12 +31,12 @@
 
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="75"/>
             <RowDefinition/>
-            <RowDefinition Height="7*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200"/>
             <ColumnDefinition/>
-            <ColumnDefinition Width="4*"/>
         </Grid.ColumnDefinitions>
         <StackPanel x:Name="stackPanel_projects" Grid.Row="1"/>
         <Button x:Name="button" HorizontalAlignment="Left" VerticalAlignment="Center" Width="32" Height="32" Background="{x:Null}" BorderBrush="{x:Null}" RenderTransformOrigin="1.331,-0.413" Margin="10,0,0,0">

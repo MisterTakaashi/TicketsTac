@@ -71,7 +71,7 @@ namespace TicketsTacGui
             try
             {
                 _connection.Open();
-                MessageBox.Show("Connexion à la base de données: OK");
+                //MessageBox.Show("Connexion à la base de données: OK");
             }
             catch ( Exception e )
             {
