@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:TicketsTacGui"
         mc:Ignorable="d"
         Title="Tickets Tac" Height="350" Width="525">
-    <Grid Background="Red">
-        
+    <Grid>
+        <Frame x:Name="frameContent" />
     </Grid>
 </Window>

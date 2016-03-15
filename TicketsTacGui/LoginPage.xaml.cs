@@ -17,17 +17,20 @@ using System.Windows.Shapes;
 namespace TicketsTacGui
 {
     /// <summary>
-    /// Logique d'interaction pour MainWindow.xaml
+    /// Logique d'interaction pour LoginPage.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class LoginPage : Page
     {
-        public MainWindow()
+        public LoginPage()
         {
             InitializeComponent();
 
-            frameContent.Navigate(new LoginPage());
+            buttonConnexion.Click += buttonConnexion_Click;
+        }
 
-            //frameContent.Source = new Uri("LoginPage.xaml", UriKind.Relative);
+        private void buttonConnexion_Click(object sender, RoutedEventArgs e)
+        {
+            Debug.WriteLine("Connexion de " + textBoxUsername.Text + " Pass: " + passwordBoxPassword.Password);
         }
     }
 }
