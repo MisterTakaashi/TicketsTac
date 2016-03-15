@@ -165,6 +165,23 @@ namespace TicketsTacGui
             return Description;
         }
 
+        public List<Ticket> GetAllTickets()
+        {
+            if (User.currentUser.hasPermissionTo(Permission.projectView, this))
+            {
+                List<Ticket> allTickets = new List<Ticket>();
+                List<Dictionary<String, String>> ticketsList = DB.SelectWhere("*", "Projet_Id = " + this.GetIDToString(), "Tickets");
+                foreach (Dictionary<String, String> ticket in ticketsList)
+                {
+                    allTickets.Add(new Ticket(ticket));
+                }
+                return allTickets;
+            }
+            else
+                Console.WriteLine("Insuficient permissions");
+                return null;
+        }
+
         /*
         ** Setters
         */
