@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,22 +16,13 @@ using System.Windows.Shapes;
 namespace TicketsTacGui
 {
     /// <summary>
-    /// Logique d'interaction pour MainWindow.xaml
+    /// Interaction logic for ProjectsList.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class ProjectsList : Page
     {
-        public MainWindow()
+        public ProjectsList()
         {
             InitializeComponent();
-
-            frameContent.Navigate(new LoginPage());
-
-            //frameContent.Source = new Uri("LoginPage.xaml", UriKind.Relative);
-        }
-
-        public void mainLabelClicked(object sender, MouseButtonEventArgs e)
-        {
-            MessageBox.Show("You clicked me at " + e.GetPosition(this).ToString());
         }
     }
 }
