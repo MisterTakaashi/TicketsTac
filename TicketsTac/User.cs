@@ -57,8 +57,107 @@ namespace TicketsTac
             return this.Password.ToSHA1();
         }
 
-        public bool hasPermissionTo(Permission perm)
+        public bool hasPermissionTo(Permission perm, object param)
         {
+            switch (perm)
+            {
+                case Permission.projectCreate:
+                    switch (this.Rank)
+                    {
+                        case Rank.Administrateur:
+                            return true;
+                        case Rank.Manager:
+                            return false;
+                        case Rank.Operator:
+                            return false;
+                        case Rank.Client:
+                            return true;
+                        default:
+                            break;
+                    }
+                    break;
+                case Permission.projectView:
+                    switch (this.Rank)
+                    {
+                        case Rank.Administrateur:
+                            return true;
+                        case Rank.Manager:
+                            // Est il manager du projet ?
+                            if (((Projet)param).GetManagers().Exists(manager => manager.Id == this.Id))
+                                return true;
+                            return false;
+                        case Rank.Operator:
+                            // Est il opérateur du projet ?
+                            if (((Projet)param).GetOperationnels().Exists(operateur => operateur.Id == this.Id))
+                                return true;
+                            return false;
+                        case Rank.Client:
+                            // Est il créateur du projet ?
+                            if (((Projet)param).Client.Id == this.Id)
+                                return true;
+                            return false;
+                        default:
+                            break;
+                    }
+                    break;
+                case Permission.projectViewAffected:
+                    break;
+                case Permission.projectViewOwn:
+                    break;
+                case Permission.projectUpdate:
+                    break;
+                case Permission.projectDelete:
+                    break;
+                case Permission.userManagerView:
+                    break;
+                case Permission.userManagerViewOwnProject:
+                    break;
+                case Permission.userManagerUpdate:
+                    break;
+                case Permission.userManagerUpdateOwnProfile:
+                    break;
+                case Permission.userOperatorView:
+                    break;
+                case Permission.userOperatorUpdate:
+                    break;
+                case Permission.userOperatorUpdateOwnProfile:
+                    break;
+                case Permission.userClientView:
+                    break;
+                case Permission.userClientUpdateOwnProfile:
+                    break;
+                case Permission.ticketViewOwnProjects:
+                    break;
+                case Permission.ticketOperationnelViewOwnProjects:
+                    break;
+                case Permission.ticketViewStateOpen:
+                    break;
+                case Permission.ticketUpdate:
+                    break;
+                case Permission.ticketUpdateStateToOpen:
+                    break;
+                case Permission.ticketUpdateStateToResolve:
+                    break;
+                case Permission.ticketUpdateStateToClosed:
+                    break;
+                case Permission.ticketCreate:
+                    break;
+                case Permission.ticketCreateForOwnProject:
+                    break;
+                case Permission.ticketDelete:
+                    break;
+                case Permission.ticketComment:
+                    break;
+                case Permission.ticketCommentOwnProject:
+                    break;
+                case Permission.ticketValidate:
+                    break;
+                case Permission.ticketValidateOwnProject:
+                    break;
+                default:
+                    break;
+            }
+
             return true;
         }
     }

@@ -35,7 +35,7 @@ namespace TicketsTac
                 Console.Write("Password: ");
                 string password = Console.ReadLine();
 
-                user = User.Connect(username, password);
+                user = User.Connect(username, password.ToSHA1());
 
                 if (user == null) Logger.Error("Your email or password is wrong.");
             }
