@@ -270,6 +270,7 @@ namespace TicketsTacGui
             files.Add(@"../../../SQL/dbo.Ticket_comms.sql");
             files.Add(@"../../../SQL/dbo.Projet_managers.sql");
             files.Add(@"../../../SQL/dbo.Projet_operators.sql");
+            files.Add(@"../../../SQL/dbo.Ticket_assignee.sql");
 
             SqlCommand cmd = null;
             for ( int i = 0 ; i < files.Count ; i++ )
