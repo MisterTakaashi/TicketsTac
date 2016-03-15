@@ -345,6 +345,20 @@ namespace TicketsTacGui
             }
         }
 
+        public void DeleteProjet()
+        {
+            if (User.currentUser.hasPermissionTo(Permission.projectDelete, this))
+            {
+                DB.DeleteWhere("Projet_Id = " + this.GetIDToString(), "Projet_managers");
+                DB.DeleteWhere("Projet_Id = " + this.GetIDToString(), "Projet_operators");
+                DB.DeleteWhere("Id = " + this.GetIDToString(), "Projet");
+            }
+            else
+            {
+                Console.WriteLine("Insuficient permissions");
+            }
+        }
+
         /*
         // Fonctions et méthodes de classe
         */
