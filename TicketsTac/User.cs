@@ -26,23 +26,23 @@ namespace TicketsTac
 
         public User() { }
 
-        public void setId(int id) {
-            //code
+        public void setId(int id, int newId) {
+            DB.Update(id, new List<string> { "id" }, new List<string> { newId.ToString() },"users");
         }
 
-        public void setUsername(String username)
+        public void setUsername(int id, String username)
         {
-            //code
+            DB.Update(id, new List<string> { "username" }, new List<string> { username }, "users");
         }
 
-        public void setEmail(String email)
+        public void setEmail(int id, String email)
         {
-            //code
+            DB.Update(id, new List<string> { "email" }, new List<string> { email }, "users");
         }
 
-        public void setRank(Rank rank)
+        public void setRank(int id, Rank rank)
         {
-            //code
+            DB.Update(id, new List<string> { "rank" }, new List<string> { rank.ToString() }, "users");
         }
 
         public static User Get(int id)
