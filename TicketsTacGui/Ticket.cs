@@ -50,27 +50,6 @@ namespace TicketsTacGui
 
          }
 
-         private Ticket CreateTicket(problemDescription)
-         {
-
-             List<string> fieldList = new List<string>();
-             fieldList.Add("users");
-             fieldList.Add("problem_description");
-             fieldList.Add("projet");
-             fieldList.Add("state");
-
-             Console.WriteLine("Ouverture d'un nouveau ticket");
-
-             Ticket ticket = new Ticket(problemDescription, state, project);
-             List<string> ValueList = new List<string>();
-             ValueList.Add(problemDescription);
-             ValueList.Add("4");
-             ValueList.Add(project.GetIDToString());
-             DB.Insert(fieldList, ValueList, "tickets");
-
-             return ticket;
-         }
-
         private void AssignUser(User user)
         {
             List < string > fields = new List<string>();
@@ -91,7 +70,7 @@ namespace TicketsTacGui
             DB.Get(this.Id, "Tickets");
         }
 
-        private Ticket EditTicket(Ticket editTicket)
+        /*private Ticket EditTicket(Ticket editTicket)
         {
 
             List<string> fieldList = new List<string>();
@@ -100,7 +79,7 @@ namespace TicketsTacGui
             fieldList.Add("projet");
             fieldList.Add("state");;
 
-            Ticket ticket = DB.Get(this.Id, "Tickets");
+            Ticket ticket = new Ticket(DB.Get(this.Id, "Tickets"));
 
             List<string> ValueList = new List<string>();
             if((ticket.ProblemDescription != editTicket.ProblemDescription) || (ticket.State != editTicket.State) || (ticket.AdditionnalNote != editTicket.AdditionnalNote))
@@ -117,7 +96,7 @@ namespace TicketsTacGui
             }
 
             return editTicket;
-        }
+        }*/
     }
 }
 
