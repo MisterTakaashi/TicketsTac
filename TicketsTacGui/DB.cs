@@ -1,18 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows;
 
 namespace TicketsTacGui
 {
+    enum Environment { Prod = 0, Dev = 1, Local = 2 }
     class DBConfig
     {
-        enum Environment { Prod = 0, Dev = 1, Local = 2 }
-        private Environment _env = Environment.Local;
+        private Environment _env = Environment.Prod;
+
         public String Host { get; set; }
         public String Username { get; set; }
         public String Pass { get; set; }
@@ -28,15 +26,22 @@ namespace TicketsTacGui
                     break;
 
                 case Environment.Prod:
-                    Host = "164.132.110.73";
-                    Pass = "Bastille89";
-                    Username = "remote";
+                    Host = "10.0.10.10";
+                    Pass = "Passw0rd";
+                    Username = "Administrator";
                     break;
 
                 case Environment.Local:
                     Host = "(localdb)\\MSSQLLocalDb";
                     break;
             }
+        }
+
+        public DBConfig(string host, string username, string password)
+        {
+            Host = host;
+            Username = username;
+            Pass = password;
         }
     }
 
@@ -58,28 +63,35 @@ namespace TicketsTacGui
         //  Update(int id, List<string>fields, List<string> values, string table)
         
         static private SqlConnection _connection = null;
-
+        static private DBConfig config = new DBConfig();
         static private void _connectToDb()
         {
-            DBConfig config = new DBConfig();
-            // _connection = new SqlConnection(@"Data Source=" + config.Host + "," + config.Port.ToString() + ";Uid=" + config.Username + ";Pwd=" + config.Pass + ";");
-            _connection = new SqlConnection("Data Source=" + config.Host + ";Integrated Security=True;Initial Catalog=TicketsTac;");
+            _connection = new SqlConnection(@"Data Source=" + config.Host + ";Uid=" + config.Username + ";Pwd=" + config.Pass + ";");
+            //_connection = new SqlConnection("Data Source=" + config.Host + ";Integrated Security=True;Initial Catalog=TicketsTac;");
             try
             {
                 _connection.Open();
-                Logger.Info("Connexion à la base de données: OK");
+                MessageBox.Show("Connexion à la base de données: OK");
             }
             catch ( Exception e )
             {
-                Console.WriteLine("/!\\ La connexion à la base de données à échoué. Informations sur la connexion:");
-                Console.WriteLine("\tHost: " + config.Host);
-                Console.WriteLine("\tUser: " + config.Username);
-                Console.WriteLine("\tPass: " + config.Pass);
-                Console.WriteLine("\tConnection String: " + _connection.ConnectionString);
-                Console.WriteLine("\tError: " + e.Message);
-                Console.ReadLine();
-                System.Environment.Exit(-1);
+                string str = "/!\\ La connexion à la base de données à échoué. Informations sur la connexion:\n\tHost: " + config.Host +
+                "\n\tUser: " + config.Username +
+                "\n\tPass: " + config.Pass +
+                "\n\tConnection String: " + _connection.ConnectionString +
+                "\n\tError: " + e.Message;
+
+                MessageBox.Show(str);
             }
+        }
+
+        public static void testConnection(DBConfig conf)
+        {
+            config = conf;
+            if (_connection != null) _connection.Close();
+
+            _connectToDb();
+            _connection.Close();
         }
 
         public static List<Dictionary<string, string>> Select(List<string> fields, string table)
