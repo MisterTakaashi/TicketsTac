@@ -36,6 +36,7 @@ namespace TicketsTacGui
             Project = projet;
             State = StateEnum.Open;
             Assignees = new List<User>();
+            AdditionnalNote = new List<Commentaire>();
         }
 
         public Ticket(Dictionary<string, string> ticket)
@@ -47,6 +48,7 @@ namespace TicketsTacGui
             Project = Projet.GetProjetFromBDD(int.Parse(ticket["Projet_Id"]));
             State = (StateEnum)int.Parse(ticket["State"]);
             Assignees = new List<User>();
+            AdditionnalNote = new List<Commentaire>();
 
             List<Dictionary<String, String>> retourSelect = DB.SelectWhere("*", "Ticket_Id = " + Id, "Ticket_Assignee");
             foreach (Dictionary<String, String> user_id in retourSelect)
