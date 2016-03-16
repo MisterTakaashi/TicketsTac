@@ -32,7 +32,7 @@ namespace TicketsTacGui
                 Button buttonProjet = new Button();
                 buttonProjet.Content = projet.Nom;
                 buttonProjet.Style = Resources["ListProjectButtons"] as Style;
-                buttonProjet.Click += buttonConnexion_Click;
+                buttonProjet.Click += buttonProjet_Click;
                 buttonProjet.Tag = projet.Id;
 
                 Console.WriteLine("Nouveau projet: " + projet.Nom);
@@ -45,7 +45,7 @@ namespace TicketsTacGui
             Console.WriteLine(projets);
         }
 
-        private void buttonConnexion_Click(object sender, RoutedEventArgs e)
+        private void buttonProjet_Click(object sender, RoutedEventArgs e)
         {
             Button senderButton = sender as Button;
             int id = (int)senderButton.Tag;
