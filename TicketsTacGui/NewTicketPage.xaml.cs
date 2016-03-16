@@ -65,7 +65,8 @@ namespace TicketsTacGui
 
         private void buttonCancel_Click(object sender, RoutedEventArgs e)
         {
-            NavigationService.Navigate(new ProjectsListPage());
+            NavigationService.GoBack();
+            //NavigationService.Navigate(new ProjectsListPage());
         }
     }
 }

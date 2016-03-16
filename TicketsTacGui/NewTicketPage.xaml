@@ -7,40 +7,83 @@
       xmlns:local="clr-namespace:TicketsTacGui"
       xmlns:control="clr-namespace:TicketsTacGui"
       mc:Ignorable="d" 
-      d:DesignHeight="300" d:DesignWidth="300"
+      d:DesignHeight="500" d:DesignWidth="600"
       Title="NewTicketPage">
     <Page.Resources>
         <ViewModel:ViewModel x:Key="ViewModel"/>
+        <Style TargetType="{x:Type Button}" x:Key="ReturnListTicketButton">
+            <Setter Property="Background" Value="#4dbd74"/>
+            <Setter Property="Foreground" Value="#FFf2f4f6"/>
+            <Setter Property="Padding" Value="10,10,0,0"/>
+            <Setter Property="FontFamily" Value="Global User Interface"/>
+            <Setter Property="FontWeight" Value="DemiBold"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <!--<Setter Property="Background" Value="#e7e7e7"/>-->
+                    <Setter Property="Background" Value="#348d53"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style TargetType="{x:Type Button}" x:Key="ValidateProjectButton">
+            <Setter Property="Background" Value="#FF3fced1"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="3,3,3,3">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#FF3AC0C3"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
 
 
     </Page.Resources>
 
     <Grid DataContext="{Binding Source={StaticResource ViewModel}}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="31" />
-            <RowDefinition Height="31" />
-            <RowDefinition Height="200" />
-            <RowDefinition Height="31" />
+            <RowDefinition Height="80" />
+            <RowDefinition Height="35"/>
+            <RowDefinition Height="35" />
+            <RowDefinition Height="35" />
+            <RowDefinition/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="75" />
-            <ColumnDefinition Width="109"/>
-            <ColumnDefinition Width="109"/>
+            <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <Label x:Name="label_project" Content="Projet: " Grid.Column="0" HorizontalAlignment="Right" Grid.Row="0" VerticalAlignment="Top" Height="24" Width="56" Margin="0,4,20,0"/>
-        <Label x:Name="label_name_name" Grid.Column="1" HorizontalAlignment="Right" Grid.Row="0" VerticalAlignment="Top" Height="24" Width="186" Margin="0,4,24,0" Grid.ColumnSpan="2"/>
-        <Label x:Name="label_name" Content="Intitule: " Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Top" Height="24" Width="56" Margin="0,30,20,0" Grid.RowSpan="2"/>
-        <Label x:Name="label_" Content="Assignee:" Grid.Column="0" HorizontalAlignment="Right" Grid.Row="2" VerticalAlignment="Top" Height="30" Width="60" Margin="0,0,16,0"/>
-        <Label x:Name="label" Content="Description:" Grid.Column="0" Grid.Row="2" VerticalAlignment="Top" Height="30" Margin="0,35,0,0" />
-        
-        <TextBox x:Name="textBox_ticket_name" Grid.Column="1" Grid.ColumnSpan="2" Height="23" TextChanged="textBox_ticket_name_TextChanged" Margin="10,2,0,8" TextWrapping="Wrap" Text="TextBox" Width="120" HorizontalAlignment="Left" Grid.Row="1"/>
+        <Label x:Name="label_project" Content="Projet: " Grid.Column="0" Grid.ColumnSpan="1" Grid.Row="1" Height="30" VerticalAlignment="Bottom" HorizontalAlignment="Right" Foreground="#5b6870"/>
+        <Label x:Name="label_name_name" Grid.Column="1" Grid.Row="1" VerticalAlignment="Top" Height="24" Margin="5,5,20,5"/>
+        <Label x:Name="label_name" Content="Intitule: " Grid.Column="0" Grid.Row="2" Height="30" VerticalAlignment="Bottom" HorizontalAlignment="Right" Foreground="#5b6870"/>
+        <Label x:Name="label_" Content="Assignee:" Grid.Column="0" Grid.Row="3" Height="30" VerticalAlignment="Bottom" HorizontalAlignment="Right" Foreground="#5b6870"/>
+        <Label x:Name="label" Content="Description:" Grid.Column="0" Grid.Row="4" VerticalAlignment="Top" HorizontalAlignment="Right" Height="30" Margin="0, 5,0,0" Foreground="#5b6870" />
 
-        <control:MultiSelectComboBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Margin="10,0,0,178" Height="23" MinWidth="100" MaxWidth="300" HorizontalAlignment="Left" Width="199" x:Name="comboBox_assignee" ItemsSource="{Binding Items}" SelectedItems="{Binding SelectedItems}" ToolTip="{Binding Path=Text, RelativeSource={RelativeSource Self}}"/>
+        <TextBox x:Name="textBox_ticket_name" Grid.Column="1" TextChanged="textBox_ticket_name_TextChanged" Margin="5,5,20,5" TextWrapping="Wrap" Text="" VerticalContentAlignment="Center" BorderBrush="#FFE7ECEE" BorderThickness="2" Grid.Row="2"/>
+
+        <control:MultiSelectComboBox Grid.Row="3" Grid.Column="1" Margin="5,5,20,5" x:Name="comboBox_assignee" ItemsSource="{Binding Items}" SelectedItems="{Binding SelectedItems}" />
 
 
-        <TextBox x:Name="textBox_ticket_description" Grid.Column="1" Grid.ColumnSpan="2" HorizontalAlignment="Left" Margin="10,35,0,0" Grid.Row="2" TextWrapping="Wrap" VerticalAlignment="Top" AcceptsReturn="True" Height="156" Width="200"/>
-        <Button x:Name="buttonCreateTicket" Grid.Column="1" Grid.Row="3" Click="buttonCreateTicket_Click" Height="23" HorizontalAlignment="Center" Margin="10,0,5,0" Width="94">Submit</Button>
-        <Button x:Name="buttonCancel" Grid.Column="2" Grid.Row="3" Click="buttonCancel_Click" Height="23" Width="94" HorizontalAlignment="Center" Margin="5,0,10,0">Cancel</Button>
+        <TextBox x:Name="textBox_ticket_description" Grid.Column="1" Margin="5,5,20,0" Grid.Row="4" TextWrapping="Wrap" VerticalAlignment="Top" AcceptsReturn="True" Height="205" BorderBrush="#FFE7ECEE" BorderThickness="2"/>
+        <Rectangle Fill="#FF1C2B36" Stroke="Black" Grid.ColumnSpan="2" Margin="0,0,0,14"/>
+        <Button x:Name="button" Content="Back" Style="{StaticResource ReturnListTicketButton}" Foreground="White" Click="buttonCancel_Click" Margin="0,0,0,14"/>
+        <Label Content="Create new Ticket" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Foreground="White" FontSize="26.667" Grid.Column="1" Height="45" Width="231"/>
+        <Button x:Name="buttonCreateProject" Style="{StaticResource ResourceKey=ValidateProjectButton}" Grid.Column="1" Grid.Row="4" Click="buttonCreateTicket_Click" HorizontalAlignment="Right" Foreground="White" Height="30" Width="60" Margin="0,215,20,0" Content="Validate" VerticalAlignment="Top"/>
     </Grid>
 </Page>
 

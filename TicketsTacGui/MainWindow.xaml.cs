@@ -12,7 +12,7 @@ namespace TicketsTacGui
         {
             InitializeComponent();
 
-            DB.Migrate();
+            //DB.Migrate();
             frameContent.Navigate(new ProjectsListPage());
             //frameContent.Navigate(new DbConnectPage()); //Fenêtre sur laquelle Pierre rentre les identifiants de la bdd pour tester la connexion
 
