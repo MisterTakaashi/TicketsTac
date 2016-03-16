@@ -88,7 +88,7 @@ namespace TicketsTacGui
             List<string> fieldList = new List<string>();
             fieldList.Add("problem_description");
             fieldList.Add("projet");
-            fieldList.Add("state");;
+            fieldList.Add("state");
 
             List<string> ValueList = new List<string>();
             if ((this.AdditionnalNotes != null))
