@@ -38,9 +38,9 @@ namespace TicketsTacGui
         private void buttonCreateTicket_Click(object sender, RoutedEventArgs e)
         {
             var auteur = User.currentUser;
-            List<string> fieldsAssignees = new List<string> { "Ticket_Id", "User_Id" }; //On déclare valuesAssignees plus tard étant donné que la liste varie en fonction de ElementAt(i)
+            List<string> fieldsAssignees = new List<string> { "Ticket_Id", "Assignee_Id" }; //On déclare valuesAssignees plus tard étant donné que la liste varie en fonction de ElementAt(i)
             List<string> fieldsCreationTicket = new List<string> { "Name", "Description", "Projet_Id", "State", "Auteur_Id" };
-            List<string> valuesCreationTicket = new List<string> { "'" + textBox_ticket_name.Text + "'", "'" + textBox_ticket_description.Text + "'", Project.Id.ToString(), "4", auteur.Id.ToString()};
+            List<string> valuesCreationTicket = new List<string> { textBox_ticket_name.Text, textBox_ticket_description.Text, Project.Id.ToString(), "4", auteur.Id.ToString()};
 
             int ticketId = DB.Insert(fieldsCreationTicket, valuesCreationTicket, "Tickets");
             Ticket ticket = Ticket.GetFromDb(ticketId);
@@ -54,19 +54,17 @@ namespace TicketsTacGui
 
                 User assignmentTarget = User.Get(value);
 
-                Console.WriteLine("Id de " + key + ": " + value);
                 valuesAssignees.Add(ticket.Id.ToString());
                 valuesAssignees.Add(assignmentTarget.Id.ToString());
                 DB.Insert(fieldsAssignees, valuesAssignees, "Ticket_assignee");
             }
 
-            NavigationService.Navigate(new ProjectsListPage());
+            NavigationService.Navigate(new ProjectIssuesPage(Project.Id));
         }
 
         private void buttonCancel_Click(object sender, RoutedEventArgs e)
         {
             NavigationService.GoBack();
-            //NavigationService.Navigate(new ProjectsListPage());
         }
     }
 }
