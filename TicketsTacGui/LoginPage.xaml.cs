@@ -39,6 +39,7 @@ namespace TicketsTacGui
 
             Task.Run(() =>
             {
+                DB.Migrate(); //Commenter pour éviter une migration de la bdd
                 this.Dispatcher.Invoke(() =>
                 {
                     textBoxUsername.Visibility = Visibility.Collapsed;

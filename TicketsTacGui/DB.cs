@@ -151,6 +151,8 @@ namespace TicketsTacGui
             try
             {
                 affectedRows = cmd.ExecuteNonQuery();
+
+                //for ( int i = 0; i < )
                 insertedRecord = SelectWhere(reqFields, reqValues, table)[0];
             }
             catch ( Exception e )
@@ -279,13 +281,14 @@ namespace TicketsTacGui
         public static Dictionary<string, string> Get(int id, string table)
         {
             if (_connection == null) _connectToDb();
-
-            return SelectWhere("*", "id =" + id.ToString(), table)[0];
+            List<Dictionary<string, string>> ret = SelectWhere("*", "id =" + id.ToString(), table);
+            return ret[0];
         }
 
         public static void Migrate()
         {
             if (_connection == null) _connectToDb();
+            Console.WriteLine("Début du DB.Migrate");
             List<string> files = new List<string>();
             files.Add(@"../../../SQL/dbo.Users.sql");
             files.Add(@"../../../SQL/dbo.Projets.sql");
@@ -298,6 +301,7 @@ namespace TicketsTacGui
             SqlCommand cmd = null;
             for ( int i = 0 ; i < files.Count ; i++ )
             {
+                Console.WriteLine("Lecture du fichier " + files[i]);
                 cmd = new SqlCommand(System.IO.File.ReadAllText(files[i]), _connection);
                 try
                 {
