@@ -130,14 +130,14 @@ namespace TicketsTacGui
 
             Console.WriteLine("Ouverture d'un nouveau ticket");
 
-            Ticket ticket = new Ticket(name, problemDescription, this);
+            /*Ticket ticket = new Ticket(name, problemDescription, this);
             List<string> ValueList = new List<string>();
             ValueList.Add(problemDescription);
             ValueList.Add("4");
             ValueList.Add(this.GetIDToString());
-            DB.Insert(fieldList, ValueList, "tickets");
+            DB.Insert(fieldList, ValueList, "tickets");*/
 
-            return ticket;
+            return null;
         }
 
         /*

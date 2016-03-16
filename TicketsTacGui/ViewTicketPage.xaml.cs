@@ -35,7 +35,7 @@ namespace TicketsTacGui
                 TextBlock reply = new TextBlock();
                 reply.Background = Brushes.AntiqueWhite;
 
-                replies.Children.Add(reply);
+                //replies.Children.Add(reply);
             }
         }
 

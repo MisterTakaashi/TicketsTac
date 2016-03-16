@@ -29,7 +29,9 @@ namespace TicketsTacGui
 
         public List<User> Assignees { get; set; }
 
-        public Ticket(string name, string problemDescription, Projet projet)
+        public User Auteur { get; set; }
+
+        public Ticket(string name, string problemDescription, Projet projet, User auteur)
         {
             Name = name;
             ProblemDescription = problemDescription;
@@ -55,6 +57,7 @@ namespace TicketsTacGui
             {
                 User selectedUser = new User(user_id);
                 Assignees.Add(selectedUser);
+                //ViewModel.Items.Add(selectedUser.Username, selectedUser.Username);
             }
          }
 

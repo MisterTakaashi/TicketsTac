@@ -15,6 +15,8 @@ namespace TicketsTacGui
             frameContent.Navigate(new LoginPage());
             //DB.Migrate();
             //frameContent.Navigate(new DbConnectPage()); //Fenêtre sur laquelle Pierre rentre les identifiants de la bdd pour tester la connexion
+
+            //frameContent.Navigate(new NewTicketPage(1));
         }
     }
 }

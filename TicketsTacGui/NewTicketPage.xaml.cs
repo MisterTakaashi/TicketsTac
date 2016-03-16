@@ -25,16 +25,6 @@ namespace TicketsTacGui
         {
             this.Project = Projet.GetProjetFromBDD(id);
             InitializeComponent();
-
-            List<User> users = User.GetAll();
-            foreach (User user in users)
-            {
-                ComboBoxItem item = new ComboBoxItem();
-                item.Tag = user.Id;
-                item.Content = user.Username;
-
-                comboBox_assignee.Items.Add(item);
-            }
         }
 
         private void textBox_ticket_name_TextChanged(object sender, TextChangedEventArgs e)
@@ -44,8 +34,10 @@ namespace TicketsTacGui
 
         private void buttonCreateTicket_Click(object sender, RoutedEventArgs e)
         {
-            User u = new User(DB.Get(int.Parse(((ComboBoxItem)comboBox_assignee.SelectedItem).Tag.ToString()), "Users"));
-            //Ticket created = new Ticket(textBox_ticket_name.Text, u, User.currentUser);
+            
+            //User u = new User(DB.Get(int.Parse(((ComboBoxItem)comboBox_assignee.SelectedItem).Tag.ToString()), "Users"));
+
+            //Ticket created = new Ticket(textBox_ticket_name.Text, textBlock_ticket_description.Text, this.Project, );
             NavigationService.Navigate(new ProjectsListPage());
         }
 

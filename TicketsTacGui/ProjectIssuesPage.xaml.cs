@@ -108,5 +108,10 @@ namespace TicketsTacGui
         {
             NavigationService.Navigate(new ViewTicketPage(int.Parse(((Button)sender).Tag.ToString())));
         }
+
+        private void button_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new NewTicketPage(Project.Id));
+        }
     }
 }

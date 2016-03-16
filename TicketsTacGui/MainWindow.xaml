@@ -7,6 +7,6 @@
         mc:Ignorable="d"
         Title="Tickets Tac" Height="600" Width="1000">
     <Grid>
-        <Frame x:Name="frameContent" NavigationUIVisibility="Hidden" />
+        <Frame x:Name="frameContent" NavigationUIVisibility="Hidden" Background="#FFECF1F2" />
     </Grid>
 </Window>

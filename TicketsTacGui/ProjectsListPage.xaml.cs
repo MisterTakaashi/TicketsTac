@@ -24,6 +24,8 @@ namespace TicketsTacGui
         {
             InitializeComponent();
 
+            buttonNewProject.Style = Resources["NewProjectButton"] as Style;
+
             List<Projet> projets = Projet.GetAllProjetsFromBDD();
 
             int numberProjets = 0;
