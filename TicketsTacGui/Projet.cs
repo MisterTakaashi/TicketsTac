@@ -37,7 +37,7 @@ namespace TicketsTacGui
                 fields.Add("Client_Id");
                 fields.Add("Created");
                 List<String> values = new List<String>();
-                values.Add("'" + nom + "'");
+                values.Add(nom);
                 values.Add(Client.Id.ToString());
                 values.Add(DB.getTimestamp().ToString());
 
