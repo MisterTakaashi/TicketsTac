@@ -39,6 +39,8 @@ namespace TicketsTacGui
                     {
                         Button ticketButton = new Button();
                         ticketButton.Style = Resources["ListIssueButtons"] as Style;
+                        ticketButton.Tag = ticket.Id;
+                        ticketButton.Click += TicketButton_Click;
 
                         StackPanel stackPanelTicketHorizontal = new StackPanel();
                         stackPanelTicketHorizontal.Orientation = Orientation.Horizontal;
@@ -100,6 +102,11 @@ namespace TicketsTacGui
                     });
                 }
             });
+        }
+
+        private void TicketButton_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new ViewTicketPage(int.Parse(((Button)sender).Tag.ToString())));
         }
     }
 }

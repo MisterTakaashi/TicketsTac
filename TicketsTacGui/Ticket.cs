@@ -102,6 +102,11 @@ namespace TicketsTacGui
             return comms;
         }
 
+        public static Ticket GetFromDb(int id)
+        {
+            return new Ticket(DB.Get(id, "Tickets"));
+        }
+
     }
 }
 

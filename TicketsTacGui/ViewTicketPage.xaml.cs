@@ -20,9 +20,13 @@ namespace TicketsTacGui
     /// </summary>
     public partial class ViewTicketPage : Page
     {
-        public ViewTicketPage()
+        Ticket Ticket = null;
+
+        public ViewTicketPage(int id)
         {
             InitializeComponent();
+
+            Ticket = Ticket.GetFromDb(id);
         }
     }
 }
