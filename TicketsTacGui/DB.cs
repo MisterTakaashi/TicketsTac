@@ -123,15 +123,15 @@ namespace TicketsTacGui
             for ( int i = 0; i < selectFields.Count; i++ )
             {
                 if (i == 0)
-                    whereClause += fields[i] + " = ";
+                    whereClause += fields[i];
                 else
-                    whereClause += " AND " + fields[i] + " = ";
+                    whereClause += " AND " + fields[i];
 
                 int bufferInt;
                 double bufferDouble;
 
-                if (double.TryParse(values[i], out bufferDouble) || int.TryParse(values[i], out bufferInt)) whereClause += values[i];
-                else whereClause += "'" + values[i] + "'";
+                if (double.TryParse(values[i], out bufferDouble) || int.TryParse(values[i], out bufferInt)) whereClause += " = " + values[i];
+                else whereClause += " LIKE '" + values[i] + "'";
             }
 
             return SelectWhere(string.Join(",", selectFields), whereClause, table);
@@ -140,10 +140,18 @@ namespace TicketsTacGui
         public static int Insert(List<string> fields, List<string> values, string table)
         {
             if (_connection == null) _connectToDb();
+
+            for ( int i = 0; i < values.Count; i++ )
+            {
+                int bufferInt;
+                double bufferDouble;
+
+                if (!int.TryParse(values[i], out bufferInt) && !double.TryParse(values[i], out bufferDouble)) values[i] = "'" + values[i] + "'";
+            }
+
             string reqValues = string.Join(",", values.ToArray());
             string reqFields = string.Join(",", fields.ToArray());
 
-            Console.WriteLine("INSERT INTO " + table + " (" + reqFields + ") VALUES (" + reqValues + ")");
 
             SqlCommand cmd = new SqlCommand("INSERT INTO " + table + " (" + reqFields + ") VALUES (" + reqValues + ")", _connection);
             int affectedRows = 0;
@@ -151,9 +159,18 @@ namespace TicketsTacGui
             try
             {
                 affectedRows = cmd.ExecuteNonQuery();
+                string whereClause = "";
+                for ( int i = 0; i < fields.Count; i++ )
+                {
+                    if (i == 0)
+                        whereClause += fields[i];
+                    else
+                        whereClause += " AND " + fields[i];
 
-                //for ( int i = 0; i < )
-                insertedRecord = SelectWhere(reqFields, reqValues, table)[0];
+                    if (values[i].StartsWith("'") && values[i].EndsWith("'")) whereClause += " LIKE " + values[i];
+                    else whereClause += " = " + values[i];
+                }
+                insertedRecord = SelectWhere("*", whereClause, table)[0];
             }
             catch ( Exception e )
             {
@@ -281,7 +298,7 @@ namespace TicketsTacGui
         public static Dictionary<string, string> Get(int id, string table)
         {
             if (_connection == null) _connectToDb();
-            List<Dictionary<string, string>> ret = SelectWhere("*", "id =" + id.ToString(), table);
+            List<Dictionary<string, string>> ret = SelectWhere("*", "id = " + id.ToString(), table);
             return ret[0];
         }
 
