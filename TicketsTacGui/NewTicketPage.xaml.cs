@@ -45,7 +45,7 @@ namespace TicketsTacGui
         private void buttonCreateTicket_Click(object sender, RoutedEventArgs e)
         {
             User u = new User(DB.Get(int.Parse(((ComboBoxItem)comboBox_assignee.SelectedItem).Tag.ToString()), "Users"));
-            Ticket created = new Ticket(textBox_ticket_name.Text, u, User.currentUser);
+            //Ticket created = new Ticket(textBox_ticket_name.Text, u, User.currentUser);
             NavigationService.Navigate(new ProjectsListPage());
         }
 

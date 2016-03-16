@@ -22,7 +22,7 @@
         <Label x:Name="labelProjectTitle" Content="" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Width="280" Height="40" FontWeight="Bold" FontSize="21.333" Grid.Row="0"/>
         <Label x:Name="labelTicketText" Content="-&gt; " HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Row="1" VerticalAlignment="Top" Height="33" Width="280"/>
         <TextBlock x:Name="textBlockDescription" HorizontalAlignment="Left" Margin="10,10,0,0" Grid.Row="2" TextWrapping="Wrap" VerticalAlignment="Top" Height="87" Width="280"/>
-        <StackPanel HorizontalAlignment="Left" Height="40" Margin="10,10,0,0" Grid.Row="3" VerticalAlignment="Top" Width="280"/>
+        <StackPanel x:Name="replies" HorizontalAlignment="Left" Height="50" Margin="10,10,0,0" Grid.Row="3" VerticalAlignment="Top" Width="280"/>
         <TextBox x:Name="textBox" AcceptsReturn="True" HorizontalAlignment="Left" Height="40" Margin="10,10,0,0" Grid.Row="4" TextWrapping="Wrap" VerticalAlignment="Top" Width="280"/>
     </Grid>
 </Page>
