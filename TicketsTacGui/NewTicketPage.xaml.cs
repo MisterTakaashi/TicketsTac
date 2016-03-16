@@ -34,10 +34,21 @@ namespace TicketsTacGui
 
         private void buttonCreateTicket_Click(object sender, RoutedEventArgs e)
         {
+            var auteur = User.currentUser;
+            //comboBox_assignee.SelectedItems
             
+            for (int i = 0; i < comboBox_assignee.SelectedItems.Count; i++)
+            {
+                var UserAssign = comboBox_assignee.SelectedItems.ElementAt(i);
+                
+            }
+
+            Ticket created = new Ticket(textBox_ticket_name.Text, textBlock_ticket_description.Text, this.Project, auteur);
+
+            DB.Insert("UserAssign", "Ticket_assignee");
             //User u = new User(DB.Get(int.Parse(((ComboBoxItem)comboBox_assignee.SelectedItem).Tag.ToString()), "Users"));
 
-            Ticket created = new Ticket(textBox_ticket_name.Text, textBlock_ticket_description.Text, this.Project, );
+
             NavigationService.Navigate(new ProjectsListPage());
         }
 
