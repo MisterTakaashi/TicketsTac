@@ -29,6 +29,9 @@ namespace TicketsTacGui
 
             InitializeComponent();
 
+            labelNameProject.Content = this.Project.Nom;
+            textBoxDescriptionProject.Text = this.Project.Description;
+
             Task.Run(() =>
             {
                 List<Ticket> tickets = this.Project.GetAllTickets();
