@@ -49,7 +49,7 @@ namespace TicketsTacGui
             foreach (Dictionary<String, String> user in result)
             {
 
-                Items.Add(user["Username"], (Object)user["Username"]);
+                Items.Add(user["Username"], (Object)user["Id"]);
             }
 
             SelectedItems = new Dictionary<string, object>();
