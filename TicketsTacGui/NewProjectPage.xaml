@@ -5,28 +5,80 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:TicketsTacGui"
       mc:Ignorable="d" 
-      d:DesignHeight="300" d:DesignWidth="300"
+      d:DesignHeight="500" d:DesignWidth="600"
       Title="NewProjectPage">
+
+    <Page.Resources>
+        <!--AddTicketButton
+        #3fced1
+        #FF3AC0C3-->
+
+        <Style TargetType="Button" x:Key="ValidateProjectButton">
+            <Setter Property="Background" Value="#FF3fced1"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="3,3,3,3">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#FF3AC0C3"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style TargetType="Button" x:Key="ReturnListTicketButton">
+            <Setter Property="Background" Value="#4dbd74"/>
+            <Setter Property="Foreground" Value="#FFf2f4f6"/>
+            <Setter Property="Padding" Value="10,10,0,0"/>
+            <Setter Property="FontFamily" Value="Global User Interface"/>
+            <Setter Property="FontWeight" Value="DemiBold"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <!--<Setter Property="Background" Value="#e7e7e7"/>-->
+                    <Setter Property="Background" Value="#348d53"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Page.Resources>
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="31" />
-            <RowDefinition Height="31" />
+            <RowDefinition Height="80" />
+            <RowDefinition Height="35" />
+            <RowDefinition Height="35" />
             <RowDefinition Height="200" />
             <RowDefinition Height="31" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="75" />
-            <ColumnDefinition Width="109"/>
-            <ColumnDefinition Width="109"/>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="73*"/>
         </Grid.ColumnDefinitions>
-        <Label x:Name="label_name" Content="Title: " Grid.Column="0" HorizontalAlignment="Right" Grid.Row="0" VerticalAlignment="Top" Height="23" Width="32" Margin="10,1,0,0"/>
-        <Label x:Name="label_" Content="Assignee:" Grid.Column="0" HorizontalAlignment="Right" Grid.Row="1" VerticalAlignment="Top" Height="30" Width="60" Margin="1,0,0,0"/>
-        <Label x:Name="label" Content="Description:" Grid.Column="0" Grid.Row="2" VerticalAlignment="Top" Height="30" />
-        <TextBox x:Name="textBox_title" Grid.Column="1" Grid.ColumnSpan="2" Height="23" Margin="10,4,0,4" TextWrapping="Wrap" Text="TextBox" Width="120" HorizontalAlignment="Left"/>
-        <ComboBox x:Name="comboBox_assignee" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Margin="10,4,0,4" Height="23" MinWidth="100" MaxWidth="300" HorizontalAlignment="Left" Width="199" />
-        <TextBox x:Name="textBlock" Grid.Column="1" Grid.ColumnSpan="2" HorizontalAlignment="Left" Margin="10,4,0,0" Grid.Row="2" TextWrapping="Wrap" VerticalAlignment="Top" AcceptsReturn="True" Height="187" Width="200"/>
-        <Button x:Name="buttonCreateProject" Grid.Column="1" Grid.Row="3" Click="buttonCreateProject_Click" Height="23" HorizontalAlignment="Center" Margin="10,0,5,0" Width="94">Submit</Button>
-        <Button x:Name="buttonCancel" Grid.Column="2" Grid.Row="3" Click="buttonCancel_Click" Height="23" Width="94" HorizontalAlignment="Center" Margin="5,0,10,0">Cancel</Button>
+        <Label x:Name="label_name" Content="Title: " Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" Height="30" VerticalAlignment="Bottom" HorizontalAlignment="Right" Foreground="#5b6870" Width="38"/>
+        <Label x:Name="label_" Content="Assignee:" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2" Margin="0,6,0,0" HorizontalAlignment="Right" Foreground="#5b6870" Width="60"/>
+        <Label x:Name="label" Content="Description:" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="3" VerticalAlignment="Top" Height="30" Margin="0,5,0,0" HorizontalAlignment="Right" Foreground="#5b6870" Width="73"/>
+        <TextBox x:Name="textBox_title" Grid.Column="2" Grid.Row="1" Margin="5,5,20,5" TextWrapping="Wrap" Text="" VerticalContentAlignment="Center" BorderBrush="#FFE7ECEE" BorderThickness="2"/>
+        <ComboBox x:Name="comboBox_assignee" Grid.Row="2" Grid.Column="2" Margin="5,5,20,5" />
+        <TextBox x:Name="textBlock" Grid.Column="2" Margin="5,5,20,5" Grid.Row="3" TextWrapping="Wrap" AcceptsReturn="True"  BorderBrush="#FFE7ECEE" BorderThickness="2"/>
+        <Button x:Name="buttonCreateProject" Style="{StaticResource ValidateProjectButton}" Grid.Column="2" Grid.Row="4" Click="buttonCreateProject_Click" HorizontalAlignment="Right" Foreground="White" Width="60" Margin="0,0,20,0">Validate</Button>
+        <Rectangle Fill="#FF1C2B36" Stroke="Black" Grid.ColumnSpan="3" Margin="0,0,0,15"/>
+        <Label Content="Create new Project" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Foreground="White" FontSize="26.667" Grid.Column="1" Height="45" Width="231" Grid.ColumnSpan="2"/>
+        <Button x:Name="button" Content="Back" Style="{StaticResource ReturnListTicketButton}" Foreground="White" Click="buttonCancel_Click" Margin="0,0,0,15"/>
     </Grid>
 </Page>
