@@ -1,0 +1,22 @@
+﻿<Window x:Class="TicketsTacGui.LoginWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TicketsTacGui"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen"
+        mc:Ignorable="d"
+        Title="LoginWindow" Height="300" Width="300" MouseDown="Window_MouseDown" Background="#FF1C2B36" BorderThickness="1,1,1,1" BorderBrush="Black">
+
+    <Grid>
+        <Label x:Name="label" Content="Welcome" Margin="0,130,0,0" VerticalAlignment="Top" HorizontalAlignment="Center" FontSize="20" Foreground="White"/>
+        <TextBox x:Name="textBoxUsername" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Top" Width="200" Margin="0,180,0,0" FontSize="13.333" GotFocus="textBoxUsername_GotFocus" LostFocus="textBoxUsername_LostFocus" Text="Email adress" Panel.ZIndex="1" Foreground="LightSlateGray"/>
+        <TextBox x:Name="textBoxPassword" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Top" Width="200" Margin="0,210,0,0" FontSize="13.333" Text="Password" GotFocus="textBoxPassword_GotFocus" Panel.ZIndex="1" Foreground="LightSlateGray"/>
+        <PasswordBox x:Name="passwordBoxPassword" HorizontalAlignment="Center" Margin="0,210,0,0" VerticalAlignment="Top" Width="200" FontSize="13.333" LostFocus="passwordBoxPassword_LostFocus"/>
+        <Button x:Name="buttonConnexion" Content="Login" Click="buttonConnexion_Click" Height="44" VerticalAlignment="Bottom" Background="#FF3FCED1" Foreground="White" BorderBrush="{x:Null}" FontSize="16"/>
+        <Image x:Name="image" HorizontalAlignment="Center" Height="100" Margin="0,30,0,0" VerticalAlignment="Top" Width="100" Source="Ressources/Bug.png"/>
+    </Grid>
+</Window>
