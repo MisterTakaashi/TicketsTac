@@ -27,29 +27,36 @@ namespace TicketsTacGui
 
         public StateEnum State { get; set; }
 
-        public List<User> UserAssign { get; set; }
+        public List<User> Assignees { get; set; }
 
-        public Ticket(string name, string problemDescription, Projet projet)
+        public User Auteur { get; set; }
+
+        public Ticket(string name, string problemDescription, Projet projet, User auteur)
         {
-            //CreateTicket();
-
+            Name = name;
+            ProblemDescription = problemDescription;
+            Project = projet;
+            State = StateEnum.Open;
+            Assignees = new List<User>();
         }
+
         public Ticket(Dictionary<string, string> ticket)
          {
             Id = int.Parse(ticket["Id"]);
             Name = ticket["Name"];
             ProblemDescription = ticket["Description"];
+
             Project = Projet.GetProjetFromBDD(int.Parse(ticket["Projet_Id"]));
             State = (StateEnum)int.Parse(ticket["State"]);
-            List<User> userList = new List<User>();
-            List<Dictionary<String, String>> retourSelect = DB.SelectWhere("*", "Ticket_Id = " + Id, "Ticket_Assignee");
-            foreach (Dictionary<String, String> user in retourSelect)
-            {
-                User selectedUser = new User(user);
-                userList.Add(selectedUser);
-                UserAssign.Add(selectedUser);
-            }
+            Assignees = new List<User>();
 
+            List<Dictionary<String, String>> retourSelect = DB.SelectWhere("*", "Ticket_Id = " + Id, "Ticket_Assignee");
+            foreach (Dictionary<String, String> user_id in retourSelect)
+            {
+                User selectedUser = new User(user_id);
+                Assignees.Add(selectedUser);
+                //ViewModel.Items.Add(selectedUser.Username, selectedUser.Username);
+            }
          }
 
         private void AssignUser(User user)
@@ -63,7 +70,7 @@ namespace TicketsTacGui
             int id=DB.Insert(fields, values, "Ticket_Assignee");
         }
 
-        public void ConsultTicket()
+        public void ConsultTickets()
         {
             List<Dictionary<string, string>> ListTicket;
             ListTicket = DB.Select("*", "tickets");
@@ -110,4 +117,3 @@ namespace TicketsTacGui
 
     }
 }
-

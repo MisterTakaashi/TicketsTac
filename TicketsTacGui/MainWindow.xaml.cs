@@ -13,9 +13,7 @@ namespace TicketsTacGui
             InitializeComponent();
 
             frameContent.Navigate(new LoginPage());
-
-            //frameContent.Source = new Uri("LoginPage.xaml", UriKind.Relative);
-
+            //DB.Migrate();
             //frameContent.Navigate(new DbConnectPage()); //Fenêtre sur laquelle Pierre rentre les identifiants de la bdd pour tester la connexion
 
             frameContent.Navigate(new NewTicketPage(1));

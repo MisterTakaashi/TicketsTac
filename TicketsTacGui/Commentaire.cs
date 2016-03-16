@@ -20,6 +20,11 @@ namespace TicketsTacGui
             Created = created;
         }
 
+        public static Commentaire GetFromDb(int id)
+        {
+            throw new NotImplementedException();
+        }
+
         public void InsertIntoBDD()
         {
             List<string> champs = new List<string>();

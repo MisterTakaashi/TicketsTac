@@ -8,3 +8,4 @@
     PRIMARY KEY CLUSTERED ([Id] ASC)
 );
 
+INSERT INTO [dbo].[Users] ( Username, Email, Password, Rank, Created ) VALUES ( 'UserTest', 'Test@gmail.com', 'a94a8fe5ccb19ba61c4c0873d391e987982fbbd3', 90, 1458140337);

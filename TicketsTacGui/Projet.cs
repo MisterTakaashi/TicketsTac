@@ -119,7 +119,7 @@ namespace TicketsTacGui
             }*/
         }
 
-        private Ticket CreateTicket(string problemDescription)
+        private Ticket CreateTicket(string name, string problemDescription)
         {
 
             List<string> fieldList = new List<string>();
@@ -130,7 +130,7 @@ namespace TicketsTacGui
 
             Console.WriteLine("Ouverture d'un nouveau ticket");
 
-            Ticket ticket = new Ticket(problemDescription, this);
+            Ticket ticket = new Ticket(name, problemDescription, this);
             List<string> ValueList = new List<string>();
             ValueList.Add(problemDescription);
             ValueList.Add("4");

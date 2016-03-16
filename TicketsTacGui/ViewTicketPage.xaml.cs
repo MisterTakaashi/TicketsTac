@@ -27,6 +27,16 @@ namespace TicketsTacGui
             InitializeComponent();
 
             Ticket = Ticket.GetFromDb(id);
+            labelProjectTitle.Content = Ticket.Name;
+            labelTicketText.Content = Ticket.ProblemDescription;
+            
+            foreach ( Commentaire commentaire in Ticket.AdditionnalNote )
+            {
+                TextBlock reply = new TextBlock();
+                reply.Background = Brushes.AntiqueWhite;
+
+                //replies.Children.Add(reply);
+            }
         }
     }
 }

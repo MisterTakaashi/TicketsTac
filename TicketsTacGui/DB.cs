@@ -290,7 +290,14 @@ namespace TicketsTacGui
             for ( int i = 0 ; i < files.Count ; i++ )
             {
                 cmd = new SqlCommand(System.IO.File.ReadAllText(files[i]), _connection);
-                cmd.ExecuteNonQuery();
+                try
+                {
+                    cmd.ExecuteNonQuery();
+                }
+                catch ( Exception e)
+                {
+                    MessageBox.Show("L'appel au script " + files[i] + " a déclenché une erreur.\n" + e.Message);
+                }
             }
         }
 
