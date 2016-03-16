@@ -48,7 +48,6 @@ namespace TicketsTacGui
             DB.Insert("UserAssign", "Ticket_assignee");
             //User u = new User(DB.Get(int.Parse(((ComboBoxItem)comboBox_assignee.SelectedItem).Tag.ToString()), "Users"));
 
-
             NavigationService.Navigate(new ProjectsListPage());
         }
 
