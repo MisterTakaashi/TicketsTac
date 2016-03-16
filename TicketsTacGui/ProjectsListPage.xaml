@@ -11,20 +11,48 @@
     <Page.Resources>
         <Style TargetType="Button" x:Key="ListProjectButtons">
             <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Height" Value="30"/>
-            <Setter Property="Padding" Value="10,0,0,0"/>
+            <Setter Property="Foreground" Value="#FFf2f4f6"/>
+            <Setter Property="Height" Value="38"/>
+            <Setter Property="Padding" Value="10,10,0,0"/>
+            <Setter Property="FontFamily" Value="Global User Interface"/>
+            <Setter Property="FontWeight" Value="DemiBold"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type Button}">
                         <Border Background="{TemplateBinding Background}">
-                            <ContentPresenter HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            <ContentPresenter HorizontalAlignment="Left" VerticalAlignment="Center" Margin="15,0,0,0"/>
                         </Border>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="#e7e7e7"/>
+                    <!--<Setter Property="Background" Value="#e7e7e7"/>-->
+                    <Setter Property="Background" Value="#FF0e1922"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style TargetType="Button" x:Key="NewProjectButton">
+            <Setter Property="Background" Value="#4dbd74"/>
+            <Setter Property="Foreground" Value="#FFf2f4f6"/>
+            <Setter Property="Height" Value="38"/>
+            <Setter Property="Padding" Value="10,10,0,0"/>
+            <Setter Property="FontFamily" Value="Global User Interface"/>
+            <Setter Property="FontWeight" Value="DemiBold"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Left" VerticalAlignment="Center" Margin="15,0,0,0"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <!--<Setter Property="Background" Value="#e7e7e7"/>-->
+                    <Setter Property="Background" Value="#348d53"/>
                 </Trigger>
             </Style.Triggers>
         </Style>
@@ -39,14 +67,10 @@
             <ColumnDefinition Width="200"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <StackPanel x:Name="stackPanel_projects" Grid.Row="1"/>
-        <Button x:Name="button" Click="button_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Width="32" Height="32" Background="{x:Null}" BorderBrush="{x:Null}" RenderTransformOrigin="1.331,-0.413" Margin="10,0,0,0">
-            <StackPanel>
-                <Image Source="Ressources/Add.png" />
-            </StackPanel>
-        </Button>
+        <StackPanel x:Name="stackPanel_projects" Grid.Row="1" Background="#FF1C2B36">
+            <Button Content="New Project" x:Name="buttonNewProject" Click="button_Click" />
+        </StackPanel>
+        <Rectangle Fill="#FF1C2B36" Stroke="Black"/>
         <Frame x:Name="frame_project" Content="Frame" Grid.Column="1" Grid.Row="1"/>
-
-
     </Grid>
 </Page>

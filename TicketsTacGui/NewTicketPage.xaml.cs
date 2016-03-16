@@ -37,7 +37,7 @@ namespace TicketsTacGui
             
             //User u = new User(DB.Get(int.Parse(((ComboBoxItem)comboBox_assignee.SelectedItem).Tag.ToString()), "Users"));
 
-            Ticket created = new Ticket(textBox_ticket_name.Text, textBlock_ticket_description.Text, this.Project, );
+            //Ticket created = new Ticket(textBox_ticket_name.Text, textBlock_ticket_description.Text, this.Project, );
             NavigationService.Navigate(new ProjectsListPage());
         }
 
