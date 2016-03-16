@@ -9,20 +9,32 @@ namespace TicketsTacGui
     class Commentaire
     {
         public string Message { get; set; }
-        public Ticket Ticket { get; set; }
+        public int Ticket_Id { get; set; }
         public Int64 Created { get; set; }
         public User Creator { get; set; }
 
-        public Commentaire(string message, Ticket ticket, User creator, Int64 created)
+        public Commentaire(string message, int ticketId, User creator, Int64 created)
         {
             Message = message;
             Creator = creator;
             Created = created;
+            Ticket_Id = ticketId;
         }
 
-        public static Commentaire GetFromDb(int id)
+        public static List<Commentaire> GetAllForTicket(int idTicket)
         {
-            throw new NotImplementedException();
+            List<Commentaire> ret = new List<Commentaire>();
+            List<Dictionary<string, string>> replies = DB.SelectWhere("*", "Ticket_Id = " + idTicket, "Ticket_comms");
+            foreach( Dictionary<string, string> reply in replies )
+            {
+                User creator = User.Get(int.Parse(reply["Creator_Id"]));
+                Int64 created = Int64.Parse(reply["Created"]);
+                string message = reply["Message"];
+
+                ret.Add(new Commentaire(message, idTicket, creator, created));
+            }
+            
+            return ret;
         }
 
         public void InsertIntoBDD()
@@ -33,7 +45,7 @@ namespace TicketsTacGui
             champs.Add("Created");
             champs.Add("User_Id");
             List<string> values = new List<string>();
-            values.Add(Ticket.Id.ToString());
+            values.Add(Ticket_Id.ToString());
             values.Add(Message);
             values.Add(Created.ToString());
             values.Add(Creator.Id.ToString());

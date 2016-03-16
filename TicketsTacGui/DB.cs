@@ -404,7 +404,7 @@ namespace TicketsTacGui
                 List<Dictionary<string, string>> ret = r.ToList();
 
                 r.Close();
-
+                
                 return ret;
             }
             catch (Exception e)

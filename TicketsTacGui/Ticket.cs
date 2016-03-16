@@ -21,7 +21,7 @@ namespace TicketsTacGui
         public int Id { get; private set; }
         public string Name { get; set; }
         public string ProblemDescription { get; set; }
-        public List<Commentaire> AdditionnalNote { get; set; }
+        public List<Commentaire> AdditionnalNotes { get; set; }
 
         public Projet Project { get; set; }
 
@@ -39,7 +39,7 @@ namespace TicketsTacGui
             Project = projet;
             State = StateEnum.Open;
             Assignees = new List<User>();
-            AdditionnalNote = new List<Commentaire>();
+            AdditionnalNotes = new List<Commentaire>();
         }
 
         public Ticket(Dictionary<string, string> ticket)
@@ -51,7 +51,7 @@ namespace TicketsTacGui
             Project = Projet.GetProjetFromBDD(int.Parse(ticket["Projet_Id"]));
             State = (StateEnum)int.Parse(ticket["State"]);
             Assignees = new List<User>();
-            AdditionnalNote = new List<Commentaire>();
+            AdditionnalNotes = Commentaire.GetAllForTicket(Id);
 
             List<Dictionary<String, String>> retourSelect = DB.SelectWhere("*", "Ticket_Id = " + Id, "Ticket_Assignee");
             foreach (Dictionary<String, String> user_id in retourSelect)
@@ -91,7 +91,7 @@ namespace TicketsTacGui
             fieldList.Add("state");;
 
             List<string> ValueList = new List<string>();
-            if ((this.AdditionnalNote != null))
+            if ((this.AdditionnalNotes != null))
             {
                 this.State = StateEnum.Commented;
             }
@@ -106,9 +106,9 @@ namespace TicketsTacGui
         private Commentaire AddComment(string noteContent)
         {
             Console.WriteLine("edition d'un nouveau commentaire");
-            Commentaire comms = new Commentaire(noteContent, this, User.currentUser, DB.getTimestamp());
+            Commentaire comms = new Commentaire(noteContent, this.Id, User.currentUser, DB.getTimestamp());
             comms.InsertIntoBDD();
-            this.AdditionnalNote.Add(comms);
+            this.AdditionnalNotes.Add(comms);
 
             return comms;
         }
