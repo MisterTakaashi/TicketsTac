@@ -133,6 +133,8 @@ namespace TicketsTacGui
                 if (double.TryParse(values[i], out bufferDouble) || int.TryParse(values[i], out bufferInt)) whereClause += values[i];
                 else whereClause += "'" + values[i] + "'";
             }
+
+            Logger.Info("Exécution de SELECT " + string.Join(",", fields) + " FROM " + table + " WHERE " + whereClause);
             return SelectWhere(string.Join(",", selectFields), whereClause, table);
         }
 
@@ -166,6 +168,14 @@ namespace TicketsTacGui
             {
                 throw new Exception("Insertion failed for the data you provided.");
             }
+        }
+
+        public static int Insert(string fields, string values, string table)
+        {
+            List<string> fieldsReq = new List<string>(fields.Split(','));
+            List<string> valuesReq = new List<string>(values.Split(','));
+
+            return DB.Insert(fieldsReq, valuesReq, table);
         }
 
         public static int Insert<T>(T instance, string table)

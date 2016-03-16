@@ -52,6 +52,7 @@ namespace TicketsTacGui
                         TextBlock textBlockTicketButtonDescription = new TextBlock(new Run(ticket.ProblemDescription));
                         textBlockTicketButtonDescription.Margin = new Thickness(5, 5, 5, 0);
                         textBlockTicketButtonDescription.FontWeight = FontWeights.DemiBold;
+                        textBlockTicketButtonDescription.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#5b6870"));
                         textBlockTicketButtonDescription.FontSize = 15;
 
                         //TextBlock textBlockTicketButtonAuthor = new TextBlock(new Run(ticket.UserAssign.ElementAt(0).Username));
