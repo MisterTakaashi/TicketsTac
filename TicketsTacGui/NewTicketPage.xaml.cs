@@ -33,7 +33,6 @@ namespace TicketsTacGui
                 item.Tag = user.Id;
                 item.Content = user.Username;
 
-                comboBox_assignee.Items.Add(item);
             }
         }
 
@@ -44,8 +43,8 @@ namespace TicketsTacGui
 
         private void buttonCreateTicket_Click(object sender, RoutedEventArgs e)
         {
-            User u = new User(DB.Get(int.Parse(((ComboBoxItem)comboBox_assignee.SelectedItem).Tag.ToString()), "Users"));
-            Ticket created = new Ticket(textBox_ticket_name.Text, u, User.currentUser);
+           // User u = new User(DB.Get(int.Parse(((ComboBoxItem)comboBox_assignee.SelectedItem).Tag.ToString()), "Users"));
+            //Ticket created = new Ticket(textBox_ticket_name.Text, u, User.currentUser);
             NavigationService.Navigate(new ProjectsListPage());
         }
 
