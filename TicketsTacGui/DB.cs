@@ -134,7 +134,6 @@ namespace TicketsTacGui
                 else whereClause += "'" + values[i] + "'";
             }
 
-            Logger.Info("Exécution de SELECT " + string.Join(",", fields) + " FROM " + table + " WHERE " + whereClause);
             return SelectWhere(string.Join(",", selectFields), whereClause, table);
         }
 
@@ -379,6 +378,7 @@ namespace TicketsTacGui
         {
             try
             {
+                Console.WriteLine("/!\\ Requête SQL: " + cmd.CommandText);
                 SqlDataReader r = cmd.ExecuteReader();
                 List<Dictionary<string, string>> ret = r.ToList();
 
