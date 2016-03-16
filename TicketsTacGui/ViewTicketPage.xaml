@@ -11,18 +11,22 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="40"></RowDefinition>
-            <RowDefinition Height="33*"></RowDefinition>
-            <RowDefinition Height="107*"></RowDefinition>
-            <RowDefinition Height="60*"></RowDefinition>
-            <RowDefinition Height="60*"></RowDefinition>
+            <RowDefinition Height="27*"></RowDefinition>
+            <RowDefinition Height="87*"></RowDefinition>
+            <RowDefinition Height="49*"></RowDefinition>
+            <RowDefinition Height="49*"></RowDefinition>
+            <RowDefinition Height="30"></RowDefinition>
         </Grid.RowDefinitions>
-        <Label x:Name="labelProjectTitle" Content="" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Width="280" Height="40" FontWeight="Bold" FontSize="21.333" Grid.Row="0"/>
-        <Label x:Name="labelTicketText" Content="-&gt; " HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Row="1" VerticalAlignment="Top" Height="33" Width="280"/>
-        <TextBlock x:Name="textBlockDescription" HorizontalAlignment="Left" Margin="10,10,0,0" Grid.Row="2" TextWrapping="Wrap" VerticalAlignment="Top" Height="87" Width="280"/>
-        <StackPanel x:Name="replies" HorizontalAlignment="Left" Height="50" Margin="10,10,0,0" Grid.Row="3" VerticalAlignment="Top" Width="280"/>
-        <TextBox x:Name="textBox" AcceptsReturn="True" HorizontalAlignment="Left" Height="40" Margin="10,10,0,0" Grid.Row="4" TextWrapping="Wrap" VerticalAlignment="Top" Width="280"/>
+        <Label x:Name="labelProjectTitle" Content="" Margin="5,0" Height="40" FontWeight="Bold" FontSize="21.333" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"/>
+        <Label x:Name="labelTicketText" Content="" Margin="5,0" Grid.Row="1" Height="33" Grid.Column="0" Grid.ColumnSpan="2"/>
+        <TextBlock x:Name="textBlockDescription" Margin="5" Grid.Row="2" TextWrapping="Wrap" Height="97" Grid.Column="0" Grid.ColumnSpan="2"/>
+        <StackPanel x:Name="replies" Height="50" Margin="5,0" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"/>
+        <TextBox x:Name="textBox" AcceptsReturn="True" Margin="5,0" Grid.Row="4" TextWrapping="Wrap" Width="290" Grid.Column="0" Grid.ColumnSpan="2"/>
+        <Button x:Name="buttonSubmit" Grid.Column="0" Grid.Row="5" Height="23" Width="130" Click="buttonSubmit_Click">Submit</Button>
+        <Button x:Name="buttonCancel" Grid.Column="1" Grid.Row="5" Height="23" Width="130" Click="buttonCancel_Click">Cancel</Button>
     </Grid>
 </Page>

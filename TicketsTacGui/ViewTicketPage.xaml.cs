@@ -38,5 +38,15 @@ namespace TicketsTacGui
                 replies.Children.Add(reply);
             }
         }
+
+        private void buttonCancel_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void buttonSubmit_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

@@ -38,11 +38,9 @@ namespace TicketsTacGui
             Created = Int64.Parse(user["Created"]);
         }
 
-        public static User Get()
+        public static User Get(int id)
         {
-
-
-            return null;
+            return new User(DB.Get(id, "Users"));
         }
 
         public static List<User> GetAll()
