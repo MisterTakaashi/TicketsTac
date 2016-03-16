@@ -54,7 +54,7 @@ namespace TicketsTacGui
             fields.Add("Created");
 
             values.Add(Ticket.Id.ToString());
-            values.Add("'" + textBox.Text + "'");
+            values.Add(textBox.Text);
             values.Add(DB.getTimestamp().ToString());
 
             DB.Insert(fields, values, "Ticket_comms");
