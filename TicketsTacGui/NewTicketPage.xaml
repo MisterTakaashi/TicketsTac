@@ -29,7 +29,7 @@
         </Grid.ColumnDefinitions>
         <Label x:Name="label_project" Content="Projet: " Grid.Column="0" HorizontalAlignment="Right" Grid.Row="0" VerticalAlignment="Top" Height="24" Width="56" Margin="0,4,20,0"/>
         <Label x:Name="label_name_name" Grid.Column="1" HorizontalAlignment="Right" Grid.Row="0" VerticalAlignment="Top" Height="24" Width="186" Margin="0,4,24,0" Grid.ColumnSpan="2"/>
-        <Label x:Name="label_name" Content="Nom: " Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Top" Height="24" Width="56" Margin="0,30,20,0" Grid.RowSpan="2"/>
+        <Label x:Name="label_name" Content="Intitule: " Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Top" Height="24" Width="56" Margin="0,30,20,0" Grid.RowSpan="2"/>
         <Label x:Name="label_" Content="Assignee:" Grid.Column="0" HorizontalAlignment="Right" Grid.Row="2" VerticalAlignment="Top" Height="30" Width="60" Margin="0,0,16,0"/>
         <Label x:Name="label" Content="Description:" Grid.Column="0" Grid.Row="2" VerticalAlignment="Top" Height="30" Margin="0,35,0,0" />
         

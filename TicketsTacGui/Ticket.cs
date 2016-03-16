@@ -31,8 +31,9 @@ namespace TicketsTacGui
 
         public User Auteur { get; set; }
 
-        public Ticket(string name, string problemDescription, Projet projet, User auteur)
+        public Ticket(int id, string name, string problemDescription, Projet projet, User auteur)
         {
+            Id = id;
             Name = name;
             ProblemDescription = problemDescription;
             Project = projet;
