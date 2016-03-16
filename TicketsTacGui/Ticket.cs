@@ -19,6 +19,7 @@ namespace TicketsTacGui
     class Ticket
     {
         public int Id { get; private set; }
+        public string Name { get; set; }
         public string ProblemDescription { get; set; }
         public List<Commentaire> AdditionnalNote { get; set; }
 
@@ -28,20 +29,20 @@ namespace TicketsTacGui
 
         public List<User> UserAssign { get; set; }
 
-        public Ticket(string problemDescription, Projet projet)
+        public Ticket(string name, string problemDescription, Projet projet)
         {
             //CreateTicket();
 
         }
-         public Ticket(Dictionary<string, string> ticket)
+        public Ticket(Dictionary<string, string> ticket)
          {
             Id = int.Parse(ticket["Id"]);
+            Name = ticket["Name"];
             ProblemDescription = ticket["Description"];
             Project = Projet.GetProjetFromBDD(int.Parse(ticket["Projet_Id"]));
             State = (StateEnum)int.Parse(ticket["State"]);
             List<User> userList = new List<User>();
-            //List<Dictionary<String, String>> retourSelect = DB.SelectWhere("Users.Id, Users.Username, Users.Email, Users.Password, Users.Rank, Users.Created", "ticket_assignee.Ticket_Id = " + Id + ", Users.Id = ticket_assignee.User_Id", "ticket_assignee, Users");
-            List<Dictionary<String, String>> retourSelect = DB.SelectWhere("*", "Ticket_Id = " + Id, "Ticket_assignee");
+            List<Dictionary<String, String>> retourSelect = DB.SelectWhere("*", "Ticket_Id = " + Id, "Ticket_Assignee");
             foreach (Dictionary<String, String> user in retourSelect)
             {
                 User selectedUser = new User(user);
@@ -59,7 +60,7 @@ namespace TicketsTacGui
             List<string> values = new List<string>();
             values.Add(user.Id.ToString());
             values.Add(this.Id.ToString());
-            int id=DB.Insert(fields, values, "ticket_assignee");
+            int id=DB.Insert(fields, values, "Ticket_Assignee");
         }
 
         public void ConsultTicket()
