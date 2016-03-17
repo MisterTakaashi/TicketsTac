@@ -34,7 +34,7 @@ namespace TicketsTacGui
             int numberProjets = 0;
             foreach (Dictionary<string, string> client in clients)
             {
-                if (!User.currentUser.hasPermissionTo(Permission.userView, null) && User.currentUser.Id != int.Parse(client["Id"]) )
+                if (!User.currentUser.hasPermissionTo(Permission.userView, User.Get(int.Parse(client["Id"].ToString()))) && User.currentUser.Id != int.Parse(client["Id"]) )
                     continue;
                 Button buttonProjet = new Button();
                 buttonProjet.Content = client["Username"];
