@@ -22,7 +22,6 @@ namespace TicketsTacGui
     {
         public LoginWindow()
         {
-            //DB.Migrate();
             InitializeComponent();
         }
 
