@@ -27,16 +27,20 @@ namespace TicketsTacGui
             profileOwner = User.currentUser;
             InitializeComponent();
 
-
+            //Le rang !!!!!
             textBoxEmail.Text = profileOwner.Email;
             textBoxPassword.Text = "*********";
         }
 
         public ClientProfilePage(int userId)
         {
+            if ( !User.currentUser.hasPermissionTo(Permission.userUpdate, null) )
+            {
+                textBoxEmail.IsReadOnly = true;
+            }
+
             profileOwner = User.Get(userId);
             InitializeComponent();
-
 
             textBoxEmail.Text = profileOwner.Email;
             textBoxPassword.Text = "*********";

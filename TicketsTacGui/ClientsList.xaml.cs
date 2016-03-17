@@ -29,12 +29,12 @@ namespace TicketsTacGui
 
             buttonNewClient.Style = Resources["NewProjectButton"] as Style;
 
-            List<Dictionary<string, string>> clients = DB.SelectWhere("*", "Rank != 90", "Users");
+            List<Dictionary<string, string>> clients = DB.Select("*", "Users");
 
             int numberProjets = 0;
             foreach (Dictionary<string, string> client in clients)
             {
-                if (!User.currentUser.hasPermissionTo(Permission.userView, null))
+                if (!User.currentUser.hasPermissionTo(Permission.userView, null) && User.currentUser.Id != int.Parse(client["Id"]) )
                     continue;
                 Button buttonProjet = new Button();
                 buttonProjet.Content = client["Username"];
