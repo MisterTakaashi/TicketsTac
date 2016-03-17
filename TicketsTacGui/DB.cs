@@ -7,7 +7,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TicketsTac
+namespace TicketsTacGui
 {
     class DBConfig
     {
@@ -50,6 +50,7 @@ namespace TicketsTac
         //  Insert(List, List, string)
         //  Get(int, string)
         //  Insert<T>(T instance, string)
+        //  Insert(List<string> fields, List<string> values, string table)
         //  Delete(int id, string table)
         //  Delete<T>(T instance, string table)
         //  DeleteWhere(string whereClause, string table)
@@ -66,7 +67,7 @@ namespace TicketsTac
             try
             {
                 _connection.Open();
-                Console.WriteLine("Connexion à la base de données: ok");
+                Logger.Info("Connexion à la base de données: OK");
             }
             catch ( Exception e )
             {
@@ -115,16 +116,29 @@ namespace TicketsTac
             string reqValues = string.Join(",", values.ToArray());
             string reqFields = string.Join(",", fields.ToArray());
 
+            Console.WriteLine("INSERT INTO " + table + " (" + reqFields + ") VALUES (" + reqValues + ")");
+
             SqlCommand cmd = new SqlCommand("INSERT INTO " + table + " (" + reqFields + ") VALUES (" + reqValues + ")", _connection);
+            int affectedRows = 0;
+            Dictionary<string, string> insertedRecord = null;
             try
             {
-                int affectedRows = cmd.ExecuteNonQuery();
-                return affectedRows;
+                affectedRows = cmd.ExecuteNonQuery();
+                insertedRecord = SelectWhere(reqFields, reqValues, table)[0];
             }
             catch ( Exception e )
             {
                 logRequestError(cmd, e);
                 return 0;
+            }
+
+            if ( affectedRows != 0 && insertedRecord.ContainsKey("Id"))
+            {
+                return int.Parse(insertedRecord["Id"]);
+            }
+            else
+            {
+                throw new Exception("Insertion failed for the data you provided.");
             }
         }
 
@@ -334,6 +348,11 @@ namespace TicketsTac
 
                 return null;
             }
+        }
+
+        public static int getTimestamp()
+        {
+            return (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
         }
 
         private static void logRequestError(SqlCommand cmd, Exception e)
