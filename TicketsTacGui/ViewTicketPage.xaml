@@ -8,14 +8,37 @@
       d:DesignHeight="500" d:DesignWidth="600"
       Title="ViewTicketPage">
 
+    <Page.Resources>
+        <Style TargetType="{x:Type Button}" x:Key="ValidateCommentButton">
+            <Setter Property="Background" Value="#FF3fced1"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#FF3AC0C3"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Page.Resources>
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition ></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="40"></RowDefinition>
-            <RowDefinition Height="7*"></RowDefinition>
-            <RowDefinition Height="3*"></RowDefinition>
+            <RowDefinition/>
+            <RowDefinition Height="100"></RowDefinition>
+            <RowDefinition Height="44"/>
         </Grid.RowDefinitions>
         <!--<Label x:Name="labelTicketText" Content="" Margin="5,11,2,11" Grid.Row="1" Grid.Column="0"/>-->
         <!--<TextBlock x:Name="textBlockDescription" Margin="5,39,2,39" Grid.Row="2" TextWrapping="Wrap" Grid.Column="0"/>-->
@@ -30,17 +53,17 @@
                 <Border Background="White" Margin="20, 20,20, 0" CornerRadius="3" Padding="18, 13,18,13">
                     <StackPanel>
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="MISTERTAKAASHI    " Foreground="#FF787878" FontWeight="DemiBold"></TextBlock>
-                            <TextBlock Text="    Thursday, Oct 10, 2016 6:20 PM" Foreground="#FF787878"></TextBlock>
+                            <TextBlock x:Name="textBlockDecriptionAuthor" Text="MISTERTAKAASHI    " Foreground="#FF787878" FontWeight="DemiBold"></TextBlock>
+                            <TextBlock x:Name="textBlockDecriptionDate" Text="    Thursday, Oct 10, 2016 6:20 PM" Foreground="#FF787878"></TextBlock>
                         </StackPanel>
-                        <TextBlock Text="Blabla" Foreground="#5b6870" FontSize="16" FontWeight="DemiBold"></TextBlock>
+                        <TextBlock x:Name="textBlockDecriptionMessage" Text="Blabla" Foreground="#5b6870" FontSize="16" FontWeight="DemiBold"></TextBlock>
                     </StackPanel>
                 </Border>
             </StackPanel>
         </ScrollViewer>
-        <TextBox x:Name="textBox" AcceptsReturn="True" Margin="7,0,4,0" Grid.Row="2" TextWrapping="Wrap" Grid.Column="0"/>
-        <Button x:Name="buttonSubmit" Grid.Column="0" Grid.Row="2" Click="buttonSubmit_Click" Margin="281,4,15,4">Submit</Button>
-        <Button x:Name="buttonCancel" Grid.Row="2" Click="buttonCancel_Click" Margin="7,4,405,4">Cancel</Button>
-        <Label x:Name="labelProjectTitle" Content="Project Name" VerticalAlignment="Top" Foreground="#5b6870" FontSize="20"/>
+        <TextBox x:Name="textBox" AcceptsReturn="True" Grid.Row="2" TextWrapping="Wrap" Grid.Column="0"  BorderBrush="#FFE7ECEE" BorderThickness="2"/>
+        <Button x:Name="buttonSubmit" Grid.Column="0" Grid.Row="3" Click="buttonSubmit_Click" Style="{StaticResource ValidateCommentButton}" Foreground="White" BorderBrush="{x:Null}" FontSize="16" Cursor="Hand">Submit</Button>
+        <Button x:Name="buttonCancel" Grid.Row="3" Click="buttonCancel_Click" Margin="0,0,412,0" Visibility="Collapsed">Cancel</Button>
+        <Label x:Name="labelProjectTitle" Content="Project Name" VerticalAlignment="Top" Foreground="#5b6870" FontSize="20" Height="37"/>
     </Grid>
 </Page>
