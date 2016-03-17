@@ -44,6 +44,8 @@ namespace TicketsTacGui
                     textBlockDecriptionDate.Text = "    " + DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm");
                     textBlockDescriptionMessage.Text = Ticket.ProblemDescription;
 
+                    this.changeBackgroundStatus();
+
                     foreach (Commentaire commentaire in Ticket.AdditionnalNotes)
                     {
                         /*TextBlock reply = new TextBlock();
@@ -139,7 +141,7 @@ namespace TicketsTacGui
         {
             this.Ticket.State = StateEnum.Resolve;
             this.changeBackgroundStatus();
-            this.Ticket.ChangeState(StateEnum.Open);
+            this.Ticket.ChangeState(StateEnum.Resolve);
         }
 
         private void buttonStatusClose_Click(object sender, RoutedEventArgs e)
