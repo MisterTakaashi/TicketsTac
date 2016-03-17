@@ -26,9 +26,9 @@ namespace TicketsTacGui
                     break;
 
                 case Environment.Prod:
-                    Host = "10.0.10.10";
+                    Host = "SRV-SQL01\\PROJECTSQL";
                     Pass = "Passw0rd";
-                    Username = "Administrator";
+                    Username = "sa";
                     break;
 
                 case Environment.Local:

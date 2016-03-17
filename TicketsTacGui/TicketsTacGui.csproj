@@ -58,7 +58,13 @@
     <Compile Include="ClientProfilePage.xaml.cs">
       <DependentUpon>ClientProfilePage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ClientsList.xaml.cs">
+      <DependentUpon>ClientsList.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Commentaire.cs" />
+    <Compile Include="CreateClientPage.xaml.cs">
+      <DependentUpon>CreateClientPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DbConnectPage.xaml.cs">
       <DependentUpon>DbConnectPage.xaml</DependentUpon>
     </Compile>
@@ -92,6 +98,14 @@
       <DependentUpon>ViewTicketPage.xaml</DependentUpon>
     </Compile>
     <Page Include="ClientProfilePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ClientsList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CreateClientPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
