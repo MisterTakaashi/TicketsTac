@@ -154,6 +154,26 @@ namespace TicketsTacGui
                 case Permission.projectDelete:
                     break;
                 case Permission.userView:
+                    User thisUser = (User)param;
+                    switch (this.Rank)
+                    {
+                        case Rank.Administrateur:
+                            return true;
+                        case Rank.Manager:
+                            if (thisUser.Rank != Rank.Administrateur)
+                                 return true;
+                            break;
+                        case Rank.Operator:
+                            if (thisUser.Rank != Rank.Administrateur)
+                                return true;
+                            break;
+                        case Rank.Client:
+                            if (thisUser.Id != this.Id)
+                                return true;
+                            break;
+                        default:
+                            break;
+                    }
                     return true;
                 case Permission.userManagerView:
                     break;
