@@ -52,7 +52,7 @@ namespace TicketsTacGui
 
                         StackPanel stackPanelTicketStatus = new StackPanel();
 
-                        TextBlock textBlockTicketButtonDescription = new TextBlock(new Run(ticket.ProblemDescription));
+                        TextBlock textBlockTicketButtonDescription = new TextBlock(new Run(ticket.Name));
                         textBlockTicketButtonDescription.Margin = new Thickness(5, 5, 5, 0);
                         textBlockTicketButtonDescription.FontWeight = FontWeights.DemiBold;
                         textBlockTicketButtonDescription.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#5b6870"));

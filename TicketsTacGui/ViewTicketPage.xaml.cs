@@ -29,7 +29,13 @@ namespace TicketsTacGui
             Ticket = Ticket.GetFromDb(id);
             labelProjectTitle.Content = Ticket.Name;
             //labelTicketText.Content = Ticket.ProblemDescription;
-            
+
+            //.Text = Ticket.Auteur.Username;
+            // TODO : Date création du ticket
+            //textBlockDecriptionDate.Text = 
+            textBlockDecriptionMessage.Text = Ticket.ProblemDescription;
+
+
             foreach ( Commentaire commentaire in Ticket.AdditionnalNotes )
             {
                 /*TextBlock reply = new TextBlock();
@@ -49,15 +55,18 @@ namespace TicketsTacGui
                 TextBlock textBlockAuthor = new TextBlock();
                 textBlockAuthor.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF787878"));
                 textBlockAuthor.FontWeight = FontWeights.DemiBold;
-                textBlockAuthor.Text = commentaire.Message;
+                textBlockAuthor.Text = commentaire.Creator.Username.ToUpper() + "    ";
 
                 TextBlock textBlockDate = new TextBlock();
                 textBlockDate.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF787878"));
+                DateTime dateCreate = DB.UnixTimeStampToDateTime(commentaire.Created);
+                textBlockDate.Text = "    " + dateCreate.Day + "/" + dateCreate.Month.ToString() + "/" + dateCreate.Year.ToString() + " " + dateCreate.Hour.ToString() + ":" + dateCreate.Minute.ToString();
 
                 TextBlock textBlockMessage = new TextBlock();
                 textBlockMessage.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#5b6870"));
                 textBlockMessage.FontSize = 16;
                 textBlockMessage.FontWeight = FontWeights.DemiBold;
+                textBlockMessage.Text = commentaire.Message;
 
                 stackPanelHori.Children.Add(textBlockAuthor);
                 stackPanelHori.Children.Add(textBlockDate);
