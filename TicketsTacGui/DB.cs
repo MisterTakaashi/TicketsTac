@@ -10,6 +10,10 @@ namespace TicketsTacGui
     class DBConfig
     {
         private Environment _env = Environment.Prod;
+<<<<<<< HEAD
+=======
+        // private Environment _env = Environment.Local;
+>>>>>>> 346397ac1cc4216d605d6019e52824a090715fbb
 
         public String Host { get; set; }
         public String Username { get; set; }
@@ -26,7 +30,7 @@ namespace TicketsTacGui
                     break;
 
                 case Environment.Prod:
-                    Host = "SRV-SQL01\\PROJECTSQL";
+                    Host = @"SRV-SQL01\PROJECTSQL";
                     Pass = "Passw0rd";
                     Username = "sa";
                     break;
@@ -85,7 +89,7 @@ namespace TicketsTacGui
             }
         }
 
-        public static void testConnection(DBConfig conf)
+        public static void setConnection(DBConfig conf)
         {
             config = conf;
             if (_connection != null) _connection.Close();
@@ -330,7 +334,7 @@ namespace TicketsTacGui
                 }
                 catch ( Exception e)
                 {
-                    MessageBox.Show("L'appel au script " + files[i] + " a déclenché une erreur.\n" + e.Message);
+                    Console.WriteLine("L'appel au script " + files[i] + " a déclenché une erreur.\n" + e.Message);
                 }
             }
         }
@@ -437,10 +441,9 @@ namespace TicketsTacGui
 
         private static void logRequestError(SqlCommand cmd, Exception e)
         {
-            Console.WriteLine("/!\\ Erreur: La requête n'a pas abouti");
-            Console.WriteLine("\tTexte: " + cmd.CommandText);
-            Console.WriteLine("\tErreur: " + e.Data);
-            Console.WriteLine("\tMessage d'erreur: " + e.Message);
+            string str = "/!\\ Erreur: La requête n'a pas abouti" + "\tTexte: " + cmd.CommandText + "\tErreur: " + e.Data + "\tMessage d'erreur: " + e.Message;
+
+            MessageBox.Show(str);
         }
     }
 }

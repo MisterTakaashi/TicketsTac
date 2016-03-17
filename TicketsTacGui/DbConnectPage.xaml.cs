@@ -15,8 +15,8 @@ namespace TicketsTacGui
 
         private void button_connect_Click(object sender, RoutedEventArgs e)
         {
-            DBConfig conf = new DBConfig(textbox_host.Text, textBox_username.Text, textbox_password.Text);
-            DB.testConnection(conf);
+            //DBConfig conf = new DBConfig(textbox_host.Text, textBox_username.Text, textbox_password.Text);
+            //DB.testConnection(conf);
         }
     }
 }
