@@ -46,12 +46,14 @@ namespace TicketsTacGui
 
         public ClientProfilePage(int userId)
         {
+            InitializeComponent();
             if ( !User.currentUser.hasPermissionTo(Permission.userUpdate, null) )
             {
                 textBoxEmail.IsReadOnly = true;
+                comboBoxRank.IsReadOnly = true;
+                textBoxPassword.IsReadOnly = true;
             }
 
-            InitializeComponent();
             profileOwner = User.Get(userId);
 
             foreach (Rank value in Enum.GetValues(typeof(Rank)))
