@@ -5,6 +5,7 @@
     [State]       TINYINT NOT NULL,
 	[Name]		  TEXT	  NOT NULL,
 	[Auteur_Id]   INT	  NOT NULL,
+    [Created]     BIGINT       NOT NULL,
     PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_Tickets_Projets] FOREIGN KEY ([Projet_Id]) REFERENCES [dbo].[Projets] ([Id]),
 	CONSTRAINT [FK_Auteur_User] FOREIGN KEY ([Auteur_Id]) REFERENCES [dbo].[Tickets] ([Id])

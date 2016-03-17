@@ -22,7 +22,7 @@ namespace TicketsTacGui
         public string Name { get; set; }
         public string ProblemDescription { get; set; }
         public List<Commentaire> AdditionnalNotes { get; set; }
-
+        public int Created { get; private set; }
         public Projet Project { get; set; }
 
         public StateEnum State { get; set; }
@@ -40,6 +40,7 @@ namespace TicketsTacGui
             State = StateEnum.Open;
             Assignees = new List<User>();
             AdditionnalNotes = new List<Commentaire>();
+            Created = DB.getTimestamp();
         }
 
         public Ticket(Dictionary<string, string> ticket)
@@ -50,13 +51,15 @@ namespace TicketsTacGui
 
             Project = Projet.GetProjetFromBDD(int.Parse(ticket["Projet_Id"]));
             State = (StateEnum)int.Parse(ticket["State"]);
+            Created = int.Parse(ticket["Created"]);
+
             Assignees = new List<User>();
             AdditionnalNotes = Commentaire.GetAllForTicket(Id);
 
-            List<Dictionary<String, String>> retourSelect = DB.SelectWhere("*", "Ticket_Id = " + Id, "Ticket_Assignee");
-            foreach (Dictionary<String, String> user_id in retourSelect)
+            List<Dictionary<String, String>> ticketAssignees = DB.SelectWhere("*", "Ticket_Id = " + Id, "Ticket_Assignee");
+            foreach (Dictionary<String, String> ticketAssignee in ticketAssignees)
             {
-                User selectedUser = new User(user_id);
+                User selectedUser = User.Get(int.Parse(ticketAssignee["Assignee_Id"]));
                 Assignees.Add(selectedUser);
                 //ViewModel.Items.Add(selectedUser.Username, selectedUser.Username);
             }

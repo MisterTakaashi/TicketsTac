@@ -39,8 +39,8 @@ namespace TicketsTacGui
         {
             var auteur = User.currentUser;
             List<string> fieldsAssignees = new List<string> { "Ticket_Id", "Assignee_Id" }; //On déclare valuesAssignees plus tard étant donné que la liste varie en fonction de ElementAt(i)
-            List<string> fieldsCreationTicket = new List<string> { "Name", "Description", "Projet_Id", "State", "Auteur_Id" };
-            List<string> valuesCreationTicket = new List<string> { textBox_ticket_name.Text, textBox_ticket_description.Text, Project.Id.ToString(), "4", auteur.Id.ToString()};
+            List<string> fieldsCreationTicket = new List<string> { "Name", "Description", "Projet_Id", "State", "Auteur_Id", "Created" };
+            List<string> valuesCreationTicket = new List<string> { textBox_ticket_name.Text, textBox_ticket_description.Text, Project.Id.ToString(), "4", auteur.Id.ToString(), DB.getTimestamp().ToString() };
 
             int ticketId = DB.Insert(fieldsCreationTicket, valuesCreationTicket, "Tickets");
             Ticket ticket = Ticket.GetFromDb(ticketId);
