@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace TicketsTacGui
 {
@@ -13,6 +14,7 @@ namespace TicketsTacGui
         public string Username { get; private set; }
         public string Email { get; private set; }
         public Rank Rank { get; private set; }
+        public static User currentUser = new User(0, "Test", "Test", Rank.Administrateur, 0);
         public Int64 Created { get; set; }
 
         public string Password { get; set; }
@@ -29,7 +31,7 @@ namespace TicketsTacGui
         public User(Dictionary<String, String> user)
         {
             Id = int.Parse(user["Id"]);
-            Username = user["Name"];
+            Username = user["Username"];
             Email = user["Email"];
             Rank = (Rank)int.Parse(user["Rank"]);
             Created = Int64.Parse(user["Created"]);
@@ -50,16 +52,14 @@ namespace TicketsTacGui
             DB.Update(id, new List<string> { "email" }, new List<string> { email }, "users");
         }
 
+        public static User Get(int id)
+        {
+            return new User(DB.Get(id, "Users"));
+        }
+
         public void setRank(int id, Rank rank)
         {
             DB.Update(id, new List<string> { "rank" }, new List<string> { rank.ToString() }, "users");
-        }
-
-        public static User Get(int id)
-        {
-            Dictionary<string, string> r = DB.Get(id, "users");
-            User theUser = new User(Int32.Parse(r["id"]), (String)r["username"], (String)r["email"], new Rank(["rank"], DB.getTimestamp());
-            return theUser;
         }
 
         public static List<User> GetAll()
@@ -80,7 +80,7 @@ namespace TicketsTacGui
 
         public static User Connect(string email, string password)
         {
-            List<Dictionary<string, string>> result = DB.SelectWhere("*", string.Format("Email = '{0}' AND Password = '{1}'", email, password), "users");
+            List<Dictionary<string, string>> result = DB.SelectWhere("*", string.Format("Email = '{0}' AND Password = '{1}'", email, password), "Users");
 
             foreach (var user in result)
             {

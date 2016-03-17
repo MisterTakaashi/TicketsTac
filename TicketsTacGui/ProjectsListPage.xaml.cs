@@ -23,6 +23,43 @@ namespace TicketsTacGui
         public ProjectsListPage()
         {
             InitializeComponent();
+
+            buttonNewProject.Style = Resources["NewProjectButton"] as Style;
+
+            List<Projet> projets = Projet.GetAllProjetsFromBDD();
+
+            int numberProjets = 0;
+            foreach (Projet projet in projets)
+            {
+                Button buttonProjet = new Button();
+                buttonProjet.Content = projet.Nom;
+                buttonProjet.Style = Resources["ListProjectButtons"] as Style;
+                buttonProjet.Click += buttonProjet_Click;
+                buttonProjet.Tag = projet.Id;
+
+                Console.WriteLine("Nouveau projet: " + projet.Nom);
+
+                stackPanel_projects.Children.Add(buttonProjet);
+
+                numberProjets++;
+            }
+
+            Console.WriteLine(projets);
+        }
+
+        private void buttonProjet_Click(object sender, RoutedEventArgs e)
+        {
+            Button senderButton = sender as Button;
+            int id = (int)senderButton.Tag;
+
+            Console.WriteLine("Demande Projet N°" + id);
+
+            frame_project.Navigate(new ProjectIssuesPage(id));
+        }
+
+        private void button_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new NewProjectPage());
         }
     }
 }

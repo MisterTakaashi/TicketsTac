@@ -19,184 +19,108 @@ namespace TicketsTacGui
     class Ticket
     {
         public int Id { get; private set; }
-        public List<User> Users;
-
+        public string Name { get; set; }
         public string ProblemDescription { get; set; }
-        public string AdditionnalNote { get; set; }
-
-        public Projet Projets { get; set; }
+        public List<Commentaire> AdditionnalNotes { get; set; }
+        public int Created { get; private set; }
+        public Projet Project { get; set; }
 
         public StateEnum State { get; set; }
 
-        public Ticket(string problemDescription, Projet projet)
-        {
-            //CreateTicket();
+        public List<User> Assignees { get; set; }
 
-        }
-       /* public Ticket(Dictionary<string, string> ticket)
+        public User Auteur { get; set; }
+
+        public Ticket(int id, string name, string problemDescription, Projet projet, User auteur)
         {
+            Id = id;
+            Name = name;
+            ProblemDescription = problemDescription;
+            Project = projet;
+            State = StateEnum.Open;
+            Assignees = new List<User>();
+            AdditionnalNotes = new List<Commentaire>();
+            Created = DB.getTimestamp();
+            Auteur = auteur;
+        }
+
+        public Ticket(Dictionary<string, string> ticket)
+         {
             Id = int.Parse(ticket["Id"]);
+            Name = ticket["Name"];
             ProblemDescription = ticket["Description"];
+
             Project = Projet.GetProjetFromBDD(int.Parse(ticket["Projet_Id"]));
             State = (StateEnum)int.Parse(ticket["State"]);
+            Created = int.Parse(ticket["Created"]);
+            Auteur = User.Get(int.Parse(ticket["Auteur_Id"]));
+            Assignees = new List<User>();
+            AdditionnalNotes = Commentaire.GetAllForTicket(Id);
 
-
-        }
-
-        private Ticket CreateTicket()
-        {
-            string problemDescription = "";
-
-            List<string> fieldList = new List<string>();
-            fieldList.Add("users");
-            fieldList.Add("problem_description");
-            fieldList.Add("projet");
-            fieldList.Add("state");
-
-            Console.WriteLine("Ouverture d'un nouveau ticket");
-
-            Console.WriteLine("Veuillez saisir la description du probleme, pour arreter saisissez 'EOF'.");
-            Console.WriteLine("Description : ");
-
-            string saisieDescription = Console.ReadLine();
-            while (problemDescription != "EOF")
+            List<Dictionary<String, String>> ticketAssignees = DB.SelectWhere("*", "Ticket_Id = " + Id, "Ticket_Assignee");
+            foreach (Dictionary<String, String> ticketAssignee in ticketAssignees)
             {
-                string.Concat(problemDescription, saisieDescription);
+                User selectedUser = User.Get(int.Parse(ticketAssignee["Assignee_Id"]));
+                Assignees.Add(selectedUser);
+                //ViewModel.Items.Add(selectedUser.Username, selectedUser.Username);
             }
+         }
 
-            Ticket ticket = new Ticket(problemDescription, state, project);
-            List<string> ValueList = new List<string>();
-            ValueList.Add(problemDescription);
-            ValueList.Add("4");
-            ValueList.Add(project.GetIDToString());
-            DB.Insert(fieldList, ValueList, "tickets");
-
-            Console.ReadLine();
-
-            return ticket;
-        }
-
-        public void AssignUser()
+        private void AssignUser(User user)
         {
-            Boolean isChoiceAssignementCorrect = false;
-            while (isChoiceAssignementCorrect != true)
-            {
-                Console.WriteLine("Souhaitez vous assigner le ticket à un collaborateur ?");
-                Console.WriteLine("'Y' oui 'N' non ");
-                string choiceAssignement = Console.ReadLine();
-                if (choiceAssignement.ToLower() == "y")
-                {
-                    isChoiceAssignementCorrect = true;
-                    chooseUser();
-                }
-                else if (choiceAssignement.ToLower() == "n")
-                {
-                    isChoiceAssignementCorrect = true;
-                }
-                else
-                {
-                    Console.WriteLine("Saisie Incorrecte veuillez recommencer");
-                    isChoiceAssignementCorrect = false;
-                }
-            }
+            List < string > fields = new List<string>();
+            fields.Add("User_Id");
+            fields.Add("Ticket_Id");
+            List<string> values = new List<string>();
+            values.Add(user.Id.ToString());
+            values.Add(this.Id.ToString());
+            int id=DB.Insert(fields, values, "Ticket_Assignee");
         }
 
-        private void chooseUser()
-        {
-            List<User> UserListFromBDD = new List<User>();
-            UserListFromBDD = User.GetAll();
-
-            List<User> UserList = new List<User>();
-
-            Boolean stopChoice = false;
-            while (stopChoice != true)
-            {
-                Console.WriteLine("A quel collaborateur souhaitez vous assigner le ticket ?");
-                Console.WriteLine("Saisissez l'id correspondant au collaborateur.");
-                Console.WriteLine("Choix du collaborateur :");
-                int choiceCollab = Convert.ToInt32(Console.ReadLine());
-                if (choiceCollab <= UserListFromBDD.Count)
-                {
-                    foreach (User user in UserListFromBDD)
-                    {
-                        if (user.GetID() == choiceCollab)
-                        {
-                            Console.WriteLine("Souhaitez vous attribuer un autre collaborateur ?");
-                            string choiceAssignement;
-                            do
-                            {
-                                Console.WriteLine("'Y' oui 'N' non ");
-                                choiceAssignement = Console.ReadLine();
-                                if (choiceAssignement.ToLower() == "y")
-                                {
-                                    stopChoice = false;
-                                    UserList.Add(user);
-                                }
-                                else if (choiceAssignement.ToLower() == "n")
-                                {
-                                    stopChoice = true;
-                                }
-                                else
-                                {
-                                    Console.WriteLine("Saisie Incorrecte veuillez recommencer");
-                                    stopChoice = false;
-                                }
-                            }
-
-                            while (choiceAssignement.ToLower() != "y" || choiceAssignement.ToLower() != "n");
-                        }
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("Saisie Incorrecte veuillez recommencer");
-                    stopChoice = false;
-                }
-            }
-        }
-        public void ConsultTicket()
+        public void ConsultTickets()
         {
             List<Dictionary<string, string>> ListTicket;
             ListTicket = DB.Select("*", "tickets");
 
             Console.WriteLine("Selectionner un ticket a consulter");
+            DB.Get(this.Id, "Tickets");
+        }
 
+        private void EditTicket()
+        {
 
+            List<string> fieldList = new List<string>();
+            fieldList.Add("problem_description");
+            fieldList.Add("projet");
+            fieldList.Add("state");
 
-            Boolean stopChoice = false;
-            while (stopChoice != true)
+            List<string> ValueList = new List<string>();
+            if ((this.AdditionnalNotes != null))
             {
-                Console.WriteLine("A quel collaborateur souhaitez vous assigner le ticket ?");
-                Console.WriteLine("Saisissez l'id correspondant au collaborateur.");
-                Console.WriteLine("Choix du collaborateur :");
-                int choiceTicket = Convert.ToInt32(Console.ReadLine());
-                if (choiceTicket <= ListTicket.Count)
-                {
-                    foreach (Dictionary<string, string> ticket in ListTicket)
-                    {
-                        if (ticket.id == choiceTicket)
-                        {
-                            Ticket tic = new Ticket(ticket);
-                            Console.WriteLine(tic.id);
-                            Console.WriteLine(tic.ProblemDescription);
-                            Console.WriteLine(tic.Projets);
-                            if (tic.AdditionnalNote != null)
-                            {
-                                Console.WriteLine(tic.AdditionnalNote);
-                            }
-                            Console.WriteLine(tic.state);
-                            stopChoice = true;
-                        }
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("Saisie Incorrecte veuillez recommencer");
-                    stopChoice = false;
-                }
+                this.State = StateEnum.Commented;
             }
 
-        }*/
+            ValueList.Add(this.ProblemDescription);
+            ValueList.Add(this.Project.GetIDToString());
+            ValueList.Add(this.State.ToString());
+           
+            DB.Update(this.Id, fieldList, ValueList, "Tickets");
+        }
+
+        private Commentaire AddComment(string noteContent)
+        {
+            Console.WriteLine("edition d'un nouveau commentaire");
+            Commentaire comms = new Commentaire(noteContent, this.Id, User.currentUser, DB.getTimestamp());
+            comms.InsertIntoBDD();
+            this.AdditionnalNotes.Add(comms);
+
+            return comms;
+        }
+
+        public static Ticket GetFromDb(int id)
+        {
+            return new Ticket(DB.Get(id, "Tickets"));
+        }
+
     }
 }
-

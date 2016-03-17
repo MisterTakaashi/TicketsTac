@@ -27,41 +27,57 @@ namespace TicketsTacGui
         // <summary>Constructeur de base</summary>
         public Projet(String nom, User manager, User client)
         {
-            DB.Insert<Projet>(this, "projet");
-            List<String> fields = new List<String>();
-            fields.Add("Name");
-            fields.Add("Client_Id");
-            fields.Add("Created");
-            List<String> values = new List<String>();
-            values.Add(nom);
-            values.Add(Client.Id.ToString());
-            values.Add(DB.getTimestamp().ToString());
-            int id = DB.Insert(fields, values, "Projets");
-            Nom = nom;
-            Client = client;
-            Id = id;
-            Managers.Add(manager);
+            if (User.currentUser.hasPermissionTo(Permission.projectCreate, this))
+            {
+                Nom = nom;
+                Client = client;
+
+                List<String> fields = new List<String>();
+                fields.Add("Name");
+                fields.Add("Client_Id");
+                fields.Add("Created");
+                List<String> values = new List<String>();
+                values.Add(nom);
+                values.Add(Client.Id.ToString());
+                values.Add(DB.getTimestamp().ToString());
+
+                DB.Insert(fields, values, "Projets");
+
+                Id = int.Parse(DB.SelectWhere("*", "Name = '" + nom + "'", "Projets")[0]["Id"]);
+                Managers.Add(manager);
+            }
+            else
+            {
+                Console.WriteLine("insuficient permissions.");
+            }
         }
 
         // <summary>Constructeur avec description</summary>
         public Projet(String nom, String description, User manager, User client)
         {
-            List<String> fields = new List<String>();
-            fields.Add("Name");
-            fields.Add("Description");
-            fields.Add("Client_Id");
-            fields.Add("Created");
-            List<String> values = new List<String>();
-            values.Add(nom);
-            values.Add(description);
-            values.Add(Client.Id.ToString());
-            values.Add(DB.getTimestamp().ToString());
-            int id = DB.Insert(fields, values, "Projets");
-            Nom = nom;
-            Description = description;
-            Client = client;
-            Id = id;
-            Managers.Add(manager);
+            if (User.currentUser.hasPermissionTo(Permission.projectCreate, this))
+            {
+                List<String> fields = new List<String>();
+                fields.Add("Name");
+                fields.Add("Description");
+                fields.Add("Client_Id");
+                fields.Add("Created");
+                List<String> values = new List<String>();
+                values.Add(nom);
+                values.Add(description);
+                values.Add(Client.Id.ToString());
+                values.Add(DB.getTimestamp().ToString());
+                int id = DB.Insert(fields, values, "Projets");
+                Nom = nom;
+                Description = description;
+                Client = client;
+                Id = id;
+                Managers.Add(manager);
+            }
+            else
+            {
+                Console.WriteLine("Insuficient permissions");
+            }
         }
 
         // <summary>Création d'un objet Projet depuis la base de données (après un DB.Select())</summary>
@@ -69,23 +85,59 @@ namespace TicketsTacGui
         {
             // Création de l'objet
             Id = int.Parse(projet["Id"]);
-            Nom = projet["Nom"];
+            Nom = projet["Name"];
             Description = projet["Description"];
             int IdClient = int.Parse(projet["Client_Id"]);
             // ajout du Client
-            Client = new User(DB.Get(IdClient, "Clients"));
+            Client = new User(DB.Get(IdClient, "Users"));
             // Ajout des Managers
-            List<Dictionary<String, String>> managers = DB.SelectWhere("Users.Id, Users.Username, Users.Email, Users.Password, Users.Rank, Users.Created", "Projet_managers.Projet_Id = " + Id + ", Users.Id = Projet_manager.Manager_Id", "Projet_managers, Users");
+
+            List<Dictionary<String, String>> managersIds = DB.SelectWhere("*", "Projet_Id = " + this.Id, "Projet_managers");
+            foreach (Dictionary<String, String> managerId in managersIds)
+            {
+                Dictionary<String, String> managersReal = DB.SelectWhere("*", "Id = " + managerId["Manager_Id"], "Users")[0];
+                Managers.Add(new User(managersReal));
+            }
+
+            /*List<Dictionary<String, String>> managers = DB.SelectWhere("Users.Id, Users.Username, Users.Email, Users.Password, Users.Rank, Users.Created", "Projet_managers.Projet_Id = " + Id + ", Users.Id = Projet_manager.Manager_Id", "Projet_managers, Users");
             foreach (Dictionary<String, String> manager in managers)
             {
                 Managers.Add(new User(manager));
-            }
+            }*/
             // Ajout des opérateurs
-            List<Dictionary<String, String>> operateurs = DB.SelectWhere("Users.Id, Users.Username, Users.Email, Users.Password, Users.Rank, Users.Created", "Projet_operators.Projet_Id = " + Id + ", Users.Id = Projet_operators.Operator_Id", "Projet_operators, Users");
+            List<Dictionary<String, String>> operatersIds = DB.SelectWhere("*", "Projet_Id = " + this.Id, "Projet_operators");
+            foreach (Dictionary<String, String> operaterId in operatersIds)
+            {
+                Dictionary<String, String> managersReal = DB.SelectWhere("*", "Id = " + operaterId["Operator_Id"], "Users")[0];
+                Operationnels.Add(new User(managersReal));
+            }
+
+            /*List<Dictionary<String, String>> operateurs = DB.SelectWhere("Users.Id, Users.Username, Users.Email, Users.Password, Users.Rank, Users.Created", "Projet_operators.Projet_Id = " + Id + ", Users.Id = Projet_operators.Operator_Id", "Projet_operators, Users");
             foreach (Dictionary<String, String> operateur in operateurs)
             {
                 Managers.Add(new User(operateur));
-            }
+            }*/
+        }
+
+        private Ticket CreateTicket(string name, string problemDescription)
+        {
+
+            List<string> fieldList = new List<string>();
+            fieldList.Add("users");
+            fieldList.Add("problem_description");
+            fieldList.Add("projet");
+            fieldList.Add("state");
+
+            Console.WriteLine("Ouverture d'un nouveau ticket");
+
+            /*Ticket ticket = new Ticket(name, problemDescription, this);
+            List<string> ValueList = new List<string>();
+            ValueList.Add(problemDescription);
+            ValueList.Add("4");
+            ValueList.Add(this.GetIDToString());
+            DB.Insert(fieldList, ValueList, "tickets");*/
+
+            return null;
         }
 
         /*
@@ -94,7 +146,7 @@ namespace TicketsTacGui
 
         public int GetID()
         {
-            return Id;
+                return Id;
         }
 
         public String GetIDToString()
@@ -104,17 +156,27 @@ namespace TicketsTacGui
 
         public User GetClient()
         {
-            return Client;
+            if (User.currentUser.hasPermissionTo(Permission.projectView, this))
+                return Client;
+            else
+                Console.WriteLine("Insuficient permissions");
+                return null;
         }
 
         public List<User> GetManagers()
         {
-            return Managers;
+            if (User.currentUser.hasPermissionTo(Permission.projectView, this))
+                return Managers;
+            else
+                return null;
         }
 
         public List<User> GetOperationnels()
         {
-            return Operationnels;
+            if (User.currentUser.hasPermissionTo(Permission.projectViewAffected, this))
+                return Operationnels;
+            else
+                return null;
         }
 
         public String GetNom()
@@ -127,32 +189,76 @@ namespace TicketsTacGui
             return Description;
         }
 
+        public List<Ticket> GetAllTickets()
+        {
+            if (User.currentUser.hasPermissionTo(Permission.projectView, this))
+            {
+                List<Ticket> allTickets = new List<Ticket>();
+                List<Dictionary<String, String>> ticketsList = DB.SelectWhere("*", "Projet_Id = " + this.GetIDToString(), "Tickets");
+                foreach (Dictionary<String, String> ticket in ticketsList)
+                {
+                    allTickets.Add(new Ticket(ticket));
+                }
+                return allTickets;
+            }
+            else
+                Console.WriteLine("Insuficient permissions");
+                return null;
+        }
+
         /*
         ** Setters
         */
 
-        public void SetId(int id)
+        private void SetClient(User client)
         {
-            Id = id;
-            // TODO atq bdd
-        }
-
-        public void SetClient(User client)
-        {
-            Client = client;
-            // TODO atq bdd
+            if (User.currentUser.hasPermissionTo(Permission.projectUpdate, this))
+            {
+                List<String> fields = new List<String>();
+                fields.Add("Client_Id");
+                List<String> values = new List<String>();
+                values.Add(client.Id.ToString());
+                DB.Update(this.GetID(), fields, values, "Projets");
+                Client = client;
+            }
+            else
+            {
+                Console.WriteLine("Insuficient permissions");
+            }
         }
 
         public void SetNom(String nom)
         {
-            Nom = nom;
-            // TODO atq bdd
+            if (User.currentUser.hasPermissionTo(Permission.projectUpdate, this))
+            {
+                List<String> fields = new List<String>();
+                fields.Add("Nom");
+                List<String> values = new List<String>();
+                values.Add(GetNom());
+                DB.Update(this.GetID(), fields, values, "Projets");
+                Nom = nom;
+            }
+            else
+            {
+                Console.WriteLine("Insuficient permissions");
+            }
         }
 
         public void SetDescription(String description)
         {
-            Description = description;
-            // TODO atq bdd
+            if (User.currentUser.hasPermissionTo(Permission.projectUpdate, this))
+            {
+                List<String> fields = new List<String>();
+                fields.Add("Description");
+                List<String> values = new List<String>();
+                values.Add(getDescription());
+                DB.Update(this.GetID(), fields, values, "Projets");
+                Description = description;
+            }
+            else
+            {
+                Console.WriteLine("Insuficient permissions");
+            }
         }
 
         /*
@@ -161,89 +267,136 @@ namespace TicketsTacGui
 
         public void AddManager(User manager)
         {
-            List<String> fields = new List<String>();
-            fields.Add("Manager_Id");
-            fields.Add("Projet_Id");
-            List<String> values = new List<String>();
-            values.Add(manager.Id.ToString());
-            values.Add(this.GetIDToString());
-            DB.Insert(fields, values, "Projet_managers");
-            Managers.Add(manager);
+            if (User.currentUser.hasPermissionTo(Permission.projectUpdate, this))
+            {
+                List<String> fields = new List<String>();
+                fields.Add("Manager_Id");
+                fields.Add("Projet_Id");
+                List<String> values = new List<String>();
+                values.Add(manager.Id.ToString());
+                values.Add(this.GetIDToString());
+                DB.Insert(fields, values, "Projet_managers");
+                Managers.Add(manager);
+            }
+            else
+            {
+                Console.WriteLine("Insuficient permissions");
+            }
         }
 
         public void AddOperationnel(User operationnel)
         {
-            List<String> fields = new List<String>();
-            fields.Add("Operator_Id");
-            fields.Add("Projet_Id");
-            List<String> values = new List<String>();
-            values.Add(operationnel.Id.ToString());
-            values.Add(this.GetIDToString());
-            DB.Insert(fields, values, "Projet_operators");
-            Operationnels.Add(operationnel);
+            if (User.currentUser.hasPermissionTo(Permission.projectUpdate, this))
+            {
+                List<String> fields = new List<String>();
+                fields.Add("Operator_Id");
+                fields.Add("Projet_Id");
+                List<String> values = new List<String>();
+                values.Add(operationnel.Id.ToString());
+                values.Add(this.GetIDToString());
+                DB.Insert(fields, values, "Projet_operators");
+                Operationnels.Add(operationnel);
+            }
+            else
+            {
+                Console.WriteLine("Insuficient permissions");
+            }
         }
 
         public void DeleteManager(int idManager)
         {
-            foreach (User manager in Managers)
+            if (User.currentUser.hasPermissionTo(Permission.projectUpdate, this))
             {
-                if (manager.Id == idManager)
+                foreach (User manager in Managers)
                 {
-                    /*List<String> where = new List<String>();
-                    where.Add("Manager_Id = " + idManager);
-                    where.Add("Projet_Id = " + Id);*/
-                    DB.DeleteWhere("Manager_Id = " + idManager + " AND Projet_Id " + Id, "Projet_operators");
-                    Operationnels.Remove(manager);
-                    break;
+                    if (manager.Id == idManager)
+                    {
+                        DB.DeleteWhere("Manager_Id = " + idManager + " AND Projet_Id " + Id, "Projet_managers");
+                        Operationnels.Remove(manager);
+                        break;
+                    }
                 }
+            }
+            else
+            {
+                Console.WriteLine("Insuficient permissions");
             }
         }
 
         public void DeleteManager(User manager)
         {
-            /*List<String> where = new List<String>();
-            where.Add("Manager_Id = " + manager.Id);
-            where.Add("Projet_Id = " + Id);*/
-            DB.DeleteWhere("Manager_Id = " + manager.Id + " AND Projet_Id = " + Id, "Projet_operators");
-            Managers.Remove(manager);
+            if (User.currentUser.hasPermissionTo(Permission.projectUpdate, this))
+            {
+                DB.DeleteWhere("Manager_Id = " + manager.Id + " AND Projet_Id = " + Id, "Projet_managers");
+                Managers.Remove(manager);
+            }
+            else
+            {
+                Console.WriteLine("Insuficient permissions");
+            }
         }
 
-        public void DeleteOperationnel(int id)
+        public void DeleteOperationnel(int idOperationnel)
         {
-            foreach (User operationnel in Operationnels)
+            if (User.currentUser.hasPermissionTo(Permission.projectUpdate, this))
             {
-                if (operationnel.Id == id)
+                foreach (User operationnel in Operationnels)
                 {
-                    // TODO attaque de la BDD
-                    Operationnels.Remove(operationnel);
-                    break;
+                    if (operationnel.Id == idOperationnel)
+                    {
+                        DB.DeleteWhere("Operator_Id = " + idOperationnel + " AND Projet_Id " + Id, "Projet_operators");
+                        Operationnels.Remove(operationnel);
+                        break;
+                    }
                 }
+            }
+            else
+            {
+                Console.WriteLine("Insuficient permissions");
             }
         }
 
         public void DeleteOperationnel(User operationnel)
         {
-            // TODO attaque de la BDD
-            Operationnels.Remove(operationnel);
+            if (User.currentUser.hasPermissionTo(Permission.projectUpdate, this))
+            {
+                DB.DeleteWhere("Operator_Id = " + operationnel.Id.ToString() + " AND Projet_Id " + Id, "Projet_operators");
+                Operationnels.Remove(operationnel);
+            }
+            else
+            {
+                Console.WriteLine("Insuficient permissions");
+            }
         }
-        /*
-        public void gestionProjet()
+
+        public void DeleteProjet()
         {
-            Console.WriteLine("voulez vous ajouter un nouveau ticket ?");
-            Ticket ticket = new Ticket("description", this);
+            if (User.currentUser.hasPermissionTo(Permission.projectDelete, this))
+            {
+                DB.DeleteWhere("Projet_Id = " + this.GetIDToString(), "Projet_managers");
+                DB.DeleteWhere("Projet_Id = " + this.GetIDToString(), "Projet_operators");
+                DB.DeleteWhere("Id = " + this.GetIDToString(), "Projet");
+            }
+            else
+            {
+                Console.WriteLine("Insuficient permissions");
+            }
         }
-        */
 
         /*
-        ** Fonctions et Méthodes statiques
+        // Fonctions et méthodes de classe
         */
+
 
         public static List<Projet> GetAllProjetsFromBDD()
         {
             List<Projet> projets = new List<Projet>();
             foreach (Dictionary<string, string> projet in DB.Select("*", "Projets"))
             {
-                projets.Add(new Projet(projet));
+                if (User.currentUser.hasPermissionTo(Permission.projectView, projet))
+                    projets.Add(new Projet(projet));
+                else
+                    Console.WriteLine("Insuficient permissions to see this project. Next Project...");
             }
             return projets;
         }

@@ -1,18 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
+﻿using System.Windows;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace TicketsTacGui
 {
@@ -24,15 +11,11 @@ namespace TicketsTacGui
         public MainWindow()
         {
             InitializeComponent();
+            
+            frameContent.Navigate(new ProjectsListPage());
+            //frameContent.Navigate(new DbConnectPage()); //Fenêtre sur laquelle Pierre rentre les identifiants de la bdd pour tester la connexion
 
-            frameContent.Navigate(new LoginPage());
-
-            //frameContent.Source = new Uri("LoginPage.xaml", UriKind.Relative);
-        }
-
-        public void mainLabelClicked(object sender, MouseButtonEventArgs e)
-        {
-            MessageBox.Show("You clicked me at " + e.GetPosition(this).ToString());
+            //frameContent.Navigate(new NewTicketPage(1));
         }
     }
 }

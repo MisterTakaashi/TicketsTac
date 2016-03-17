@@ -1,18 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows;
 
 namespace TicketsTacGui
 {
+    enum Environment { Prod = 0, Dev = 1, Local = 2 }
     class DBConfig
     {
-        enum Environment { Prod = 0, Dev = 1, Local = 2 }
         private Environment _env = Environment.Local;
+
         public String Host { get; set; }
         public String Username { get; set; }
         public String Pass { get; set; }
@@ -28,15 +26,22 @@ namespace TicketsTacGui
                     break;
 
                 case Environment.Prod:
-                    Host = "164.132.110.73";
-                    Pass = "Bastille89";
-                    Username = "remote";
+                    Host = "10.0.10.10";
+                    Pass = "Passw0rd";
+                    Username = "Administrator";
                     break;
 
                 case Environment.Local:
                     Host = "(localdb)\\MSSQLLocalDb";
                     break;
             }
+        }
+
+        public DBConfig(string host, string username, string password)
+        {
+            Host = host;
+            Username = username;
+            Pass = password;
         }
     }
 
@@ -58,28 +63,35 @@ namespace TicketsTacGui
         //  Update(int id, List<string>fields, List<string> values, string table)
         
         static private SqlConnection _connection = null;
-
+        static private DBConfig config = new DBConfig();
         static private void _connectToDb()
         {
-            DBConfig config = new DBConfig();
-            // _connection = new SqlConnection(@"Data Source=" + config.Host + "," + config.Port.ToString() + ";Uid=" + config.Username + ";Pwd=" + config.Pass + ";");
+            //_connection = new SqlConnection(@"Data Source=" + config.Host + ";Uid=" + config.Username + ";Pwd=" + config.Pass + ";");
             _connection = new SqlConnection("Data Source=" + config.Host + ";Integrated Security=True;Initial Catalog=TicketsTac;");
             try
             {
                 _connection.Open();
-                Logger.Info("Connexion à la base de données: OK");
+                //MessageBox.Show("Connexion à la base de données: OK");
             }
             catch ( Exception e )
             {
-                Console.WriteLine("/!\\ La connexion à la base de données à échoué. Informations sur la connexion:");
-                Console.WriteLine("\tHost: " + config.Host);
-                Console.WriteLine("\tUser: " + config.Username);
-                Console.WriteLine("\tPass: " + config.Pass);
-                Console.WriteLine("\tConnection String: " + _connection.ConnectionString);
-                Console.WriteLine("\tError: " + e.Message);
-                Console.ReadLine();
-                System.Environment.Exit(-1);
+                string str = "/!\\ La connexion à la base de données à échoué. Informations sur la connexion:\n\tHost: " + config.Host +
+                "\n\tUser: " + config.Username +
+                "\n\tPass: " + config.Pass +
+                "\n\tConnection String: " + _connection.ConnectionString +
+                "\n\tError: " + e.Message;
+
+                MessageBox.Show(str);
             }
+        }
+
+        public static void testConnection(DBConfig conf)
+        {
+            config = conf;
+            if (_connection != null) _connection.Close();
+
+            _connectToDb();
+            _connection.Close();
         }
 
         public static List<Dictionary<string, string>> Select(List<string> fields, string table)
@@ -105,18 +117,41 @@ namespace TicketsTacGui
             return getRequestResult(cmd);
         }
 
-        public static List<Dictionary<string, string>> SelectWhere(List<string> fields, List<string> values, string table)
+        public static List<Dictionary<string, string>> SelectWhere(List<string> selectFields, List<string> fields, List<string> values, string table)
         {
-            return SelectWhere(string.Join(",", fields), string.Join(",", fields), table);
+            string whereClause = "";
+            for ( int i = 0; i < selectFields.Count; i++ )
+            {
+                if (i == 0)
+                    whereClause += fields[i];
+                else
+                    whereClause += " AND " + fields[i];
+
+                int bufferInt;
+                double bufferDouble;
+
+                if (double.TryParse(values[i], out bufferDouble) || int.TryParse(values[i], out bufferInt)) whereClause += " = " + values[i];
+                else whereClause += " LIKE '" + values[i] + "'";
+            }
+
+            return SelectWhere(string.Join(",", selectFields), whereClause, table);
         }
 
         public static int Insert(List<string> fields, List<string> values, string table)
         {
             if (_connection == null) _connectToDb();
+
+            for ( int i = 0; i < values.Count; i++ )
+            {
+                int bufferInt;
+                double bufferDouble;
+
+                if (!int.TryParse(values[i], out bufferInt) && !double.TryParse(values[i], out bufferDouble)) values[i] = "'" + values[i] + "'";
+            }
+
             string reqValues = string.Join(",", values.ToArray());
             string reqFields = string.Join(",", fields.ToArray());
 
-            Console.WriteLine("INSERT INTO " + table + " (" + reqFields + ") VALUES (" + reqValues + ")");
 
             SqlCommand cmd = new SqlCommand("INSERT INTO " + table + " (" + reqFields + ") VALUES (" + reqValues + ")", _connection);
             int affectedRows = 0;
@@ -124,7 +159,18 @@ namespace TicketsTacGui
             try
             {
                 affectedRows = cmd.ExecuteNonQuery();
-                insertedRecord = SelectWhere(reqFields, reqValues, table)[0];
+                string whereClause = "";
+                for ( int i = 0; i < fields.Count; i++ )
+                {
+                    if (i == 0)
+                        whereClause += fields[i];
+                    else
+                        whereClause += " AND " + fields[i];
+
+                    if (values[i].StartsWith("'") && values[i].EndsWith("'")) whereClause += " LIKE " + values[i];
+                    else whereClause += " = " + values[i];
+                }
+                insertedRecord = SelectWhere("*", whereClause, table)[0];
             }
             catch ( Exception e )
             {
@@ -140,6 +186,14 @@ namespace TicketsTacGui
             {
                 throw new Exception("Insertion failed for the data you provided.");
             }
+        }
+
+        public static int Insert(string fields, string values, string table)
+        {
+            List<string> fieldsReq = new List<string>(fields.Split(','));
+            List<string> valuesReq = new List<string>(values.Split(','));
+
+            return DB.Insert(fieldsReq, valuesReq, table);
         }
 
         public static int Insert<T>(T instance, string table)
@@ -244,13 +298,14 @@ namespace TicketsTacGui
         public static Dictionary<string, string> Get(int id, string table)
         {
             if (_connection == null) _connectToDb();
-
-            return SelectWhere("*", "id =" + id.ToString(), table)[0];
+            List<Dictionary<string, string>> ret = SelectWhere("*", "id = " + id.ToString(), table);
+            return ret[0];
         }
 
         public static void Migrate()
         {
             if (_connection == null) _connectToDb();
+            Console.WriteLine("Début du DB.Migrate");
             List<string> files = new List<string>();
             files.Add(@"../../../SQL/dbo.Users.sql");
             files.Add(@"../../../SQL/dbo.Projets.sql");
@@ -258,12 +313,21 @@ namespace TicketsTacGui
             files.Add(@"../../../SQL/dbo.Ticket_comms.sql");
             files.Add(@"../../../SQL/dbo.Projet_managers.sql");
             files.Add(@"../../../SQL/dbo.Projet_operators.sql");
+            files.Add(@"../../../SQL/dbo.Ticket_assignee.sql");
 
             SqlCommand cmd = null;
             for ( int i = 0 ; i < files.Count ; i++ )
             {
+                Console.WriteLine("Lecture du fichier " + files[i]);
                 cmd = new SqlCommand(System.IO.File.ReadAllText(files[i]), _connection);
-                cmd.ExecuteNonQuery();
+                try
+                {
+                    cmd.ExecuteNonQuery();
+                }
+                catch ( Exception e)
+                {
+                    MessageBox.Show("L'appel au script " + files[i] + " a déclenché une erreur.\n" + e.Message);
+                }
             }
         }
 
@@ -280,15 +344,18 @@ namespace TicketsTacGui
 
                 fields.Add(p.Name);
 
-                Type valueType = p.GetValue(instance).GetType();
-
-                //TODO : Etre sur de prendre toutes les énums en compte
-                if (valueType == typeof(string))
-                    values.Add("'" + p.GetValue(instance).ToString() + "'");
-                else if (valueType == typeof(Rank) || valueType == typeof(StateEnum))
-                    values.Add(((int)p.GetValue(instance)).ToString());
-                else
-                    values.Add(p.GetValue(instance).ToString());
+                if (p.GetValue(instance) != null)
+                {
+                    Type valueType = p.GetValue(instance).GetType(); //NULLReferenceException
+                    if (valueType == typeof(string))
+                        values.Add("'" + p.GetValue(instance).ToString() + "'");
+                    else if (valueType == typeof(Rank) || valueType == typeof(StateEnum))
+                        values.Add(((int)p.GetValue(instance)).ToString());
+                    else
+                        values.Add(p.GetValue(instance).ToString());
+                    //TODO : Etre sur de prendre toutes les énums en compte
+                }
+                else continue;
             }
 
             ret.Add("fields", fields);
@@ -332,11 +399,12 @@ namespace TicketsTacGui
         {
             try
             {
+                Console.WriteLine("/!\\ Requête SQL: " + cmd.CommandText);
                 SqlDataReader r = cmd.ExecuteReader();
                 List<Dictionary<string, string>> ret = r.ToList();
 
                 r.Close();
-
+                
                 return ret;
             }
             catch (Exception e)
@@ -353,6 +421,14 @@ namespace TicketsTacGui
         public static int getTimestamp()
         {
             return (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+        }
+
+        public static DateTime UnixTimeStampToDateTime(double unixTimeStamp)
+        {
+            // Unix timestamp is seconds past epoch
+            System.DateTime dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
+            dtDateTime = dtDateTime.AddSeconds(unixTimeStamp).ToLocalTime();
+            return dtDateTime;
         }
 
         private static void logRequestError(SqlCommand cmd, Exception e)
