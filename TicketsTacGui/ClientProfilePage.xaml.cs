@@ -33,7 +33,20 @@ namespace TicketsTacGui
 
         private void buttonSubmit_Click(object sender, RoutedEventArgs e)
         {
+            profileOwner.setEmail(textBoxEmail.Text);
 
+            string passwdText = textBoxPassword.Text;
+            bool passwdChanged = false;
+
+            for ( int i = 0; i < passwdText.Length; i++ )
+            {
+                if ( !passwdText.ElementAt(i).ToString().Equals("*") )
+                {
+                    passwdChanged = true;
+                }
+            }
+
+            if (passwdChanged) profileOwner.setPassword(passwdText);
         }
 
         private void buttonCancel_Click(object sender, RoutedEventArgs e)
