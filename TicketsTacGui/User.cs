@@ -72,10 +72,10 @@ namespace TicketsTacGui
         public static List<User> GetAll()
         {
             List<User> allUsers = new List<User>();
-            List<Dictionary<string, string>> r = DB.Select("*", "users");
+            List<Dictionary<string, string>> r = DB.Select("*", "Users");
             foreach (Dictionary<string, string> aUser in r)
             {
-                allUsers.Add(new User(Int32.Parse(aUser["id"]), (String)aUser["username"], (String)aUser["email"], (Rank)Int32.Parse(aUser["rank"]), DB.getTimestamp()));
+                allUsers.Add(new User(Int32.Parse(aUser["Id"]), (String)aUser["Username"], (String)aUser["Email"], (Rank)Int32.Parse(aUser["Rank"]), DB.getTimestamp()));
             }
             return allUsers;
         }
@@ -154,6 +154,26 @@ namespace TicketsTacGui
                 case Permission.projectDelete:
                     break;
                 case Permission.userView:
+                    User thisUser = (User)param;
+                    switch (this.Rank)
+                    {
+                        case Rank.Administrateur:
+                            return true;
+                        case Rank.Manager:
+                            if (thisUser.Rank != Rank.Administrateur)
+                                 return true;
+                            break;
+                        case Rank.Operator:
+                            if (thisUser.Rank != Rank.Administrateur)
+                                return true;
+                            break;
+                        case Rank.Client:
+                            if (thisUser.Id != this.Id)
+                                return true;
+                            break;
+                        default:
+                            break;
+                    }
                     return true;
                 case Permission.userManagerView:
                     break;

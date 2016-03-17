@@ -69,7 +69,7 @@
                 <Grid>
                     
                 </Grid>-->
-                <Border Background="White" Margin="20, 20,20, 0" CornerRadius="3" Padding="18, 13,18,13">
+                <Border Background="White" Margin="20, 20,20, 0" CornerRadius="3,3,0,0" Padding="18, 13,18,13">
                     <StackPanel>
                         <StackPanel Orientation="Horizontal">
                             <TextBlock x:Name="textBlockDecriptionAuthor" Text="MISTERTAKAASHI    " Foreground="#FF787878" FontWeight="DemiBold"></TextBlock>
@@ -77,6 +77,20 @@
                         </StackPanel>
                         <TextBlock x:Name="textBlockDescriptionMessage" Text="Blabla" Foreground="#5b6870" FontSize="16" FontWeight="DemiBold"></TextBlock>
                     </StackPanel>
+                </Border>
+                <Border x:Name="backgroundStatus" Background="#FF28b62c" Margin="20, 0,20, 0" CornerRadius="0,0,3,3" Padding="5">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="60"/>
+                            <ColumnDefinition Width="60"/>
+                            <ColumnDefinition Width="60"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Open" Foreground="White" FontSize="12" FontWeight="DemiBold" x:Name="textBlockStatus"></TextBlock>
+                        <Button Content="Open" x:Name="buttonStatusOpen" Click="buttonStatusOpen_Click"  Grid.Column="1" />
+                        <Button Content="Resolve" x:Name="buttonStatusResolve" Click="buttonStatusResolve_Click"  Grid.Column="2" />
+                        <Button Content="Close" x:Name="buttonStatusClose" Click="buttonStatusClose_Click" Grid.Column="3" />
+                    </Grid>
                 </Border>
             </StackPanel>
         </ScrollViewer>

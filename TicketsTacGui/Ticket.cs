@@ -122,5 +122,18 @@ namespace TicketsTacGui
             return new Ticket(DB.Get(id, "Tickets"));
         }
 
+        public void ChangeState(StateEnum state)
+        {
+            this.State = state;
+
+            List<string> keys = new List<string>();
+            keys.Add("State");
+
+            List<string> values = new List<string>();
+            values.Add(((int)state).ToString());
+
+            DB.Update(this.Id, keys, values, "Tickets");
+        }
+
     }
 }

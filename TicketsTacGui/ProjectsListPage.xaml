@@ -56,6 +56,30 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
+
+        <Style TargetType="Button" x:Key="NewUserButton">
+            <Setter Property="Background" Value="#4dbd74"/>
+            <Setter Property="Foreground" Value="#FFf2f4f6"/>
+            <Setter Property="Height" Value="38"/>
+            <Setter Property="Padding" Value="10,10,0,0"/>
+            <Setter Property="FontFamily" Value="Global User Interface"/>
+            <Setter Property="FontWeight" Value="DemiBold"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <!--<Setter Property="Background" Value="#e7e7e7"/>-->
+                    <Setter Property="Background" Value="#348d53"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
     </Page.Resources>
 
     <Grid>
@@ -73,6 +97,6 @@
         <Rectangle Fill="#FF1C2B36" Stroke="#FF1C2B36"/>
         <Frame x:Name="frame_project" Content="  Click on project to show its Tickets" Grid.Column="1" Grid.RowSpan="2"/>
         <Label x:Name="label" Content="Tickets Tac" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="25" Foreground="White" FontFamily="Segoe WP Semibold"/>
-        <Button x:Name="buttonProfile" Content="My Profile" Grid.Row="1" Height="22" VerticalAlignment="Bottom" Click="buttonProfile_Click"/>
+        <Button x:Name="buttonProfile" Content="My Profile" Grid.Row="1" Height="22" VerticalAlignment="Bottom" Click="buttonProfile_Click" Style="{StaticResource NewUserButton}"/>
     </Grid>
 </Page>
