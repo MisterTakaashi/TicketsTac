@@ -60,5 +60,10 @@ namespace TicketsTacGui
             int id = int.Parse(((Button)sender).Tag.ToString());
             frame_client.Navigate(new ClientProfilePage(id));
         }
+
+        private void buttonBackToProject_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new ProjectsListPage());
+        }
     }
 }
