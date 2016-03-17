@@ -10,12 +10,11 @@ namespace TicketsTacGui
 {
     class User
     {
+        public int Id { get; private set; }
+        public string Username { get; private set; }
+        public string Email { get; private set; }
+        public Rank Rank { get; private set; }
         public static User currentUser = new User(0, "Test", "Test", Rank.Administrateur, 0);
-
-        public int Id { get; }
-        public string Username { get; set; }
-        public string Email { get; set; }
-        public Rank Rank { get; set; }
         public Int64 Created { get; set; }
 
         public string Password { get; set; }
@@ -38,22 +37,45 @@ namespace TicketsTacGui
             Created = Int64.Parse(user["Created"]);
         }
 
+        public void setId(int id, int newId)
+        {
+            DB.Update(id, new List<string> { "id" }, new List<string> { newId.ToString() }, "users");
+        }
+
+        public void setUsername(int id, String username)
+        {
+            DB.Update(id, new List<string> { "username" }, new List<string> { username }, "users");
+        }
+
+        public void setEmail(int id, String email)
+        {
+            DB.Update(id, new List<string> { "email" }, new List<string> { email }, "users");
+        }
+
         public static User Get(int id)
         {
             return new User(DB.Get(id, "Users"));
         }
 
+        public void setRank(int id, Rank rank)
+        {
+            DB.Update(id, new List<string> { "rank" }, new List<string> { rank.ToString() }, "users");
+        }
+
         public static List<User> GetAll()
         {
-            List<User> ret = new List<User>();
-            List<Dictionary<string, string>> users = DB.Select("*", "Users");
-
-            foreach (Dictionary<string, string> user in users)
+            List<User> allUsers = new List<User>();
+            List<Dictionary<string, string>> r = DB.Select("*", "users");
+            foreach (Dictionary<string, string> aUser in r)
             {
-                ret.Add(new User(user));
+                allUsers.Add(new User(Int32.Parse(aUser["id"]), (String)aUser["username"], (String)aUser["email"], (Rank)Int32.Parse(aUser["rank"]), DB.getTimestamp()));
             }
+            return allUsers;
+        }
 
-            return ret;
+        public static void Delete(int id)
+        {
+            DB.Delete(id, "users");
         }
 
         public static User Connect(string email, string password)
