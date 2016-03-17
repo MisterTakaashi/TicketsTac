@@ -207,6 +207,8 @@ namespace TicketsTacGui
 
         public static int Update(int id, List<string> fields, List<string> values, string table)
         {
+            if (_connection == null) _connectToDb();
+
             string request = "UPDATE " + table + " SET ";
             for ( int i = 0; i < fields.Count; i++ )
             {
@@ -220,7 +222,7 @@ namespace TicketsTacGui
             }
             request += " WHERE id = " + id.ToString();
 
-            SqlCommand cmd = new SqlCommand(request);
+            SqlCommand cmd = new SqlCommand(request, _connection);
             try
             {
                 int affectedRows = cmd.ExecuteNonQuery();
@@ -235,6 +237,8 @@ namespace TicketsTacGui
 
         public static int Update<T>(T instance, string table)
         {
+            if (_connection == null) _connectToDb();
+
             Dictionary<string, List<string>> ret = getObjectProperties<T>(instance);
 
             int id = -1;
