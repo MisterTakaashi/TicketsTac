@@ -30,6 +30,25 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
+        <Style TargetType="{x:Type Button}" x:Key="ValidateProjectButton">
+            <Setter Property="Background" Value="#FF3fced1"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="3,3,3,3">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#FF3AC0C3"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
     </Page.Resources>
 
     <Grid>
@@ -39,23 +58,22 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="80"></RowDefinition>
-            <RowDefinition Height="30"></RowDefinition>
-            <RowDefinition Height="30"></RowDefinition>
-            <RowDefinition Height="30"></RowDefinition>
-            <RowDefinition Height="137"></RowDefinition>
-            <RowDefinition Height="40"></RowDefinition>
+            <RowDefinition Height="35"></RowDefinition>
+            <RowDefinition Height="35"></RowDefinition>
+            <RowDefinition Height="35"></RowDefinition>
+            <RowDefinition Height="55"></RowDefinition>
+            <RowDefinition Height="174"></RowDefinition>
         </Grid.RowDefinitions>
-        <Label x:Name="labelEmail" Content="Email" Margin="0,4" Grid.Row="1" Grid.Column="0" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Padding="0,0,5,0"/>
-        <Label x:Name="label" Content="Password" Margin="0,4" Grid.Row="2" Padding="0,0,5,0" HorizontalContentAlignment="Right" VerticalContentAlignment="Center"/>
-        <TextBox x:Name="textBoxEmail" Grid.Column="1" Margin="5,4" Grid.Row="1" TextWrapping="Wrap" />
-        <TextBox x:Name="textBoxPassword" Grid.Column="1" Margin="3,5,5,3" Grid.Row="2" TextWrapping="Wrap" />
-        <TextBlock x:Name="textBlock" Grid.Column="1" Margin="5,10" Grid.Row="4" TextWrapping="Wrap" Text="In order to edit your personnal informations, you just have to type them in the appropriate field below. Then just click 'Submit'" />
-        <Button x:Name="buttonSubmit" Content="Button" Grid.Column="1" Margin="10,8,268,8" Grid.Row="5" HorizontalContentAlignment="Center" Click="buttonSubmit_Click"/>
-        <Button x:Name="buttonCancel" Content="Button" Grid.Column="1" Margin="267,8,10,8" Grid.Row="5" Click="buttonCancel_Click"/>
+        <Label x:Name="labelEmail" Content="Email" Grid.Row="1" Margin="0" HorizontalContentAlignment="Right" Height="30" VerticalAlignment="Bottom" HorizontalAlignment="Right" Foreground="#5b6870" Width="38"/>
+        <Label x:Name="label" Content="Password" Grid.Row="2" Margin="0" HorizontalContentAlignment="Right" Height="30" VerticalAlignment="Bottom" HorizontalAlignment="Right" Foreground="#5b6870" Width="60"/>
+        <TextBox x:Name="textBoxEmail" Grid.Column="1" Grid.Row="1" Margin="5,5,20,5" TextWrapping="Wrap" Text="" VerticalContentAlignment="Center" BorderBrush="#FFE7ECEE" BorderThickness="2" />
+        <TextBox x:Name="textBoxPassword" Grid.Column="1" Grid.Row="2" Margin="5,5,20,5" TextWrapping="Wrap" Text="" VerticalContentAlignment="Center" BorderBrush="#FFE7ECEE" BorderThickness="2" />
+        <TextBlock x:Name="textBlock" Grid.Column="1" Margin="5,10,20,10" Grid.Row="4" TextWrapping="Wrap" Foreground="#5b6870" Text="In order to edit your personnal informations, you just have to type them in the appropriate field below. Then just click 'Submit'" />
         <Rectangle Fill="#FF1C2B36" Stroke="Black" Grid.ColumnSpan="2" Margin="0,0,0,15"/>
         <Button x:Name="button" Content="Back" Style="{StaticResource ReturnListTicketButton}" Foreground="White" Click="buttonCancel_Click" Margin="0,0,0,15"/>
-        <Label x:Name="textBlockClientName" Content="Create new Ticket" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Foreground="White" FontSize="26.667" Grid.Column="1" Height="45" Width="231"/>
-        <Label x:Name="label1" Content="Rank" Margin="0" Grid.Row="3" HorizontalContentAlignment="Right" VerticalContentAlignment="Center"/>
-        <ComboBox x:Name="comboBoxRank" Grid.Column="1" Margin="5,4" Grid.Row="3"/>
+        <Label x:Name="textBlockClientName" Content="Create new User" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Foreground="White" FontSize="26.667" Grid.Column="1" Height="45" Width="231"/>
+        <Label x:Name="label1" Content="Rank" Grid.Row="3" Margin="0" HorizontalContentAlignment="Right" Height="30" VerticalAlignment="Bottom" HorizontalAlignment="Right" Foreground="#5b6870" Width="36"/>
+        <ComboBox x:Name="comboBoxRank" Grid.Column="1" Grid.Row="3"  Margin="5,5,20,5"/>
+        <Button x:Name="buttonCreateProject" Style="{StaticResource ValidateProjectButton}" Grid.Column="1" Grid.Row="5" Click="buttonSubmit_Click" HorizontalAlignment="Right" Foreground="White" Width="60" Margin="0,8,20,0" Content="Validate" Height="32" VerticalAlignment="Top"/>
     </Grid>
 </Page>
