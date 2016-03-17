@@ -24,6 +24,9 @@ namespace TicketsTacGui
         {
             InitializeComponent();
 
+            if (!User.currentUser.hasPermissionTo(Permission.projectCreate, null))
+                buttonNewProject.Visibility = Visibility.Collapsed;
+
             buttonNewProject.Style = Resources["NewProjectButton"] as Style;
 
             List<Projet> projets = Projet.GetAllProjetsFromBDD();

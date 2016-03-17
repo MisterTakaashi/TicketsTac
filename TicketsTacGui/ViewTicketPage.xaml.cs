@@ -29,12 +29,13 @@ namespace TicketsTacGui
 
             Task.Run(() =>
             {
-                Thread.Sleep(2000);
-
                 Ticket = Ticket.GetFromDb(id);
 
                 replies.Dispatcher.Invoke(() =>
                 {
+                    if (!User.currentUser.hasPermissionTo(Permission.ticketValidate, Ticket))
+                        buttonValidateTicket.Visibility = Visibility.Hidden;
+
                     labelProjectTitle.Content = Ticket.Name;
                     //labelTicketText.Content = Ticket.ProblemDescription;
 
@@ -42,7 +43,6 @@ namespace TicketsTacGui
                     // TODO : Date création du ticket
                     textBlockDecriptionDate.Text = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm");
                     textBlockDescriptionMessage.Text = Ticket.ProblemDescription;
-
 
                     foreach (Commentaire commentaire in Ticket.AdditionnalNotes)
                     {

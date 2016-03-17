@@ -83,7 +83,7 @@ namespace TicketsTacGui
                         case Rank.Administrateur:
                             return true;
                         case Rank.Manager:
-                            return false;
+                            return true;
                         case Rank.Operator:
                             return false;
                         case Rank.Client:
@@ -117,7 +117,7 @@ namespace TicketsTacGui
                     }
                     break;
                 case Permission.projectViewAffected:
-                    break;
+                    return true;
                 case Permission.projectViewOwn:
                     break;
                 case Permission.projectUpdate:
@@ -142,6 +142,29 @@ namespace TicketsTacGui
                     break;
                 case Permission.userClientUpdateOwnProfile:
                     break;
+                case Permission.ticketView:
+                    Ticket thisTicket = ((Ticket)param);
+
+                    switch (this.Rank)
+                    {
+                        case Rank.Administrateur:
+                            return true;
+                        case Rank.Manager:
+                            if (this.hasPermissionTo(Permission.projectView, ((Ticket)param).Project))
+                                return true;
+                            break;
+                        case Rank.Operator:
+                            if (thisTicket.Assignees.Exists(assigned => assigned.Id == this.Id) && (thisTicket.State == StateEnum.Open || thisTicket.State == StateEnum.Commented))
+                                return true;
+                            break;
+                        case Rank.Client:
+                            if (thisTicket.Project.Client.Id == this.Id && (thisTicket.State == StateEnum.Open || thisTicket.State == StateEnum.Commented))
+                                return true;
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
                 case Permission.ticketViewOwnProjects:
                     break;
                 case Permission.ticketOperationnelViewOwnProjects:
@@ -151,22 +174,78 @@ namespace TicketsTacGui
                 case Permission.ticketUpdate:
                     break;
                 case Permission.ticketUpdateStateToOpen:
+                    switch (this.Rank)
+                    {
+                        case Rank.Administrateur:
+                            return true;
+                        case Rank.Manager:
+                            return true;
+                        case Rank.Operator:
+                            return false;
+                        case Rank.Client:
+                            return false;
+                        default:
+                            break;
+                    }
                     break;
                 case Permission.ticketUpdateStateToResolve:
-                    break;
+                    return true;
                 case Permission.ticketUpdateStateToClosed:
+                    switch (this.Rank)
+                    {
+                        case Rank.Administrateur:
+                            return true;
+                        case Rank.Manager:
+                            return true;
+                        case Rank.Operator:
+                            return false;
+                        case Rank.Client:
+                            return false;
+                        default:
+                            break;
+                    }
                     break;
                 case Permission.ticketCreate:
+                    switch (this.Rank)
+                    {
+                        case Rank.Administrateur:
+                            return true;
+                        case Rank.Manager:
+                            break;
+                        case Rank.Operator:
+                            break;
+                        case Rank.Client:
+                            if (((Projet)param).Client.Id == this.Id)
+                                return true;
+                            break;
+                        default:
+                            break;
+                    }
                     break;
                 case Permission.ticketCreateForOwnProject:
                     break;
                 case Permission.ticketDelete:
                     break;
                 case Permission.ticketComment:
-                    break;
+                    return true;
                 case Permission.ticketCommentOwnProject:
                     break;
                 case Permission.ticketValidate:
+                    switch (this.Rank)
+                    {
+                        case Rank.Administrateur:
+                            return true;
+                        case Rank.Manager:
+                            break;
+                        case Rank.Operator:
+                            break;
+                        case Rank.Client:
+                            if (((Ticket)param).State == StateEnum.Resolve)
+                                return true;
+                            break;
+                        default:
+                            break;
+                    }
                     break;
                 case Permission.ticketValidateOwnProject:
                     break;
@@ -174,7 +253,7 @@ namespace TicketsTacGui
                     break;
             }
 
-            return true;
+            return false;
         }
     }
 
@@ -203,6 +282,7 @@ namespace TicketsTacGui
         userOperatorUpdateOwnProfile = 18,
         userClientView = 22,
         userClientUpdateOwnProfile = 24,
+        ticketView = 30,
         ticketViewOwnProjects = 9,
         ticketOperationnelViewOwnProjects = 25,
         ticketViewStateOpen = 20,

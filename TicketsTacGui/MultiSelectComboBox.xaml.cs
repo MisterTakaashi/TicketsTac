@@ -95,7 +95,7 @@ namespace TicketsTacGui
         {
             CheckBox clickedBox = (CheckBox)sender;
 
-            if (clickedBox.Content == "All")
+            if (((string)clickedBox.Content) == "All")
             {
                 if (clickedBox.IsChecked.Value)
                 {

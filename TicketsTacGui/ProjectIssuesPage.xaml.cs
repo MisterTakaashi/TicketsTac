@@ -29,6 +29,9 @@ namespace TicketsTacGui
 
             InitializeComponent();
 
+            if (!User.currentUser.hasPermissionTo(Permission.ticketCreate, this.Project))
+                button.Visibility = Visibility.Hidden;
+
             labelNameProject.Content = this.Project.Nom;
             textBoxDescriptionProject.Text = this.Project.Description;
 

@@ -197,7 +197,10 @@ namespace TicketsTacGui
                 List<Dictionary<String, String>> ticketsList = DB.SelectWhere("*", "Projet_Id = " + this.GetIDToString(), "Tickets");
                 foreach (Dictionary<String, String> ticket in ticketsList)
                 {
-                    allTickets.Add(new Ticket(ticket));
+                    Ticket currentTicket = new Ticket(ticket);
+
+                    if (User.currentUser.hasPermissionTo(Permission.ticketView, currentTicket))
+                        allTickets.Add(new Ticket(ticket));
                 }
                 return allTickets;
             }
@@ -393,7 +396,9 @@ namespace TicketsTacGui
             List<Projet> projets = new List<Projet>();
             foreach (Dictionary<string, string> projet in DB.Select("*", "Projets"))
             {
-                if (User.currentUser.hasPermissionTo(Permission.projectView, projet))
+                Projet addedProject = new Projet(projet);
+
+                if (User.currentUser.hasPermissionTo(Permission.projectView, addedProject))
                     projets.Add(new Projet(projet));
                 else
                     Console.WriteLine("Insuficient permissions to see this project. Next Project...");
