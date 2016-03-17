@@ -41,6 +41,7 @@ namespace TicketsTacGui
             Assignees = new List<User>();
             AdditionnalNotes = new List<Commentaire>();
             Created = DB.getTimestamp();
+            Auteur = auteur;
         }
 
         public Ticket(Dictionary<string, string> ticket)
@@ -52,7 +53,7 @@ namespace TicketsTacGui
             Project = Projet.GetProjetFromBDD(int.Parse(ticket["Projet_Id"]));
             State = (StateEnum)int.Parse(ticket["State"]);
             Created = int.Parse(ticket["Created"]);
-
+            Auteur = User.Get(int.Parse(ticket["Auteur_Id"]));
             Assignees = new List<User>();
             AdditionnalNotes = Commentaire.GetAllForTicket(Id);
 

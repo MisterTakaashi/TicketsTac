@@ -38,10 +38,10 @@ namespace TicketsTacGui
                     labelProjectTitle.Content = Ticket.Name;
                     //labelTicketText.Content = Ticket.ProblemDescription;
 
-                    //.Text = Ticket.Auteur.Username;
+                    textBlockDecriptionAuthor.Text = Ticket.Auteur.Username;
                     // TODO : Date création du ticket
-                    //textBlockDecriptionDate.Text = 
-                    textBlockDecriptionMessage.Text = Ticket.ProblemDescription;
+                    textBlockDecriptionDate.Text = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm");
+                    textBlockDescriptionMessage.Text = Ticket.ProblemDescription;
 
 
                     foreach (Commentaire commentaire in Ticket.AdditionnalNotes)

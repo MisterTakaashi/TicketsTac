@@ -56,7 +56,7 @@
                             <TextBlock x:Name="textBlockDecriptionAuthor" Text="MISTERTAKAASHI    " Foreground="#FF787878" FontWeight="DemiBold"></TextBlock>
                             <TextBlock x:Name="textBlockDecriptionDate" Text="    Thursday, Oct 10, 2016 6:20 PM" Foreground="#FF787878"></TextBlock>
                         </StackPanel>
-                        <TextBlock x:Name="textBlockDecriptionMessage" Text="Blabla" Foreground="#5b6870" FontSize="16" FontWeight="DemiBold"></TextBlock>
+                        <TextBlock x:Name="textBlockDescriptionMessage" Text="Blabla" Foreground="#5b6870" FontSize="16" FontWeight="DemiBold"></TextBlock>
                     </StackPanel>
                 </Border>
             </StackPanel>
