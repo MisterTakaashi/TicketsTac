@@ -97,6 +97,6 @@
         <Rectangle Fill="#FF1C2B36" Stroke="#FF1C2B36"/>
         <Frame x:Name="frame_project" Content="  Click on project to show its Tickets" Grid.Column="1" Grid.RowSpan="2"/>
         <Label x:Name="label" Content="Tickets Tac" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="25" Foreground="White" FontFamily="Segoe WP Semibold"/>
-        <Button x:Name="buttonProfile" Content="My Profile" Grid.Row="1" Height="22" VerticalAlignment="Bottom" Click="buttonProfile_Click" Style="{StaticResource NewUserButton}"/>
+        <Button x:Name="buttonProfile" Content="Profiles" Grid.Row="1" Height="22" VerticalAlignment="Bottom" Click="buttonProfile_Click" Style="{StaticResource NewUserButton}"/>
     </Grid>
 </Page>

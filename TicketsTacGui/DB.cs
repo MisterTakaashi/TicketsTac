@@ -9,7 +9,7 @@ namespace TicketsTacGui
     enum Environment { Prod = 0, Dev = 1, Local = 2 }
     class DBConfig
     {
-        private Environment _env = Environment.Local;
+        private Environment _env = Environment.Prod;
 
         public String Host { get; set; }
         public String Username { get; set; }
@@ -66,8 +66,8 @@ namespace TicketsTacGui
         static private DBConfig config = new DBConfig();
         static private void _connectToDb()
         {
-            //_connection = new SqlConnection(@"Data Source=" + config.Host + ";Uid=" + config.Username + ";Pwd=" + config.Pass + ";");
-            _connection = new SqlConnection("Data Source=" + config.Host + ";Integrated Security=True;Initial Catalog=TicketsTac;");
+            _connection = new SqlConnection(@"Data Source=" + config.Host + ";Uid=" + config.Username + ";Pwd=" + config.Pass + ";Initial Catalog=TicketsTac;");
+            //_connection = new SqlConnection("Data Source=" + config.Host + ";Integrated Security=True;Initial Catalog=TicketsTac;");
             try
             {
                 _connection.Open();

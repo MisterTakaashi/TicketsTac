@@ -27,6 +27,7 @@ namespace TicketsTacGui
             profileOwner = User.currentUser;
             InitializeComponent();
 
+            textBlockProfileName.Content = profileOwner.Username;
 
             textBoxEmail.Text = profileOwner.Email;
             textBoxPassword.Text = "*********";
@@ -37,6 +38,7 @@ namespace TicketsTacGui
             profileOwner = User.Get(userId);
             InitializeComponent();
 
+            textBlockProfileName.Content = profileOwner.Username;
 
             textBoxEmail.Text = profileOwner.Email;
             textBoxPassword.Text = "*********";
@@ -60,6 +62,8 @@ namespace TicketsTacGui
             }
 
             if (passwdChanged) profileOwner.setPassword(passwdText);
+
+            NavigationService.GoBack();
         }
 
         private void buttonCancel_Click(object sender, RoutedEventArgs e)
