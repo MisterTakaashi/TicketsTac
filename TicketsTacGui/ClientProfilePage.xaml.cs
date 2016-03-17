@@ -28,6 +28,18 @@ namespace TicketsTacGui
             InitializeComponent();
 
             //Le rang !!!!!
+
+            foreach ( Rank value in Enum.GetValues(typeof(Rank)) )
+            {
+                ComboBoxItem item = new ComboBoxItem();
+                item.Tag = (int)value;
+                item.Content = value.ToString();
+
+                comboBoxRank.Items.Add(item);
+            }
+
+            textBlockClientName.Content = profileOwner.Username;
+
             textBoxEmail.Text = profileOwner.Email;
             textBoxPassword.Text = "*********";
         }
@@ -39,9 +51,22 @@ namespace TicketsTacGui
                 textBoxEmail.IsReadOnly = true;
             }
 
-            profileOwner = User.Get(userId);
             InitializeComponent();
+            profileOwner = User.Get(userId);
 
+            foreach (Rank value in Enum.GetValues(typeof(Rank)))
+            {
+                ComboBoxItem item = new ComboBoxItem();
+                item.Tag = (int)value;
+                item.Content = value.ToString();
+                comboBoxRank.Items.Add(item);
+                if ( value == profileOwner.Rank ) comboBoxRank.SelectedItem = item;
+            }
+
+
+
+            textBlockClientName.Content = profileOwner.Username;
+            
             textBoxEmail.Text = profileOwner.Email;
             textBoxPassword.Text = "*********";
         }
@@ -64,6 +89,7 @@ namespace TicketsTacGui
             }
 
             if (passwdChanged) profileOwner.setPassword(passwdText);
+            profileOwner.setRank((Rank)int.Parse(((ComboBoxItem)comboBoxRank.SelectedItem).Tag.ToString()));
         }
 
         private void buttonCancel_Click(object sender, RoutedEventArgs e)

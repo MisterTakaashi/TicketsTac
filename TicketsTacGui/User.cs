@@ -64,9 +64,9 @@ namespace TicketsTacGui
             return new User(DB.Get(id, "Users"));
         }
 
-        public void setRank(int id, Rank rank)
+        public void setRank(Rank rank)
         {
-            DB.Update(id, new List<string> { "rank" }, new List<string> { rank.ToString() }, "users");
+            DB.Update(Id, new List<string> { "rank" }, new List<string> { ((int)rank).ToString() }, "users");
         }
 
         public static List<User> GetAll()
@@ -174,6 +174,8 @@ namespace TicketsTacGui
                         default:
                             break;
                     }
+                    return true;
+                case Permission.userUpdate:
                     return true;
                 case Permission.userManagerView:
                     break;
@@ -325,6 +327,7 @@ namespace TicketsTacGui
         projectUpdate = 3,
         projectDelete = 4,
         userView = 31,
+        userUpdate = 33,
         userManagerView = 5,
         userManagerViewOwnProject = 23,
         userManagerUpdate = 6,
