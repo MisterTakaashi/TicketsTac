@@ -64,5 +64,10 @@ namespace TicketsTacGui
         {
             NavigationService.Navigate(new NewProjectPage());
         }
+
+        private void buttonProfile_Click(object sender, RoutedEventArgs e)
+        {
+            frame_project.Navigate(new ClientProfilePage());
+        }
     }
 }

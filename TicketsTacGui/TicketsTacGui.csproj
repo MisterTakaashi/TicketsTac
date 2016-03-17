@@ -55,6 +55,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ClientProfilePage.xaml.cs">
+      <DependentUpon>ClientProfilePage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Commentaire.cs" />
     <Compile Include="DbConnectPage.xaml.cs">
       <DependentUpon>DbConnectPage.xaml</DependentUpon>
@@ -88,6 +91,10 @@
     <Compile Include="ViewTicketPage.xaml.cs">
       <DependentUpon>ViewTicketPage.xaml</DependentUpon>
     </Compile>
+    <Page Include="ClientProfilePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="DbConnectPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
