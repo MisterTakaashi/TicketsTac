@@ -175,6 +175,8 @@ namespace TicketsTacGui
                             break;
                     }
                     return true;
+                case Permission.userUpdate:
+                    return true;
                 case Permission.userManagerView:
                     break;
                 case Permission.userManagerViewOwnProject:
@@ -325,6 +327,7 @@ namespace TicketsTacGui
         projectUpdate = 3,
         projectDelete = 4,
         userView = 31,
+        userUpdate = 33,
         userManagerView = 5,
         userManagerViewOwnProject = 23,
         userManagerUpdate = 6,

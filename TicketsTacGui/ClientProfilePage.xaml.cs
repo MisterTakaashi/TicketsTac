@@ -27,6 +27,7 @@ namespace TicketsTacGui
             profileOwner = User.currentUser;
             InitializeComponent();
 
+            textBlockClientName.Content = profileOwner.Username;
 
             textBoxEmail.Text = profileOwner.Email;
             textBoxPassword.Text = "*********";
@@ -37,6 +38,7 @@ namespace TicketsTacGui
             profileOwner = User.Get(userId);
             InitializeComponent();
 
+            textBlockClientName.Content = profileOwner.Username;
 
             textBoxEmail.Text = profileOwner.Email;
             textBoxPassword.Text = "*********";
