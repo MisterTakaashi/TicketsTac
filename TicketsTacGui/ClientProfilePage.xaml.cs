@@ -20,10 +20,21 @@ namespace TicketsTacGui
     /// </summary>
     public partial class ClientProfilePage : Page
     {
-        User profileOwner = User.currentUser;
+        User profileOwner;
 
         public ClientProfilePage()
         {
+            profileOwner = User.currentUser;
+            InitializeComponent();
+
+
+            textBoxEmail.Text = profileOwner.Email;
+            textBoxPassword.Text = "*********";
+        }
+
+        public ClientProfilePage(int userId)
+        {
+            profileOwner = User.Get(userId);
             InitializeComponent();
 
 
@@ -33,8 +44,10 @@ namespace TicketsTacGui
 
         private void buttonSubmit_Click(object sender, RoutedEventArgs e)
         {
-            profileOwner.setEmail(textBoxEmail.Text);
-
+            if (profileOwner.Email != textBoxPassword.Text)
+            {
+                profileOwner.setEmail(textBoxEmail.Text);
+            }
             string passwdText = textBoxPassword.Text;
             bool passwdChanged = false;
 

@@ -43,17 +43,20 @@ namespace TicketsTacGui
         }
 
         public void setPassword(string password) {
-            DB.Update(Id, new List<string> { "Password" }, new List<string> { password.ToSHA1() }, "Users");
+            Password = password.ToSHA1();
+            DB.Update(Id, new List<string> { "Password" }, new List<string> { Password }, "Users");
         }
 
-        public void setUsername(int id, string username)
+        public void setUsername(string username)
         {
-            DB.Update(Id, new List<string> { "Username" }, new List<string> { username }, "Users");
+            Username = username;
+            DB.Update(Id, new List<string> { "Username" }, new List<string> { Username }, "Users");
         }
 
         public void setEmail(string email)
         {
-            DB.Update(Id, new List<string> { "Email" }, new List<string> { email }, "Users");
+            Email = email;
+            DB.Update(Id, new List<string> { "Email" }, new List<string> { Email }, "Users");
         }
 
         public static User Get(int id)
